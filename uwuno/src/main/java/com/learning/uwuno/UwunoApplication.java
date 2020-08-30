@@ -8,7 +8,11 @@ public class UwunoApplication {
 
     public static void main(String[] args) {
         // Need to pass application class to this + the args from the main to get this to work
+        // Starts tomcat server and scans the rest of the path for sprint annotations
         SpringApplication.run(UwunoApplication.class, args);
+        roomContainer container = new roomContainer();
+        container.addRoom("test room");
+
     }
 
 }
