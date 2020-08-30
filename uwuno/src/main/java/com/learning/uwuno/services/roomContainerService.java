@@ -13,12 +13,6 @@ public class roomContainerService {
     // Variables
     private ArrayList<room> roomList = new ArrayList<room>();
 
-    // Only here for testing purposes TODO: Remove this after api for setting up new room is done
-    boolean test = addRoom("1");
-    boolean test1 = addRoom("2");
-    boolean test2 = addRoom("3");
-
-
     // Class Functions
     // TODO: make it check if uid already exists later + Change/Encrypt it
     public int createUid() {
