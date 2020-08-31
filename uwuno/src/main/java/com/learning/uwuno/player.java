@@ -9,4 +9,12 @@ public class player {
         this.uid = uid;
         this.name = name;
     }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

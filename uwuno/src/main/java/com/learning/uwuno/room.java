@@ -1,12 +1,12 @@
 package com.learning.uwuno;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class room {
     // Class Variables
     final private int uid;
     private String roomName;
-    private List<player> playerList;
+    private ArrayList<player> playerList = new ArrayList<player>();
 
     // Class functions
     public room(int id, String roomName) {
@@ -26,5 +26,11 @@ public class room {
         return uid;
     }
 
+    public boolean addPlayer(player newPlayer) {
+        return playerList.add(newPlayer);
+    }
 
+    public ArrayList<player> getPlayers() {
+        return playerList;
+    }
 }
