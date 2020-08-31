@@ -5,8 +5,8 @@ public class player {
     final private int uid;
     private String name;
 
-    public player(int uid, String name) {
-        this.uid = uid;
+    public player(int id, String name) {
+        this.uid = id;
         this.name = name;
     }
 
@@ -16,5 +16,9 @@ public class player {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

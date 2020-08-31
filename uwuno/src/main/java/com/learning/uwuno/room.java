@@ -33,4 +33,12 @@ public class room {
     public ArrayList<player> getPlayers() {
         return playerList;
     }
+
+    public player getPlayer(int pid) {
+        return playerList.stream().filter(t -> t.getUid() == pid).findFirst().get();
+    }
+
+    public void deletePlayer(int pid) {
+        playerList.removeIf(t -> t.getUid() == pid);
+    }
 }
