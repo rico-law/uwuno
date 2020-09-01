@@ -1,0 +1,46 @@
+JSON Planning
+- spring recognizes both uid and id as the samething by default
+
+### ROOMS ###
+POST
+http://localhost:8080/rooms
+{
+    uid,
+    roomName
+}
+
+GET
+http://localhost:8080/rooms
+
+PUT
+http://localhost:8080/rooms/<uid>
+{
+    uid,
+    roomName
+}
+
+DELETE
+http://localhost:8080/rooms/<uid>
+
+### Player ###
+POST
+http://localhost:8080/rooms/<uid>/players
+{
+    id,
+    name
+}
+
+
+
+PUT
+Draw card
+http://localhost:8080/rooms/<uid>/players/<pid>
+{
+
+}
+
+Play a card
+http://localhost:8080/rooms/<uid>/players/<pid>
+{
+
+}
