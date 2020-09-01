@@ -1,11 +1,10 @@
 package com.learning.uwuno.controllers;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
-import com.learning.uwuno.errors.errorNotFound;
+import com.learning.uwuno.errors.*;
 import com.learning.uwuno.services.roomContainerService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +29,8 @@ public class playerController {
             try {
                 room room = containerService.getRoom(Integer.parseInt(uid));
                 return room.getPlayers();
-            } catch (NoSuchElementException e) {
+            }
+            catch (NoSuchElementException e) {
                 throw new errorNotFound();
             }
         }
@@ -47,7 +47,8 @@ public class playerController {
                 // TODO: Generate unique id
                 room room = containerService.getRoom(Integer.parseInt(uid));
                 room.addPlayer(newPlayer);
-            } catch (NoSuchElementException e) {
+            }
+            catch (NoSuchElementException e) {
                 throw new errorNotFound();
             }
         } else {
@@ -72,6 +73,9 @@ public class playerController {
             catch (NoSuchElementException e) {
                 throw new errorNotFound();
             }
+            catch (JsonProcessingException e) {
+                throw new internalServerError();
+            }
         } else {
             throw new errorNotFound();
         }
@@ -90,6 +94,9 @@ public class playerController {
             }
             catch (NoSuchElementException e) {
                 throw new errorNotFound();
+            }
+            catch (JsonProcessingException e) {
+                throw new internalServerError();
             }
         }
         else {
