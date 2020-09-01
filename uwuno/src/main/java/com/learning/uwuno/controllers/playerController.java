@@ -67,8 +67,8 @@ public class playerController {
                 // TODO: Check if name already exists
                 room room = containerService.getRoom(Integer.parseInt(uid));
                 Map<String, String> map = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
-                player player = room.getPlayer(Integer.parseInt(map.get("pid")));
-                player.setName(map.get("newName"));
+                player player = room.getPlayer(Integer.parseInt(map.get("id")));
+                player.setName(map.get("name"));
             }
             catch (NoSuchElementException e) {
                 throw new errorNotFound();
@@ -90,7 +90,7 @@ public class playerController {
             try {
                 room room = containerService.getRoom(Integer.parseInt(uid));
                 Map<String, String> map = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
-                room.deletePlayer(Integer.parseInt(map.get("pid")));
+                room.deletePlayer(Integer.parseInt(map.get("id")));
             }
             catch (NoSuchElementException e) {
                 throw new errorNotFound();
