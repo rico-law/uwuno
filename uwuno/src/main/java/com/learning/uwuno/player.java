@@ -1,7 +1,10 @@
 package com.learning.uwuno;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class player {
     // Class Variables
+    @JsonIgnore
     final private int uid;
     private String name;
 
