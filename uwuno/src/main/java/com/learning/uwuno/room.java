@@ -1,16 +1,17 @@
 package com.learning.uwuno;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class room {
     // Class Variables
-    final private int uid;
+    final private String uid;
     private String roomName;
     private ArrayList<player> playerList = new ArrayList<player>();
 
     // Class functions
-    public room(int id, String roomName) {
-        this.uid = id;
+    public room(String roomName) {
+        this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
     }
 
@@ -22,7 +23,7 @@ public class room {
         this.roomName = roomName;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
@@ -34,11 +35,11 @@ public class room {
         return playerList;
     }
 
-    public player getPlayer(int pid) {
-        return playerList.stream().filter(t -> t.getUid() == pid).findFirst().get();
+    public player getPlayer(String pid) {
+        return playerList.stream().filter(t -> t.getUid().equals(pid)).findFirst().get();
     }
 
-    public void deletePlayer(int pid) {
-        playerList.removeIf(t -> t.getUid() == pid);
+    public void deletePlayer(String pid) {
+        playerList.removeIf(t -> t.getUid().equals(pid));
     }
 }
