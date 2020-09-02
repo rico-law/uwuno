@@ -4,7 +4,6 @@ import com.learning.uwuno.room;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 @Service
 public class roomContainerService {
@@ -14,13 +13,8 @@ public class roomContainerService {
     private ArrayList<room> roomList = new ArrayList<room>();
 
     // Class Functions
-    // TODO: make it check if uid already exists later + Change/Encrypt it
-    public int createUid() {
-        return roomList.size();
-    }
-
     public boolean addRoom(String roomName) {
-        return roomList.add(new room(createUid(), roomName));
+        return roomList.add(new room(roomName));
     }
 
     public boolean addRoom(room newRoom) {
@@ -32,15 +26,15 @@ public class roomContainerService {
     }
 
     // Callees must handle NoSuchElementException
-    public room getRoom(int uid) {
-        return roomList.stream().filter(t -> t.getUid() == uid).findFirst().get();
+    public room getRoom(String uid) {
+        return roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
     }
 
-    public void updateRoomName(int uid, String newName) {
-        roomList.stream().filter(t -> t.getUid() == uid).findFirst().get().setRoomName(newName);
+    public void updateRoomName(String uid, String newName) {
+        roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get().setRoomName(newName);
     }
 
-    public void deleteRoom(int uid) {
-        roomList.removeIf(t -> t.getUid() == uid);
+    public void deleteRoom(String uid) {
+        roomList.removeIf(t -> t.getUid().equals(uid));
     }
 }
