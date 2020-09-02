@@ -2,19 +2,14 @@ package com.learning.uwuno.controllers;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.learning.uwuno.player;
-import com.learning.uwuno.room;
+import com.learning.uwuno.*;
 import com.learning.uwuno.errors.*;
 import com.learning.uwuno.services.roomContainerService;
-import com.learning.uwuno.util.requestUtil;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -43,9 +38,9 @@ public class playerController {
             throws JsonMappingException, JsonProcessingException {
         try {
             // OPTIONAL TODO: Check if name already exists and append number to it
-            Map<String, String> map = requestUtil.parseJson(json);
+            parser parser = new parser(json);
             room room = containerService.getRoom(uid);
-            player newPlayer = new player(map.get("name"));
+            player newPlayer = new player(parser.getValue("name"));
             room.addPlayer(newPlayer);
             return newPlayer.getUid();
         }
@@ -64,10 +59,10 @@ public class playerController {
             throws JsonMappingException, JsonProcessingException {
         try {
             // OPTIONAL TODO: Check if name already exists and append number to it
-            Map<String, String> map = requestUtil.parseJson(json);
+            parser parser = new parser(json);
             room room = containerService.getRoom(uid);
-            player player = room.getPlayer(map.get("id"));
-            player.setName(map.get("name"));
+            player player = room.getPlayer(parser.getValue("id"));
+            player.setName(parser.getValue("name"));
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
@@ -82,9 +77,9 @@ public class playerController {
     public void deletePlayer(@RequestBody String json, @PathVariable String uid)
             throws JsonMappingException, JsonProcessingException {
         try {
-            Map<String, String> map = requestUtil.parseJson(json);
+            parser parser = new parser(json);
             room room = containerService.getRoom(uid);
-            room.deletePlayer(map.get("id"));
+            room.deletePlayer(parser.getValue("id"));
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
