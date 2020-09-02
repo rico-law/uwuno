@@ -26,8 +26,8 @@ public class room {
         return uid;
     }
 
-    public boolean addPlayer(player newPlayer) {
-        return playerList.add(newPlayer);
+    public void addPlayer(player newPlayer) {
+        playerList.add(newPlayer);
     }
 
     public ArrayList<player> getPlayers() {

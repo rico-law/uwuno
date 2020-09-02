@@ -1,5 +1,6 @@
 package com.learning.uwuno;
 
+import com.learning.uwuno.cards.deck;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,5 +12,4 @@ public class UwunoApplication {
         // Starts tomcat server and scans the rest of the path for sprint annotations
         SpringApplication.run(UwunoApplication.class, args);
     }
-
 }
