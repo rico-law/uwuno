@@ -1,10 +1,11 @@
 package com.learning.uwuno.util;
 
+import com.learning.uwuno.errors.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learning.uwuno.errors.*;
 
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class parser {
 
     // Assume this is called after checking for existence if handler handles multiple formats
     public String getValue(String key) {
-        if (exists(key)) {
+        if (!exists(key)) {
             throw new errorNotFound();
         } else {
             return map.get(key);

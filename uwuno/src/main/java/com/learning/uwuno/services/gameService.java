@@ -17,6 +17,11 @@ public class gameService {
     // Variables
     private ArrayList<room> roomList = new ArrayList<room>();
 
+    // Test Room
+    room a = new room("testingRoom", false);
+    Object test = roomList.add(a);
+
+
     // Class Functions
     // POSTS
     public String addRoom(String roomName, boolean useBlankCards) {

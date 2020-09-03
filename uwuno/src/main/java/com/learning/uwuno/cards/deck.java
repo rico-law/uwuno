@@ -1,25 +1,24 @@
 package com.learning.uwuno.cards;
 
-import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.internalServerError;
 
 import java.util.*;
 
 public class deck {
-    // Constants
-    final private int MAX_HAND_SIZE = 7;
-
     // Class variables
     // Assume the top of the list is the next card to be drawn
     private LinkedList<card> activeDeck;
     private ArrayList<card> discardPile;
     final private boolean useBlankCards;
+    final private int maxHandSize;
+    private card lastCardPlayed;
 
     // Class Functions
-    public deck(boolean useBlankCards) {
+    public deck(boolean useBlankCards, int maxHandSize) {
         activeDeck = createDeck();
         discardPile = new ArrayList<card>();
         this.useBlankCards = useBlankCards;
+        this.maxHandSize = maxHandSize;
     }
 
     // Creates cards, fills active deck and shuffles it
@@ -55,6 +54,7 @@ public class deck {
     // Add discard pile to active deck and shuffle it
     public void reshuffle() {
         if (!discardPile.isEmpty()) {
+
             activeDeck.addAll(discardPile);
             Collections.shuffle(discardPile);
             discardPile.clear(); // Faster than removeAll
@@ -83,10 +83,17 @@ public class deck {
     public ArrayList<card> drawHand() {
         // Starting hand draws 7 cards, subList returns a view, have to create a new copy with same contents
         ArrayList<card> ret = new ArrayList<card>();
-        for (int i = 0; i < MAX_HAND_SIZE; i++) {
+        for (int i = 0; i < maxHandSize; i++) {
             ret.add(activeDeck.pop());
         }
         return ret;
+    }
+
+    // Should use this function when starting a game as it correctly sets the lastCardPlayed
+    public card drawStart() {
+        card start =  activeDeck.pop();
+        lastCardPlayed = start;
+        return start;
     }
 
     // Place given card into the discard pile at the end of the list, does not perform
@@ -94,12 +101,11 @@ public class deck {
     // TODO: Might need to find another way to do this, this doesn't guarantee destruction of
     //  previous card might cause debugging hell
     public void addToDiscard(card card) {
+        lastCardPlayed = card;
         discardPile.add(card);
     }
 
     public card lastPlayedCard() {
-        if (!discardPile.isEmpty())
-            return discardPile.get(discardPile.size() - 1);
-        throw new badRequest();
+        return lastCardPlayed;
     }
 }

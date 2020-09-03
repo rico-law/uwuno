@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class room {
+    // Constants
+    final private int MAX_HAND_SIZE = 7;
+
     // Class Variables
     final private String uid;
     private String roomName;
@@ -17,7 +20,7 @@ public class room {
     public room(String roomName, boolean useBlankCards) {
         this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
-        this.deck = new deck(useBlankCards);
+        this.deck = new deck(useBlankCards, MAX_HAND_SIZE);
     }
 
     // Room Functions

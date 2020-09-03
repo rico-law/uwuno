@@ -1,6 +1,5 @@
 package com.learning.uwuno.controllers;
 
-import com.learning.uwuno.*;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.errors.*;
 import com.learning.uwuno.services.gameService;
@@ -59,6 +58,7 @@ public class playerController {
             throw new internalServerError();
         }
 
+        // TODO: Change this to return a JSON Object, returning a POJO screws with JSON return
         // Handle updating name
         if (parser.exists("name")) {
             try { // TODO: Check if name already exists and append number to it
@@ -70,7 +70,7 @@ public class playerController {
                 throw new errorNotFound();
             }
         }
-        // Handle drawing a card - add to a player's cardList
+        // Handle drawing a card - remove a card from the deck and add to a player's cardList
         else if (parser.exists("draw")) {
             try {
                 int numToDraw = Integer.parseInt(parser.getValue("draw"));
