@@ -2,7 +2,7 @@ package com.learning.uwuno.cards;
 
 public class basicCard implements card {
     // Variables
-    CardType cardType = CardType.Basic;
+    final private CardType cardType = CardType.Basic;
     private Color color;
     private int value;
 

@@ -1,4 +1,4 @@
-package com.learning.uwuno;
+package com.learning.uwuno.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -23,11 +23,18 @@ public class parser {
         }
     }
 
+    // Assume this is called after checking for existence if handler handles multiple formats
     public String getValue(String key) {
-        if (map.get(key) == null) {
+        if (exists(key)) {
             throw new errorNotFound();
         } else {
             return map.get(key);
         }
+    }
+
+    public boolean exists(String key) {
+        if (map.get(key) == null)
+            return false;
+        return true;
     }
 }

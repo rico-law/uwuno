@@ -1,11 +1,13 @@
 package com.learning.uwuno.cards;
 
-public class draw2Card implements card {
+// Class handles all special cards that are not black
+public class sColorCard implements card {
     // Class Variables
-    card.CardType cardType = CardType.Draw2;
-    card.Color color;
+    final private card.CardType cardType;
+    final private card.Color color;
 
-    public draw2Card(card.Color color) {
+    public sColorCard(card.CardType cardType, card.Color color) {
+        this.cardType = cardType;
         this.color = color;
     }
 

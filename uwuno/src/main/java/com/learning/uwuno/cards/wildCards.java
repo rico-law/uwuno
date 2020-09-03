@@ -1,11 +1,13 @@
 package com.learning.uwuno.cards;
 
-public class blankCard implements card {
+// Handles all wild cards
+public class wildCards implements card {
     // Class Variables
-    card.CardType cardType = CardType.Blank;
-    card.Color color = card.Color.Black;
+    final private card.CardType cardType;
+    final private card.Color color = Color.Black;
 
-    public blankCard() {
+    public wildCards(card.CardType cardType) {
+        this.cardType = cardType;
     }
 
     // Interface Functions

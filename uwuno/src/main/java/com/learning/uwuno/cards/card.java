@@ -1,6 +1,6 @@
 package com.learning.uwuno.cards;
 
-interface card {
+public interface card {
     enum CardType {
         Basic, // Numbers 1 "0", 2 of each other number
         Skip, // 2 of each color
@@ -8,7 +8,7 @@ interface card {
         Draw2, // 2 of each color
         Draw4, // 4 of these
         ChangeColor, // 4 of these
-        Blank // 4 of these - to implement additional rules with
+        Blank // 4 of these, To implement additional house rules with
     }
 
     enum Color {

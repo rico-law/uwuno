@@ -1,5 +1,6 @@
 JSON Planning
 - spring recognizes both uid and id as the samething by default
+- order in code POST, GET, PUT, DELETE
 
 ### ROOMS ###
 POST
@@ -21,6 +22,7 @@ http://localhost:8080/rooms/<uid>
 DELETE
 http://localhost:8080/rooms/<uid>
 
+
 ### Player ###
 POST
 http://localhost:8080/rooms/<uid>/players
@@ -28,17 +30,25 @@ http://localhost:8080/rooms/<uid>/players
     name
 }
 
+GET
+http://localhost:8080/rooms/<uid>/players/<pid>/cards
 
 
 PUT
-Draw card
 http://localhost:8080/rooms/<uid>/players/<pid>
+Change name
 {
+    name
+}
 
+Draw card
+{
+    draw // the number of cards
 }
 
 Play a card
-http://localhost:8080/rooms/<uid>/players/<pid>
 {
-
+    cardType,
+    cardColor,
+    cardValue // empty if non-basic card
 }
