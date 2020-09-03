@@ -50,5 +50,6 @@ Play a card
 {
     cardType,
     cardColor,
-    cardValue // empty if non-basic card
+    cardValue, // empty if non-basic card
+    nextColor // empty if not a wild card
 }

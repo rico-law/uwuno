@@ -43,10 +43,10 @@ public class deck {
         }
         // Handle draw4's, changeColors and blanks
         for (int i = 0; i < 4; i++) {
-            deck.add(new wildCards(card.CardType.Draw4));
-            deck.add(new wildCards(card.CardType.ChangeColor));
+            deck.add(new wildCard(card.CardType.Draw4));
+            deck.add(new wildCard(card.CardType.ChangeColor));
             if (useBlankCards)
-                deck.add(new wildCards(card.CardType.Blank));
+                deck.add(new wildCard(card.CardType.Blank));
         }
         Collections.shuffle(deck);
         return deck;

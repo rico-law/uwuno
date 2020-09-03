@@ -1,12 +1,12 @@
 package com.learning.uwuno.cards;
 
 // Handles all wild cards
-public class wildCards implements card {
+public class wildCard implements card {
     // Class Variables
     final private card.CardType cardType;
     final private card.Color color = Color.Black;
 
-    public wildCards(card.CardType cardType) {
+    public wildCard(card.CardType cardType) {
         this.cardType = cardType;
     }
 

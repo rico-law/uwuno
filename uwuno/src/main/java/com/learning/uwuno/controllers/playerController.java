@@ -102,18 +102,13 @@ public class playerController {
     }
 
     // DELETES
-    @DeleteMapping(value = "rooms/{uid}/players")
-    public void deletePlayer(@RequestBody String json, @PathVariable String uid) {
+    @DeleteMapping(value = "rooms/{uid}/players/{pid}")
+    public void deletePlayer(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         try {
-            parser parser = new parser(json);
-            room room = containerService.getRoom(uid);
-            room.deletePlayer(parser.getValue("id"));
+            containerService.deletePlayer(uid, pid);
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
-        }
-        catch (JsonProcessingException e) {
-            throw new internalServerError();
         }
     }
 }

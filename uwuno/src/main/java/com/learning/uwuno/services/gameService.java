@@ -81,4 +81,8 @@ public class gameService {
         roomList.removeIf(t -> t.getUid().equals(uid));
     }
 
+    public void deletePlayer(String uid, String pid) {
+        getRoom(uid).deletePlayer(pid);
+    }
+
 }
