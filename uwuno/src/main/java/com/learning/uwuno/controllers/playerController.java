@@ -84,16 +84,19 @@ public class playerController {
         // Will check for whether card is playable, however will throw if not
         else if (parser.exists("cardType") &&
                 parser.exists("cardColor") &&
-                parser.exists("cardValue")) {
+                parser.exists("cardValue") &&
+                parser.exists("wildColor")) {
             containerService.playCard(uid, pid, parser.getValue("cardType"),
                                                 parser.getValue("cardColor"),
-                                                parser.getValue("cardValue"));
+                                                parser.getValue("cardValue"),
+                                                parser.getValue("wildColor"));
             return containerService.getPlayer(uid, pid).getCardList();
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||
                 parser.exists("cardColor") ||
-                parser.exists("cardValue")) {
+                parser.exists("cardValue") ||
+                parser.exists("wildColor")) {
             throw new badRequest(); // Separate for custom message later on?
         }
         else {

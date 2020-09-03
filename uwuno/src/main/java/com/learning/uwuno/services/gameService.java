@@ -67,7 +67,8 @@ public class gameService {
     }
 
     // Should handle both taking card away from player and adding it back into deck
-    public void playCard(String uid, String pid, String type, String color, String value) {
+    // type = cardType, color = cardColor, value = number on card, wildColor = color to set wild card to
+    public void playCard(String uid, String pid, String type, String color, String value, String wildColor) {
         card toPlay = utils.inputToCard(type, color, value);
         if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest();

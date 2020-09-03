@@ -22,5 +22,4 @@ public interface card {
     // Interface Functions
     public Color getColor();
     public CardType getType();
-    public void playCard();
 }

@@ -24,7 +24,4 @@ public class basicCard implements card {
     public CardType getType() {
         return cardType;
     }
-
-    public void playCard() {
-    }
 }

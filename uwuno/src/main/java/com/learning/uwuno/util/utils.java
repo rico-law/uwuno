@@ -22,18 +22,16 @@ public final class utils {
         }
         else {
             switch (type) {
-                case Skip:
-                case Reverse:
-                case Draw2:
+                case Skip, Reverse, Draw2 -> {
                     if (color != card.Color.Black)
                         return new sColorCard(type, color);
                     throw new badRequest();
-                case Draw4:
-                case ChangeColor:
-                case Blank:
+                }
+                case Draw4, ChangeColor, Blank -> {
                     if (color == card.Color.Black)
                         return new wildCard(type);
                     throw new badRequest();
+                }
             }
         }
         throw new badRequest();
@@ -49,6 +47,10 @@ public final class utils {
         else if (toPlay instanceof basicCard && lastPlayed instanceof basicCard &&
                 ((basicCard) toPlay).getValue() == ((basicCard) lastPlayed).getValue()) {
             return true;
+        }
+        // If last played card is a wild card need to check the temp color
+        else if (lastPlayed instanceof wildCard) {
+            return ((wildCard) lastPlayed).getTempColor() == toPlay.getColor();
         }
         // Check if same color or same type, if same type the type must not be a basic numeric card
         else {

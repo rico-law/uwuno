@@ -19,7 +19,4 @@ public class sColorCard implements card {
     public card.CardType getType() {
         return cardType;
     }
-
-    public void playCard() {
-    }
 }

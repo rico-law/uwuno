@@ -38,7 +38,16 @@ public class UwunoApplication {
         boolean t5 = utils.checkPlayable(c1, c4); // false
         boolean t6 = utils.checkPlayable(c4, c1); // true
 
+        wildCard c5 = new wildCard(card.CardType.Draw4);
+        c5.setTempColor(card.Color.Blue);
+        wildCard c6 = new wildCard(card.CardType.Draw4);
+        c6.setTempColor(card.Color.Green);
+        boolean t7 = utils.checkPlayable(c5, c6); // true
+        boolean t8 = utils.checkPlayable(c4, c5); // true
+        boolean t9 = c5.equals(c6); // true
 
+        hand.add(new wildCard(card.CardType.Draw4));
+        hand.remove(c5); // Should work with overriden equals()
 
         int f = 3;
     }
