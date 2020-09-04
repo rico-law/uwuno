@@ -28,14 +28,11 @@ public class parser {
     public String getValue(String key) {
         if (!exists(key)) {
             throw new errorNotFound();
-        } else {
-            return map.get(key);
         }
+        return map.get(key);
     }
 
     public boolean exists(String key) {
-        if (map.get(key) == null)
-            return false;
-        return true;
+        return map.get(key) != null;
     }
 }

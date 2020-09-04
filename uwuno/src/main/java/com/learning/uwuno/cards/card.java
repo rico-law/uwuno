@@ -1,7 +1,7 @@
 package com.learning.uwuno.cards;
 
-public interface card {
-    enum CardType {
+public abstract class card {
+    public enum CardType {
         Basic, // Numbers 1 "0", 2 of each other number
         Skip, // 2 of each color
         Reverse, // 2 of each color
@@ -11,7 +11,7 @@ public interface card {
         Blank // 4 of these, To implement additional house rules with
     }
 
-    enum Color {
+    public enum Color {
         Blue,
         Green,
         Red,
@@ -19,7 +19,16 @@ public interface card {
         Black // Assume all wild cards are of color black
     }
 
-    // Interface Functions
-    public Color getColor();
-    public CardType getType();
+    // Class Variables
+    CardType cardType;
+    Color color;
+
+    // Base Functions
+    public CardType getType() {
+        return cardType;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 }

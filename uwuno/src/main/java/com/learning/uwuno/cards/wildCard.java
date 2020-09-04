@@ -3,7 +3,7 @@ package com.learning.uwuno.cards;
 import com.learning.uwuno.errors.badRequest;
 
 // Handles all wild cards
-public class wildCard implements card {
+public class wildCard extends card {
     // Class Variables
     final private card.CardType cardType;
     final private card.Color color = Color.Black;
@@ -41,14 +41,5 @@ public class wildCard implements card {
     // can use this to check if this is a new card if that is ever needed
     public card.Color getTempColor() {
         return lastChosenColor;
-    }
-
-    // Interface Functions
-    public card.Color getColor() {
-        return color;
-    }
-
-    public card.CardType getType() {
-        return cardType;
     }
 }

@@ -1,6 +1,6 @@
 package com.learning.uwuno.cards;
 
-public class basicCard implements card {
+public class basicCard extends card {
     // Variables
     final private CardType cardType = CardType.Basic;
     private Color color;
@@ -14,14 +14,5 @@ public class basicCard implements card {
 
     public int getValue() {
         return value;
-    }
-
-    // Interface Functions
-    public Color getColor() {
-        return color;
-    }
-
-    public CardType getType() {
-        return cardType;
     }
 }
