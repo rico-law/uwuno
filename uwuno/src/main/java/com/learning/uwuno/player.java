@@ -46,7 +46,7 @@ public class player {
     }
 
     public ArrayList<card> drawCards(int numCards) {
-        ArrayList<card> drawnCards = curDeck.drawCard(numCards);
+        ArrayList<card> drawnCards = curDeck.drawCards(numCards);
         cardList.addAll(drawnCards);
         return drawnCards;
     }

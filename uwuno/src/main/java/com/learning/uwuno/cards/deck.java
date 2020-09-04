@@ -63,7 +63,7 @@ public class deck {
     // Draw numCard cards, assume first item in the ArrayList is the top card
     // don't ever use this function directly, use implementation inside gameService to ensure
     // cards are removed from deck without moving it into a player's hand
-    public ArrayList<card> drawCard(int numCards) {
+    public ArrayList<card> drawCards(int numCards) {
         if (activeDeck.isEmpty() || activeDeck.size() < numCards)
             reshuffle();
         try {
@@ -76,16 +76,6 @@ public class deck {
         catch (NoSuchElementException e) {
             throw new internalServerError();
         }
-    }
-
-    // Should only ever be called once at the beginning of the game for each player
-    public ArrayList<card> drawHand() {
-        // Starting hand draws 7 cards, subList returns a view, have to create a new copy with same contents
-        ArrayList<card> ret = new ArrayList<card>();
-        for (int i = 0; i < maxHandSize; i++) {
-            ret.add(activeDeck.pop());
-        }
-        return ret;
     }
 
     // Should use this function when starting a game as it correctly sets the lastCardPlayed
