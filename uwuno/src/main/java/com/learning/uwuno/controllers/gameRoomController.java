@@ -1,10 +1,11 @@
 package com.learning.uwuno.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.learning.uwuno.*;
-import com.learning.uwuno.services.roomContainerService;
+import com.learning.uwuno.services.gameService;
 import com.learning.uwuno.errors.*;
+import com.learning.uwuno.util.parser;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,29 @@ Entity Classes:
 public class gameRoomController {
     // Runs and injects container service
     @Autowired
-    private roomContainerService containerService;
+    private gameService containerService;
+
+    // POSTS
+    @PostMapping(value = "rooms")
+    public String addRoom(@RequestBody String json) {
+        try {
+            parser parser = new parser(json);
+            if (parser.exists("roomName") && parser.exists("useBlankCards")) {
+                return containerService.addRoom(parser.getValue("roomName"),
+                        Boolean.parseBoolean(parser.getValue("useBlankCards")));
+            }
+            throw new badRequest();
+        }
+        catch (JsonProcessingException e) {
+            throw new internalServerError();
+        }
+    }
 
     // GETS
     // Returns .json formatted vector of rooms, private variables are shown (room name)
     @GetMapping(value = "rooms")
     public ArrayList<room> rooms() {
-        return containerService.getRoomList();
+        return containerService.getRoomList(); // TODO: Fix to not return player pids
     }
 
     // Example: localhost:8080/rooms/2
@@ -43,17 +60,15 @@ public class gameRoomController {
         }
     }
 
-    // POSTS
-    @PostMapping(value = "rooms")
-    public String addRoom(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+    // Returns a list of players in given room uid.
+    @GetMapping(value = "rooms/{uid}/players")
+    public ArrayList<player> getPlayers(@PathVariable String uid) {
         try {
-            parser parser = new parser(json);
-            room newRoom = new room(parser.getValue("roomName"));
-            containerService.addRoom(newRoom);
-            return newRoom.getUid();
+            room room = containerService.getRoom(uid);
+            return room.getPlayers();
         }
-        catch (JsonProcessingException e) {
-            throw new internalServerError();
+        catch (NoSuchElementException e) {
+            throw new errorNotFound();
         }
     }
 
