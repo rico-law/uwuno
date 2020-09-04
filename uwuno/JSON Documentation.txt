@@ -6,7 +6,8 @@ JSON Planning
 POST
 http://localhost:8080/rooms
 {
-    roomName
+    roomName,
+    useBlankCards // boolean
 }
 
 GET

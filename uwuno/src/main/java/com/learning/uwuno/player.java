@@ -4,18 +4,17 @@ import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.errors.badRequest;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+@JsonIgnoreProperties(value = {"pid", "curDeck"})
 public class player {
     // Class Variables
-    @JsonIgnore
     final private String pid;
     private String name;
     private ArrayList<card> cardList = new ArrayList<card>(); // TODO: Start game must check to make sure this value is not empty
-    @JsonIgnore
     private deck curDeck;
 
     public player(String name) {

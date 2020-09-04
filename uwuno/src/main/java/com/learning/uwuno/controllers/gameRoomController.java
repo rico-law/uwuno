@@ -32,7 +32,11 @@ public class gameRoomController {
     public String addRoom(@RequestBody String json) {
         try {
             parser parser = new parser(json);
-            return containerService.addRoom(parser.getValue("roomName"), false);
+            if (parser.exists("roomName") && parser.exists("useBlankCards")) {
+                return containerService.addRoom(parser.getValue("roomName"),
+                        Boolean.parseBoolean(parser.getValue("useBlankCards")));
+            }
+            throw new badRequest();
         }
         catch (JsonProcessingException e) {
             throw new internalServerError();
