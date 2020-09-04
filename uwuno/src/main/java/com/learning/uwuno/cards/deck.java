@@ -74,7 +74,6 @@ public class deck {
             return ret;
         }
         catch (NoSuchElementException e) {
-            // TODO: Discuss what happens here, this is technically possible?
             throw new internalServerError();
         }
     }

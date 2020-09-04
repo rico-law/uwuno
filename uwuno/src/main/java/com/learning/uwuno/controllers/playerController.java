@@ -97,7 +97,7 @@ public class playerController {
                 parser.exists("cardColor") ||
                 parser.exists("cardValue") ||
                 parser.exists("wildColor")) {
-            throw new badRequest(); // Separate for custom message later on?
+            throw new badRequest(); // TODO: Separate for custom message later on (very likely GUI bug)
         }
         else {
             throw new badRequest();

@@ -60,10 +60,7 @@ public class gameService {
     }
 
     public ArrayList<card> drawCards(String uid, String pid, int numCards) {
-        room room = getRoom(uid);
-        ArrayList<card> drawnCards = room.drawCards(numCards);
-        room.getPlayer(pid).addCards(drawnCards);
-        return drawnCards;
+        return getPlayer(uid, pid).drawCards(numCards);
     }
 
     // Should handle both taking card away from player and adding it back into deck
@@ -72,9 +69,7 @@ public class gameService {
         card toPlay = utils.inputToCard(type, color, value);
         if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest();
-        room curRoom = getRoom(uid);
-        curRoom.getPlayer(pid).removeCard(toPlay);
-        curRoom.addToDiscard(toPlay);
+        getPlayer(uid, pid).playCards(toPlay);
     }
 
     // DELETES

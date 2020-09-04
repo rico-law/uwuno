@@ -20,7 +20,7 @@ public class room {
     public room(String roomName, boolean useBlankCards) {
         this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
-        this.deck = new deck(useBlankCards, MAX_HAND_SIZE);
+        setupDeck(new deck(useBlankCards, MAX_HAND_SIZE));
     }
 
     // Room Functions
@@ -53,17 +53,15 @@ public class room {
         playerList.removeIf(t -> t.getPid().equals(pid));
     }
 
-    // Deck Functions, do not return deck and handle everything here so as there's no way to control what is
-    // done with the reference of the deck
-    public ArrayList<card> drawCards(int numCards) {
-        return deck.drawCard(numCards);
+    // Only use this to create new deck as this will ensure each player gets the same reference deck
+    public void setupDeck(deck newDeck) {
+        deck = newDeck;
+        for (player curPlayer : playerList) {
+            curPlayer.setCurDeck(newDeck);
+        }
     }
 
     public card lastPlayedCard() {
         return deck.lastPlayedCard();
-    }
-
-    public void addToDiscard(card played) {
-        deck.addToDiscard(played);
     }
 }
