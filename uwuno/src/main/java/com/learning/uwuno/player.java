@@ -51,7 +51,7 @@ public class player {
         return drawnCards;
     }
 
-    public void playCards(card toPlay) {
+    public void playCard(card toPlay) {
         curDeck.addToDiscard(toPlay);
         removeCard(toPlay);
     }

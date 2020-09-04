@@ -69,7 +69,7 @@ public class gameService {
         card toPlay = utils.inputToCard(type, color, value);
         if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest();
-        getPlayer(uid, pid).playCards(toPlay);
+        getPlayer(uid, pid).playCard(toPlay);
     }
 
     // DELETES
