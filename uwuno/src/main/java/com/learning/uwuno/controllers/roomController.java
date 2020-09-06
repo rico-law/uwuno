@@ -24,7 +24,7 @@ Entity Classes:
 */
 
 @RestController
-public class gameRoomController {
+public class roomController {
     // Runs and injects container service
     @Autowired
     private gameService containerService;
