@@ -63,8 +63,10 @@ public class gameService {
         return player;
     }
 
-    public ArrayList<card> drawCards(String uid, String pid, int numCards) {
-        return getPlayer(uid, pid).drawCards(numCards);
+    public player drawCards(String uid, String pid, int numCards) {
+        player player = getPlayer(uid, pid);
+        player.drawCards(numCards);
+        return player;
     }
 
     // Should handle both taking card away from player and adding it back into deck
