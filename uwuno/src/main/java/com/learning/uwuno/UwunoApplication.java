@@ -20,12 +20,15 @@ public class UwunoApplication {
 //        deck testdeck = new deck(false, 5);
 //        ArrayList<card> hand = testdeck.drawHand();
 //        player testplayer = new player("test");
-//        testplayer.addCards(hand);
+//        testplayer.setCurDeck(testdeck);
+//        testplayer.drawCards(2);
 //        card cardRemove = testplayer.getCardList().get(0);
 //        testplayer.removeCard(cardRemove);
 //        testdeck.addToDiscard(cardRemove);
 //        card lastCard = testdeck.lastPlayedCard();
-//
+//        card.CardType type = lastCard.getType();
+//        card.Color color = lastCard.getColor();
+////
 //        card testCreate = utils.inputToCard("Skip", "Blue", "");
 //
 //        card c1 = new basicCard(4, card.Color.Blue);
