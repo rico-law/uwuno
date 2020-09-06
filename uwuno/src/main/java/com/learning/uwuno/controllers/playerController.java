@@ -2,12 +2,15 @@ package com.learning.uwuno.controllers;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.errors.*;
+import com.learning.uwuno.player;
 import com.learning.uwuno.services.gameService;
 import com.learning.uwuno.util.parser;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,11 +25,11 @@ public class playerController {
     // POSTS
     // Adds a new player to the given room uid.
     @PostMapping(value = "rooms/{uid}/players")
-    public String addPlayer(@RequestBody String json, @PathVariable String uid) {
+    public ResponseEntity<player> addPlayer(@RequestBody String json, @PathVariable String uid) {
         try {
             // OPTIONAL TODO: Check if name already exists and append number to it
             parser parser = new parser(json);
-            return containerService.addPlayer(parser.getValue("name"), uid);
+            return ResponseEntity.ok(containerService.addPlayer(parser.getValue("name"), uid));
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
@@ -39,8 +42,8 @@ public class playerController {
     // GETS
     // Return list of card available to player
     @GetMapping(value = "rooms/{uid}/players/{pid}/cards")
-    public ArrayList<card> getPlayerCards(@PathVariable String uid, @PathVariable String pid) {
-        return containerService.getPlayer(uid, pid).getCardList();
+    public ResponseEntity<ArrayList<card>> getPlayerCards(@PathVariable String uid, @PathVariable String pid) {
+        return ResponseEntity.ok(containerService.getPlayer(uid, pid).getCardList());
     }
 
     // PUTS
@@ -49,7 +52,7 @@ public class playerController {
     // 2) Play Card
     // 3) Draw Card
     @PutMapping(value = "rooms/{uid}/players/{pid}")
-    public Object handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<player> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         parser parser;
         try {
             parser = new parser(json);
@@ -62,9 +65,8 @@ public class playerController {
         // Handle updating name
         if (parser.exists("name")) {
             try { // TODO: Check if name already exists and append number to it
-                containerService.updatePlayerName(uid, pid, parser.getValue("name"));
+                return ResponseEntity.ok(containerService.updatePlayerName(uid, pid, parser.getValue("name")));
                 // Should we do it this way? Def good for debugging front end at least
-                return containerService.getPlayer(uid, pid);
             }
             catch (NoSuchElementException e) {
                 throw new errorNotFound();
@@ -74,7 +76,7 @@ public class playerController {
         else if (parser.exists("draw")) {
             try {
                 int numToDraw = Integer.parseInt(parser.getValue("draw"));
-                return containerService.drawCards(uid, pid, numToDraw);
+                return ResponseEntity.ok(containerService.drawCards(uid, pid, numToDraw));
             }
             catch (NumberFormatException e) {
                 throw new badRequest();
@@ -90,7 +92,7 @@ public class playerController {
                                                 parser.getValue("cardColor"),
                                                 parser.getValue("cardValue"),
                                                 parser.getValue("wildColor"));
-            return containerService.getPlayer(uid, pid).getCardList();
+            return ResponseEntity.ok(containerService.getPlayer(uid, pid));
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||
@@ -106,9 +108,10 @@ public class playerController {
 
     // DELETES
     @DeleteMapping(value = "rooms/{uid}/players/{pid}")
-    public void deletePlayer(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<Void> deletePlayer(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         try {
             containerService.deletePlayer(uid, pid);
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();

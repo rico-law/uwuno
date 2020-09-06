@@ -8,6 +8,8 @@ import com.learning.uwuno.util.parser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,12 +31,12 @@ public class gameRoomController {
 
     // POSTS
     @PostMapping(value = "rooms")
-    public String addRoom(@RequestBody String json) {
+    public ResponseEntity<room> addRoom(@RequestBody String json) {
         try {
             parser parser = new parser(json);
             if (parser.exists("roomName") && parser.exists("useBlankCards")) {
-                return containerService.addRoom(parser.getValue("roomName"),
-                        Boolean.parseBoolean(parser.getValue("useBlankCards")));
+                return ResponseEntity.ok(containerService.addRoom(parser.getValue("roomName"),
+                        Boolean.parseBoolean(parser.getValue("useBlankCards"))));
             }
             throw new badRequest();
         }
@@ -46,15 +48,15 @@ public class gameRoomController {
     // GETS
     // Returns .json formatted vector of rooms, private variables are shown (room name)
     @GetMapping(value = "rooms")
-    public ArrayList<room> rooms() {
-        return containerService.getRoomList(); // TODO: Fix to not return player pids
+    public ResponseEntity<ArrayList<room>> rooms() {
+        return ResponseEntity.ok(containerService.getRoomList()); // TODO: Fix to not return player pids
     }
 
     // Example: localhost:8080/rooms/2
     @GetMapping(value = "rooms/{uid}")
-    public room getRoom(@PathVariable String uid) {
+    public ResponseEntity<room> getRoom(@PathVariable String uid) {
         try {
-            return containerService.getRoom(uid);
+            return ResponseEntity.ok(containerService.getRoom(uid));
         } catch (NoSuchElementException e) {
             throw new errorNotFound();
         }
@@ -62,10 +64,10 @@ public class gameRoomController {
 
     // Returns a list of players in given room uid.
     @GetMapping(value = "rooms/{uid}/players")
-    public ArrayList<player> getPlayers(@PathVariable String uid) {
+    public ResponseEntity<ArrayList<player>> getPlayers(@PathVariable String uid) {
         try {
             room room = containerService.getRoom(uid);
-            return room.getPlayers();
+            return ResponseEntity.ok(room.getPlayers());
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
@@ -74,10 +76,10 @@ public class gameRoomController {
 
     // PUTS
     @PutMapping(value = "rooms/{uid}")
-    public void updateRoomName(@PathVariable String uid, @RequestBody String json) {
+    public ResponseEntity<room> updateRoomName(@PathVariable String uid, @RequestBody String json) {
         try {
             parser parser = new parser(json);
-            containerService.updateRoomName(uid, parser.getValue("roomName"));
+            return ResponseEntity.ok(containerService.updateRoomName(uid, parser.getValue("roomName")));
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
@@ -90,9 +92,10 @@ public class gameRoomController {
     // DELETES
     // TODO: Figure out how to prevent ppl from deleting a room that isn't theirs (maybe make a hidden password per room?
     @DeleteMapping(value = "rooms/{uid}")
-    public void deleteRoom(@PathVariable String uid) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable String uid) {
         try {
             containerService.deleteRoom(uid);
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
