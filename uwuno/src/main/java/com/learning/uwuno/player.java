@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@JsonIgnoreProperties(value = {"pid", "curDeck"})
 public class player {
     // Class Variables
     final private String pid;
