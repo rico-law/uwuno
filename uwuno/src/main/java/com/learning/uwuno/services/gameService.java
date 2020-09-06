@@ -19,10 +19,10 @@ public class gameService {
 
     // Class Functions
     // POSTS
-    public String addRoom(String roomName, boolean useBlankCards) {
+    public room addRoom(String roomName, boolean useBlankCards) {
         room newRoom = new room(roomName, useBlankCards);
         roomList.add(newRoom);
-        return newRoom.getUid();
+        return newRoom;
     }
 
     public String addRoom(room newRoom) {
@@ -30,10 +30,10 @@ public class gameService {
         return newRoom.getUid();
     }
 
-    public String addPlayer(String name, String uid) {
+    public player addPlayer(String name, String uid) {
         player newPlayer = new player(name);
         getRoom(uid).addPlayer(newPlayer);
-        return newPlayer.getPid();
+        return newPlayer;
     }
 
     // GETS
@@ -51,16 +51,22 @@ public class gameService {
     }
 
     // PUTS
-    public void updateRoomName(String uid, String newName) {
-        roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get().setRoomName(newName);
+    public room updateRoomName(String uid, String newName) {
+        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
+        room.setRoomName(newName);
+        return room;
     }
 
-    public void updatePlayerName(String uid, String pid, String newName) {
-        getRoom(uid).getPlayer(pid).setName(newName);
+    public player updatePlayerName(String uid, String pid, String newName) {
+        player player = getRoom(uid).getPlayer(pid);
+        player.setName(newName);
+        return player;
     }
 
-    public ArrayList<card> drawCards(String uid, String pid, int numCards) {
-        return getPlayer(uid, pid).drawCards(numCards);
+    public player drawCards(String uid, String pid, int numCards) {
+        player player = getPlayer(uid, pid);
+        player.drawCards(numCards);
+        return player;
     }
 
     // Should handle both taking card away from player and adding it back into deck
