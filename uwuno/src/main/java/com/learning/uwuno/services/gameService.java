@@ -19,10 +19,10 @@ public class gameService {
 
     // Class Functions
     // POSTS
-    public String addRoom(String roomName, boolean useBlankCards) {
+    public room addRoom(String roomName, boolean useBlankCards) {
         room newRoom = new room(roomName, useBlankCards);
         roomList.add(newRoom);
-        return newRoom.getUid();
+        return newRoom;
     }
 
     public String addRoom(room newRoom) {
@@ -30,10 +30,10 @@ public class gameService {
         return newRoom.getUid();
     }
 
-    public String addPlayer(String name, String uid) {
+    public player addPlayer(String name, String uid) {
         player newPlayer = new player(name);
         getRoom(uid).addPlayer(newPlayer);
-        return newPlayer.getPid();
+        return newPlayer;
     }
 
     // GETS
