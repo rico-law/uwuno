@@ -51,12 +51,16 @@ public class gameService {
     }
 
     // PUTS
-    public void updateRoomName(String uid, String newName) {
-        roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get().setRoomName(newName);
+    public room updateRoomName(String uid, String newName) {
+        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
+        room.setRoomName(newName);
+        return room;
     }
 
-    public void updatePlayerName(String uid, String pid, String newName) {
-        getRoom(uid).getPlayer(pid).setName(newName);
+    public player updatePlayerName(String uid, String pid, String newName) {
+        player player = getRoom(uid).getPlayer(pid);
+        player.setName(newName);
+        return player;
     }
 
     public ArrayList<card> drawCards(String uid, String pid, int numCards) {

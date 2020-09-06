@@ -65,9 +65,8 @@ public class playerController {
         // Handle updating name
         if (parser.exists("name")) {
             try { // TODO: Check if name already exists and append number to it
-                containerService.updatePlayerName(uid, pid, parser.getValue("name"));
+                return ResponseEntity.ok(containerService.updatePlayerName(uid, pid, parser.getValue("name")));
                 // Should we do it this way? Def good for debugging front end at least
-                return ResponseEntity.ok(containerService.getPlayer(uid, pid));
             }
             catch (NoSuchElementException e) {
                 throw new errorNotFound();

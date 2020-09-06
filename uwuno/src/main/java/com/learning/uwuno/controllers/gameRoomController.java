@@ -76,11 +76,10 @@ public class gameRoomController {
 
     // PUTS
     @PutMapping(value = "rooms/{uid}")
-    public ResponseEntity<Void> updateRoomName(@PathVariable String uid, @RequestBody String json) {
+    public ResponseEntity<room> updateRoomName(@PathVariable String uid, @RequestBody String json) {
         try {
             parser parser = new parser(json);
-            containerService.updateRoomName(uid, parser.getValue("roomName"));
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.ok(containerService.updateRoomName(uid, parser.getValue("roomName")));
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();
