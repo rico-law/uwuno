@@ -111,4 +111,57 @@ public class basicPlayerTest {
 
         assertThat(response.statusCode(), is(equalTo(404)));
     }
+
+    // DELETE valid Player
+    @Test
+    public void deletePlayer200() throws IOException {
+        // Player
+        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
+        String playerInputName = "player_delete_200";
+        String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
+
+        String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .then().extract().response().path("pid");
+
+        // Request
+        Response response = given().pathParam("uid", roomId).pathParam("pid", playerId)
+                .when().delete(BASE_URL + "/rooms/{uid}/players/{pid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(200)));
+    }
+
+    // DELETE invalid Player - via invalid pid
+    @Test
+    public void deletePlayerInvalidPid404() {
+        Response response = given().pathParam("uid", roomId).pathParam("pid", "invalid_pid")
+                .when().delete(BASE_URL + "/rooms/{uid}/players/{pid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(404)));
+    }
+
+    // DELETE invalid Player - via invalid uid
+    @Test
+    public void deletePlayerInvalidUid404() throws FileNotFoundException {
+        // Player
+        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
+        String playerInputName = "player_delete_404";
+        String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
+
+        String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .then().extract().response().path("pid");
+
+        // Request
+        Response response = given().pathParam("uid", "invalid_uid").pathParam("pid", playerId)
+                .when().delete(BASE_URL + "/rooms/{uid}/players/{pid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(404)));
+    }
+
+    // PUT
+
 }
