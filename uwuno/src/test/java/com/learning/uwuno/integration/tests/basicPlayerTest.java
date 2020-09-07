@@ -7,7 +7,6 @@ import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static com.learning.uwuno.integration.constants.*;
 import static io.restassured.RestAssured.*;

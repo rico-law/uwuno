@@ -43,7 +43,12 @@ public class playerController {
     // Return list of card available to player
     @GetMapping(value = "rooms/{uid}/players/{pid}/cards")
     public ResponseEntity<ArrayList<card>> getPlayerCards(@PathVariable String uid, @PathVariable String pid) {
-        return ResponseEntity.ok(containerService.getPlayer(uid, pid).getCardList());
+        try {
+            return ResponseEntity.ok(containerService.getPlayer(uid, pid).getCardList());
+        }
+        catch (NoSuchElementException e) {
+            throw new errorNotFound();
+        }
     }
 
     // PUTS
