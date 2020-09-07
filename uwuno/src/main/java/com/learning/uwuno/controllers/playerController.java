@@ -92,7 +92,7 @@ public class playerController {
                                         parser.getValue("cardType"),
                                         parser.getValue("cardColor"),
                                         parser.getValue("cardValue"),
-                                        parser.getValue("SetWildColor")));
+                                        parser.getValue("setWildColor")));
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||
