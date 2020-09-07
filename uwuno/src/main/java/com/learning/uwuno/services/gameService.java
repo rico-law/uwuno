@@ -83,7 +83,8 @@ public class gameService {
 
     // DELETES
     public void deleteRoom(String uid) {
-        if (!roomList.removeIf(t -> t.getUid().equals(uid))) throw new errorNotFound();
+        if (!roomList.removeIf(t -> t.getUid().equals(uid)))
+            throw new errorNotFound();
     }
 
     public void deletePlayer(String uid, String pid) {
