@@ -51,7 +51,8 @@ public class room {
     }
 
     public void deletePlayer(String pid) {
-        if (!playerList.removeIf(t -> t.getPid().equals(pid))) throw new errorNotFound();
+        if (!playerList.removeIf(t -> t.getPid().equals(pid)))
+            throw new errorNotFound();
     }
 
     // Only use this to create new deck as this will ensure each player gets the same reference deck

@@ -49,8 +49,8 @@ public class playerController {
     // PUTS
     // Possible calls for player PUT, for differing json inputs check JSON Documentation.txt
     // 1) Update player name
-    // 2) Play Card
-    // 3) Draw Card
+    // 2) Draw Card
+    // 3) Play Card
     @PutMapping(value = "rooms/{uid}/players/{pid}")
     public ResponseEntity<player> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         parser parser;
@@ -88,11 +88,11 @@ public class playerController {
                 parser.exists("cardColor") &&
                 parser.exists("cardValue") &&
                 parser.exists("setWildColor")) {
-            containerService.playCard(uid, pid, parser.getValue("cardType"),
-                                                parser.getValue("cardColor"),
-                                                parser.getValue("cardValue"),
-                                                parser.getValue("setWildColor"));
-            return ResponseEntity.ok(containerService.getPlayer(uid, pid));
+            return ResponseEntity.ok(containerService.playCard(uid, pid,
+                                        parser.getValue("cardType"),
+                                        parser.getValue("cardColor"),
+                                        parser.getValue("cardValue"),
+                                        parser.getValue("SetWildColor")));
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||

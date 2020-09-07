@@ -5,8 +5,6 @@ import com.learning.uwuno.errors.badRequest;
 // Handles all wild cards
 public class wildCard extends card {
     // Class Variables
-    final private card.CardType cardType;
-    final private card.Color color = Color.Black;
     // Variable to keep track of the color chosen by user when played
     private card.Color lastChosenColor = Color.Black;
 
@@ -27,6 +25,7 @@ public class wildCard extends card {
     // Class Functions
     public wildCard(card.CardType cardType) {
         this.cardType = cardType;
+        this.color = Color.Black;
     }
 
     public void setTempColor(card.Color color) {

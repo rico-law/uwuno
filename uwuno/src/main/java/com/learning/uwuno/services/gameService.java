@@ -76,16 +76,19 @@ public class gameService {
 
     // Should handle both taking card away from player and adding it back into deck
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
-    public void playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
+    public player playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
         card toPlay = utils.inputToCard(type, color, value);
         if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest();
-        getPlayer(uid, pid).playCard(toPlay);
+        player player = getPlayer(uid, pid);
+        player.playCard(toPlay);
+        return player;
     }
 
     // DELETES
     public void deleteRoom(String uid) {
-        if (!roomList.removeIf(t -> t.getUid().equals(uid))) throw new errorNotFound();
+        if (!roomList.removeIf(t -> t.getUid().equals(uid)))
+            throw new errorNotFound();
     }
 
     public void deletePlayer(String uid, String pid) {
