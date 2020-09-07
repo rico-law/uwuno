@@ -1,6 +1,7 @@
 package com.learning.uwuno.unit;
 
 import com.learning.uwuno.controllers.roomController;
+import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 import com.learning.uwuno.services.gameService;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,7 @@ import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,6 +52,18 @@ public class roomControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0]['name']").value("test"))
                 .andExpect(jsonPath("$.length()").value(1))
+                .andDo(print());
+    }
+
+    @Test
+    public void GET_room() throws Exception {
+        room room = new room("test", false);
+        when(service.getRoom("2")).thenReturn(room);
+        mock.perform(get("/rooms/2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(room.getName()))
+                .andExpect(jsonPath("$.uid").value(room.getUid()))
+                .andExpect(jsonPath("$.players").value(room.getPlayers()))
                 .andDo(print());
     }
 
@@ -129,27 +141,69 @@ public class roomControllerTests {
 
     @Test
     public void GET_players_in_empty_room() throws Exception {
+        room room = new room("test", false);
+        when(service.getRoom(room.getUid())).thenReturn(room);
 
+        mock.perform(get("/rooms/" + room.getUid() + "/players"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length").value(0))
+                .andDo(print());
     }
 
     @Test
     public void GET_players_in_room() throws Exception{
+        room room = new room("test", false);
+        player player = new player("tester");
+        room.addPlayer(player);
+        when(service.getRoom(room.getUid())).thenReturn(room);
 
+        mock.perform(get("/rooms/" + room.getUid() + "/players"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..*").value(room.getPlayers()))
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].name").value(player.getName()))
+                .andDo(print());
     }
 
     @Test
-    public void GET_players_in_room_not_found_err() throws Exception {
+    public void GET_players_in_room_not_found_err() throws Exception{
+        player player = new player("tester");
+        when(service.getRoom("2").getPlayers()).thenThrow(NoSuchElementException.class);
 
+        mock.perform(get("/rooms/2/players"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
     public void PUT_update_room_name() throws Exception {
+        room room = new room("test", false);
+        when(service.getRoom(room.getUid())).thenReturn(room);
 
+        mock.perform(get("/rooms/" + room.getUid()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("test"))
+                .andDo(print());
+
+        room.setRoomName("newName");
+        when(service.updateRoomName(room.getUid(), room.getName())).thenReturn(room);
+        mock.perform(put("/rooms/" + room.getUid())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUtils.createJSON("roomName", room.getName())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("newName"))
+                .andDo(print());
     }
 
     @Test
     public void PUT_update_room_name_not_found_err() throws Exception {
+        when(service.updateRoomName("2", "3")).thenThrow(NoSuchElementException.class);
 
+        mock.perform(put("/rooms/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUtils.createJSON("roomName", "3")))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 
     @Test
