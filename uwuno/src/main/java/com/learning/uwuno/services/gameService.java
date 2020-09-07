@@ -20,6 +20,7 @@ public class gameService {
     // Class Functions
     // POSTS
     public room addRoom(String roomName, boolean useBlankCards) {
+        if (roomName.isEmpty()) throw new badRequest();
         room newRoom = new room(roomName, useBlankCards);
         roomList.add(newRoom);
         return newRoom;
@@ -31,6 +32,7 @@ public class gameService {
     }
 
     public player addPlayer(String name, String uid) {
+        if (name.isEmpty()) throw new badRequest();
         player newPlayer = new player(name);
         getRoom(uid).addPlayer(newPlayer);
         return newPlayer;
@@ -52,12 +54,14 @@ public class gameService {
 
     // PUTS
     public room updateRoomName(String uid, String newName) {
+        if (newName.isEmpty()) throw new badRequest();
         room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
         room.setRoomName(newName);
         return room;
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
+        if (newName.isEmpty()) throw new badRequest();
         player player = getRoom(uid).getPlayer(pid);
         player.setName(newName);
         return player;
@@ -70,8 +74,8 @@ public class gameService {
     }
 
     // Should handle both taking card away from player and adding it back into deck
-    // type = cardType, color = cardColor, value = number on card, wildColor = color to set wild card to
-    public void playCard(String uid, String pid, String type, String color, String value, String wildColor) {
+    // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
+    public void playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
         card toPlay = utils.inputToCard(type, color, value);
         if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest();

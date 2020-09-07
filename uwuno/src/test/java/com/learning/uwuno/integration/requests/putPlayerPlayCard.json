@@ -1,0 +1,6 @@
+{
+  "cardType": "$cardType",
+  "cardColor": "$cardColor",
+  "cardValue": "$cardValue",
+  "setWildColor": "$setWildCard"
+}
