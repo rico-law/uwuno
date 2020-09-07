@@ -113,7 +113,7 @@ public class playerController {
 
     // DELETES
     @DeleteMapping(value = "rooms/{uid}/players/{pid}")
-    public ResponseEntity<Void> deletePlayer(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<Void> deletePlayer(@PathVariable String uid, @PathVariable String pid) {
         try {
             containerService.deletePlayer(uid, pid);
             return ResponseEntity.status(HttpStatus.OK).build();
