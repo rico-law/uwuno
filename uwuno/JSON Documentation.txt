@@ -52,5 +52,5 @@ Play a card
     cardType,
     cardColor,
     cardValue, // empty if non-basic card
-    wildColor // empty if not a wild card
+    setWildColor // empty if not a wild card
 }

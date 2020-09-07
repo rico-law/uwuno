@@ -87,18 +87,18 @@ public class playerController {
         else if (parser.exists("cardType") &&
                 parser.exists("cardColor") &&
                 parser.exists("cardValue") &&
-                parser.exists("wildColor")) {
+                parser.exists("setWildColor")) {
             return ResponseEntity.ok(containerService.playCard(uid, pid,
                                         parser.getValue("cardType"),
                                         parser.getValue("cardColor"),
                                         parser.getValue("cardValue"),
-                                        parser.getValue("wildColor")));
+                                        parser.getValue("setWildColor")));
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||
                 parser.exists("cardColor") ||
                 parser.exists("cardValue") ||
-                parser.exists("wildColor")) {
+                parser.exists("setWildColor")) {
             throw new badRequest(); // TODO: Separate for custom message later on (very likely GUI bug)
         }
         else {
