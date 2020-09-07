@@ -2,6 +2,7 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
+import com.learning.uwuno.errors.errorNotFound;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -50,7 +51,8 @@ public class room {
     }
 
     public void deletePlayer(String pid) {
-        playerList.removeIf(t -> t.getPid().equals(pid));
+        if (!playerList.removeIf(t -> t.getPid().equals(pid)))
+            throw new errorNotFound();
     }
 
     // Only use this to create new deck as this will ensure each player gets the same reference deck

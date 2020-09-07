@@ -2,6 +2,7 @@ package com.learning.uwuno.services;
 
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
+import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 import com.learning.uwuno.util.utils;
@@ -82,7 +83,8 @@ public class gameService {
 
     // DELETES
     public void deleteRoom(String uid) {
-        roomList.removeIf(t -> t.getUid().equals(uid));
+        if (!roomList.removeIf(t -> t.getUid().equals(uid)))
+            throw new errorNotFound();
     }
 
     public void deletePlayer(String uid, String pid) {
