@@ -187,12 +187,13 @@ public class basicRoomTest {
                 .then().extract().response();
 
         assertThat(response.statusCode(), is(equalTo(200)));
+        assertThat(response.path("uid"), is(equalTo(roomId)));
         assertThat(response.path("name"), is(equalTo(inputName)));
     }
 
     // PUT invalid name
     @Test
-    public void putValidRoomName400() throws IOException {
+    public void putInvalidRoomName400() throws IOException {
         // Room
         String oldFilePath = JSON_REQUESTS_PATH + "/postRoom.json";
         String oldInputName = "room_put_old_name_invalid_400";
@@ -217,7 +218,7 @@ public class basicRoomTest {
 
     // PUT invalid room uid
     @Test
-    public void putValidRoomName404() throws IOException {
+    public void putInvalidRoomUid404() throws IOException {
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
         String inputName = "room_put_new_name_valid_200";
         String request = jsonUtil.createPutRoomJson(inputName, "invalid_uid", filePath);
