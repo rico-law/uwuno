@@ -102,13 +102,53 @@ public class roomControllerTests {
     }
 
     @Test
-    public void POST_add_room_bad_req_err() throws Exception {
-        when(service.addRoom(isNull(), anyBoolean())).thenThrow(new com.learning.uwuno.errors.badRequest());
+    public void POST_add_room_internal_server_err() throws Exception {
+        String invalidJSON = "{" + "]";
 
+        mock.perform(post("/rooms")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andDo(print());
+    }
+
+    @Test
+    public void POST_add_room_bad_req_err() throws Exception {
+        when(service.addRoom(anyString(), anyBoolean())).thenThrow(new com.learning.uwuno.errors.badRequest());
+
+        // 1. No RoomName in JSON
+        String missingRoomName = testUtils.createJSON("useBlankCards", "false");
+
+        mock.perform(post("/rooms")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(missingRoomName)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+        // 2. No UseBlankCards in JSON
+        String missingBlankCards = testUtils.createJSON("roomName", "test");
+
+        mock.perform(post("/rooms")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(missingBlankCards)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+        // 3. Missing both fields in JSON
+        mock.perform(post("/rooms")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+        // 4. Empty RoomName (error thrown by service)
         ArrayList<String> keys = new ArrayList<>();
+        keys.add("roomName");
         keys.add("useBlankCards");
 
         ArrayList<String> values = new ArrayList<>();
+        values.add("");
         values.add("false");
 
         mock.perform(post("/rooms")
