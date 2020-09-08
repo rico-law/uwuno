@@ -93,13 +93,8 @@ public class roomController {
     // TODO: Figure out how to prevent ppl from deleting a room that isn't theirs (maybe make a hidden password per room?
     @DeleteMapping(value = "rooms/{uid}")
     public ResponseEntity<Void> deleteRoom(@PathVariable String uid) {
-        try {
-            containerService.deleteRoom(uid);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        catch (NoSuchElementException e) {
-            throw new errorNotFound();
-        }
+        containerService.deleteRoom(uid);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
 

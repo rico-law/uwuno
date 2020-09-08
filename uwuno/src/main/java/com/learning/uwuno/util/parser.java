@@ -26,9 +26,8 @@ public class parser {
 
     // Assume this is called after checking for existence if handler handles multiple formats
     public String getValue(String key) {
-        if (!exists(key)) {
+        if (!exists(key))
             throw new errorNotFound();
-        }
         return map.get(key);
     }
 
