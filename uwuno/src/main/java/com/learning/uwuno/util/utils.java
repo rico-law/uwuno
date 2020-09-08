@@ -14,23 +14,28 @@ public final class utils {
     static public card inputToCard(String cardType, String cardColor, String cardValue) {
         card.CardType type = card.CardType.valueOf(cardType);
         card.Color color = card.Color.valueOf(cardColor);
-        if (!cardValue.isBlank()) {
-            int value = Integer.parseInt(cardValue);
-            if (value < 0 || value > 9)
+        if (!cardValue.isBlank() && cardType.equals("Basic") && !cardColor.equals("Black")) {
+            try {
+                int value = Integer.parseInt(cardValue);
+                if (value < 0 || value > 9)
+                    throw new badRequest();
+                return new basicCard(value, color);
+            }
+            catch (NumberFormatException e) {
                 throw new badRequest();
-            return new basicCard(value, color);
+            }
         }
-        else {
+        else if (cardValue.isBlank() && !cardType.equals("Basic")) {
             switch (type) {
                 case Skip, Reverse, Draw2 -> {
                     if (color != card.Color.Black)
                         return new sColorCard(type, color);
-                    throw new badRequest();
+//                    throw new badRequest();
                 }
                 case Draw4, ChangeColor, Blank -> {
                     if (color == card.Color.Black)
                         return new wildCard(type);
-                    throw new badRequest();
+//                    throw new badRequest();
                 }
             }
         }
