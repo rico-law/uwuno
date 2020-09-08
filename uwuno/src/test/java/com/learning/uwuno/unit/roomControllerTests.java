@@ -60,7 +60,7 @@ public class roomControllerTests {
     @Test
     public void GET_room() throws Exception {
         room room = new room("test", false);
-        when(service.getRoom("2")).thenReturn(room);
+        when(service.getRoom(anyString())).thenReturn(room);
         mock.perform(get("/rooms/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(room.getName()))
@@ -71,7 +71,7 @@ public class roomControllerTests {
 
     @Test
     public void GET_room_not_found() throws Exception {
-        when(service.getRoom("2")).thenThrow(NoSuchElementException.class);
+        when(service.getRoom(anyString())).thenThrow(NoSuchElementException.class);
         mock.perform(get("/rooms/2"))
                 .andExpect(status().isNotFound())
                 .andDo(print());
@@ -149,7 +149,7 @@ public class roomControllerTests {
     @Test
     public void GET_players_in_room_not_found_err() throws Exception {
         player player = new player("tester");
-        when(service.getRoom("2")).thenThrow(new com.learning.uwuno.errors.errorNotFound());
+        when(service.getRoom(anyString())).thenThrow(new com.learning.uwuno.errors.errorNotFound());
 
         mock.perform(get("/rooms/2/players")
                 .accept(MediaType.APPLICATION_JSON))
@@ -181,7 +181,7 @@ public class roomControllerTests {
 
     @Test
     public void PUT_update_room_name_not_found_err() throws Exception {
-        when(service.updateRoomName("2", "3")).thenThrow(new com.learning.uwuno.errors.errorNotFound());
+        when(service.updateRoomName(anyString(), anyString())).thenThrow(new com.learning.uwuno.errors.errorNotFound());
 
         mock.perform(put("/rooms/2")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -193,7 +193,7 @@ public class roomControllerTests {
 
     @Test
     public void PUT_update_room_name_bad_req_err() throws Exception {
-        when(service.updateRoomName("2", "")).thenThrow(new com.learning.uwuno.errors.badRequest());
+        when(service.updateRoomName(anyString(), anyString())).thenThrow(new com.learning.uwuno.errors.badRequest());
 
         mock.perform(put("/rooms/2")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -211,7 +211,7 @@ public class roomControllerTests {
 
     @Test
     public void DELETE_room_not_found_err() throws Exception {
-        doThrow(new com.learning.uwuno.errors.errorNotFound()).when(service).deleteRoom("2");
+        doThrow(new com.learning.uwuno.errors.errorNotFound()).when(service).deleteRoom(anyString());
 
         mock.perform(delete("/rooms/2"))
                 .andExpect(status().isNotFound())
