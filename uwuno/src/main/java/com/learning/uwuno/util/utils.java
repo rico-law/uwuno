@@ -3,6 +3,8 @@ package com.learning.uwuno.util;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 
+import static com.learning.uwuno.cards.card.CardType.*;
+
 public final class utils {
     // Should not be instantiated
     private utils() {
@@ -12,8 +14,15 @@ public final class utils {
     // Function to create the proper card interface given cardType, cardColor, cardValue as strings
     // This function is case sensitive, for exact qualifiers look in card.java
     static public card inputToCard(String cardType, String cardColor, String cardValue) {
-        card.CardType type = card.CardType.valueOf(cardType);
-        card.Color color = card.Color.valueOf(cardColor);
+        card.CardType type;
+        card.Color color;
+        try {
+            type = card.CardType.valueOf(cardType);
+            color = card.Color.valueOf(cardColor);
+        }
+        catch (IllegalArgumentException e) {
+            throw new badRequest();
+        }
         if (!cardValue.isBlank() && cardType.equals("Basic") && !cardColor.equals("Black")) {
             try {
                 int value = Integer.parseInt(cardValue);
@@ -30,12 +39,10 @@ public final class utils {
                 case Skip, Reverse, Draw2 -> {
                     if (color != card.Color.Black)
                         return new sColorCard(type, color);
-//                    throw new badRequest();
                 }
                 case Draw4, ChangeColor, Blank -> {
                     if (color == card.Color.Black)
                         return new wildCard(type);
-//                    throw new badRequest();
                 }
             }
         }

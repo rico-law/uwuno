@@ -28,8 +28,9 @@ public class UwunoApplication {
 //        card lastCard = testdeck.lastPlayedCard();
 //        card.CardType type = lastCard.getType();
 //        card.Color color = lastCard.getColor();
-////
+//
 //        card testCreate = utils.inputToCard("Skip", "Blue", "");
+//        card testCreate1 = utils.inputToCard("Skip", "Black", ""); // throws
 //
 //        card c1 = new basicCard(4, card.Color.Blue);
 //        card c2 = new basicCard(2, card.Color.Green);
