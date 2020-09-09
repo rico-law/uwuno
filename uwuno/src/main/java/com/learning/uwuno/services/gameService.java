@@ -57,7 +57,7 @@ public class gameService {
 
     // PUTS
     public room updateRoomName(String uid, String newName) {
-        if (newName.isEmpty())
+        if (newName.isBlank())
             throw new badRequest();
         room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
         room.setRoomName(newName);
@@ -65,7 +65,7 @@ public class gameService {
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
-        if (newName.isEmpty())
+        if (newName.isBlank())
             throw new badRequest();
         player player = getRoom(uid).getPlayer(pid);
         player.setName(newName);
@@ -81,9 +81,9 @@ public class gameService {
     // Should handle both taking card away from player and adding it back into deck
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
     public player playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
-        if (color.equals(card.Color.Black.toString()) && wildColor.isBlank() ||
-            color.isBlank() && !wildColor.isBlank() ||
-            !color.equals(card.Color.Black.toString()) && !wildColor.isBlank()) {
+        if (color.equals(card.Color.Black.toString()) && setWildColor.isBlank() ||
+            color.isBlank() && !setWildColor.isBlank() ||
+            !color.equals(card.Color.Black.toString()) && !setWildColor.isBlank()) {
             throw new badRequest();
         }
         card toPlay = utils.inputToCard(type, color, value);
@@ -96,7 +96,9 @@ public class gameService {
 
     // DELETES
     public void deleteRoom(String uid) {
-        if (!roomList.removeIf(t -> t.getUid().equals(uid)))
+        if (roomList.isEmpty())
+            throw new badRequest();
+        else if (!roomList.removeIf(t -> t.getUid().equals(uid)))
             throw new errorNotFound();
     }
 

@@ -150,7 +150,7 @@ public class playerControllerTests {
         when(gameService.playCard(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(testPlayer);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "wildColor")),
+                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor")),
                 new ArrayList<>(Arrays.asList("Basic", "Green", "6", "")));
 
         mvc.perform(put("/rooms/123/players/123")
