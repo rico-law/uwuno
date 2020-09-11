@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-
 @WebMvcTest(playerController.class)
 @AutoConfigureMockMvc
 public class playerControllerTests {
@@ -58,6 +56,15 @@ public class playerControllerTests {
                 .andExpect(jsonPath("$.name").value(testPlayer.getName()))
                 .andExpect(jsonPath("$.cardList").isArray())
                 .andExpect(jsonPath("$.cardList", hasSize(0)));
+    }
+
+    @Test
+    public void testPlayer_POST_ERROR() throws Exception {
+        mvc.perform(post("/rooms/123/players")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUtils.createJSON("wrongKey", testPlayer.getName())))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -90,6 +97,15 @@ public class playerControllerTests {
                 .andExpect(jsonPath("$.name").value(newName));
     }
 
+    @Test
+    public void testPlayer_PUT_updateName_ERROR() throws Exception {
+        mvc.perform(put("/rooms/123/players/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUtils.createJSON("wrongKey", "newName"))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void testPlayer_PUT_drawCard() throws Exception {
@@ -110,6 +126,23 @@ public class playerControllerTests {
     }
 
     @Test
+    public void testPlayer_PUT_drawCard_ERROR() throws Exception {
+        mvc.perform(put("/rooms/123/players/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUtils.createJSON("wrongKey", "1"))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(put("/rooms/123/players/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUtils.createJSON("draw", "wrongValue"))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testPlayer_PUT_playCard() throws Exception {
         testPlayer.setCurDeck(new deck(false, 1));
         testPlayer.drawCards(1);
@@ -117,8 +150,8 @@ public class playerControllerTests {
         when(gameService.playCard(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(testPlayer);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "wildColor")),
-                new ArrayList<String>(Arrays.asList("Basic", "Green", "6", "")));
+                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor")),
+                new ArrayList<>(Arrays.asList("Basic", "Green", "6", "")));
 
         mvc.perform(put("/rooms/123/players/123")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -129,5 +162,18 @@ public class playerControllerTests {
                 .andExpect(jsonPath("$.cardList").isArray())
                 .andExpect(jsonPath("$.cardList", hasSize(0)));
     }
-}
 
+    @Test
+    public void testPlayer_PUT_playCard_ERROR() throws Exception {
+        String content = testUtils.createJSON(
+                new ArrayList<>(List.of("cardType", "cardColor", "cardValue")),
+                new ArrayList<>(Arrays.asList("Basic", "Green", "6")));
+
+        mvc.perform(put("/rooms/123/players/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+}
