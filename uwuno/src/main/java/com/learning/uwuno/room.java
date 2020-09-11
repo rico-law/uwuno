@@ -10,7 +10,7 @@ import java.util.UUID;
 public class room {
     // Constants
     final private int MAX_HAND_SIZE = 7;
-    private enum States {
+    private enum Status {
         Lobby,
         Start,
         End
@@ -21,7 +21,7 @@ public class room {
     private String roomName;
     private LinkedList<player> playerList = new LinkedList<player>();
     private deck deck;
-    private States state = States.Lobby;
+    private Status status = Status.Lobby;
 
     // Class functions
     public room(String roomName, boolean useBlankCards) {

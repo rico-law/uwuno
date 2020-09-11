@@ -64,6 +64,11 @@ public class gameService {
         return room;
     }
 
+    public void updateRoomStatus(String uid, String status) {
+        if (status.isEmpty())
+            throw new badRequest();
+    }
+
     public player updatePlayerName(String uid, String pid, String newName) {
         if (newName.isEmpty())
             throw new badRequest();
