@@ -4,24 +4,30 @@ import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.errors.errorNotFound;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public class room {
     // Constants
     final private int MAX_HAND_SIZE = 7;
+    private enum States {
+        Lobby,
+        Start,
+        End
+    }
 
     // Class Variables
     final private String uid;
     private String roomName;
-    private ArrayList<player> playerList = new ArrayList<player>();
+    private LinkedList<player> playerList = new LinkedList<player>();
     private deck deck;
+    private States state = States.Lobby;
 
     // Class functions
     public room(String roomName, boolean useBlankCards) {
         this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
-        setupDeck(new deck(useBlankCards, MAX_HAND_SIZE));
+        this.deck = new deck(useBlankCards, MAX_HAND_SIZE);
     }
 
     // Room Functions
@@ -38,7 +44,7 @@ public class room {
     }
 
     // Player Functions
-    public ArrayList<player> getPlayers() {
+    public LinkedList<player> getPlayers() {
         return playerList;
     }
 

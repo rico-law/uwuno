@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 /*
@@ -64,7 +65,7 @@ public class roomController {
 
     // Returns a list of players in given room uid.
     @GetMapping(value = "rooms/{uid}/players")
-    public ResponseEntity<ArrayList<player>> getPlayers(@PathVariable String uid) {
+    public ResponseEntity<LinkedList<player>> getPlayers(@PathVariable String uid) {
         try {
             room room = containerService.getRoom(uid);
             return ResponseEntity.ok(room.getPlayers());
