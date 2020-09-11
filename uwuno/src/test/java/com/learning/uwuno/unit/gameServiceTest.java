@@ -3,6 +3,7 @@ package com.learning.uwuno.unit;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.room;
+import com.learning.uwuno.room.Status;
 import com.learning.uwuno.services.gameService;
 import com.learning.uwuno.player;
 
@@ -124,7 +125,7 @@ public class gameServiceTest {
         });
 
         gameService.updateRoomStatus(room.getUid(), newStatus);
-        assertThat(room.getRoomStatus(), equalTo(com.learning.uwuno.room.Status.Start));
+        assertThat(room.getRoomStatus(), equalTo(Status.Start));
     }
 
     @Test

@@ -71,10 +71,9 @@ public class room {
     }
 
     // Only use this to create new deck as this will ensure each player gets the same reference deck
-    public void setupDeck(deck newDeck) {
-        deck = newDeck;
+    public void setupDeck() {
         for (player curPlayer : playerList) {
-            curPlayer.setCurDeck(newDeck);
+            curPlayer.setCurDeck(this.deck);
         }
     }
 

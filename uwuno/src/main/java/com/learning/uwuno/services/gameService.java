@@ -5,6 +5,7 @@ import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
+import com.learning.uwuno.room.Status;
 import com.learning.uwuno.util.utils;
 
 import org.springframework.stereotype.Service;
@@ -67,7 +68,10 @@ public class gameService {
         if (status.isBlank())
             throw new badRequest();
         room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
-        room.setRoomStatus(utils.stringToRoomState(status));
+        room.Status roomStatus = utils.stringToRoomState(status);
+        room.setRoomStatus(roomStatus);
+
+        if (roomStatus == Status.Start) room.setupDeck();
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
