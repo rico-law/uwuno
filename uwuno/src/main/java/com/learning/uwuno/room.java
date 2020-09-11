@@ -10,7 +10,7 @@ import java.util.UUID;
 public class room {
     // Constants
     final private int MAX_HAND_SIZE = 7;
-    private enum Status {
+    public enum Status {
         Lobby,
         Start,
         End
@@ -21,12 +21,13 @@ public class room {
     private String roomName;
     private LinkedList<player> playerList = new LinkedList<player>();
     private deck deck;
-    private Status status = Status.Lobby;
+    private Status roomStatus;
 
     // Class functions
     public room(String roomName, boolean useBlankCards) {
         this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
+        this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards, MAX_HAND_SIZE);
     }
 
@@ -37,6 +38,14 @@ public class room {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public void setRoomStatus(Status status) {
+        this.roomStatus = status;
+    }
+
+    public Status getRoomStatus() {
+        return roomStatus;
     }
 
     public String getUid() {

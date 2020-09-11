@@ -18,7 +18,7 @@ http://localhost:8080/rooms/<uid>
 {
     uid,
     roomName,
-    status: lobby // state of the game either: lobby, start, end
+    roomStatus: lobby // state of the game either: Lobby, Start, End
 }
 
 DELETE

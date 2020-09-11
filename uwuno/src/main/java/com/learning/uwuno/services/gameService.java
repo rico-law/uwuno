@@ -56,17 +56,18 @@ public class gameService {
     }
 
     // PUTS
-    public room updateRoomName(String uid, String newName) {
+    public void updateRoomName(String uid, String newName) {
         if (newName.isBlank())
             throw new badRequest();
         room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
         room.setRoomName(newName);
-        return room;
     }
 
     public void updateRoomStatus(String uid, String status) {
-        if (status.isEmpty())
+        if (status.isBlank())
             throw new badRequest();
+        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
+        room.setRoomStatus(utils.stringToRoomState(status));
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {

@@ -81,7 +81,7 @@ public class roomController {
         try {
             parser parser = new parser(json);
             containerService.updateRoomName(uid, parser.getValue("roomName"));
-            containerService.updateRoomStatus(uid, parser.getValue("status"));
+            containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         catch (NoSuchElementException e) {

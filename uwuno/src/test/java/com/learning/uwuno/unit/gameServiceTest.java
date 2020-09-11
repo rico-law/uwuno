@@ -37,6 +37,7 @@ public class gameServiceTest {
     final private String testPlayerName = "testPlayer";
     final private String newName = "newName";
     final private String wrongId = "id";
+    final private String newStatus = "Start";
 
     @Test
     public void testGameService_addRoom() throws Exception {
@@ -108,6 +109,22 @@ public class gameServiceTest {
 
         gameService.updateRoomName(room.getUid(), newName);
         assertThat(room.getName(), equalTo(newName));
+    }
+
+    @Test
+    public void testGameService_updateRoomStatus() throws Exception {
+        room room = gameService.addRoom(testRoomName, false);
+
+        assertThrows(badRequest.class, () -> {
+            gameService.updateRoomStatus(room.getUid(), "");
+        });
+
+        assertThrows(badRequest.class, () -> {
+            gameService.updateRoomStatus(room.getUid(), "invalid_status");
+        });
+
+        gameService.updateRoomStatus(room.getUid(), newStatus);
+        assertThat(room.getRoomStatus(), equalTo(com.learning.uwuno.room.Status.Start));
     }
 
     @Test
