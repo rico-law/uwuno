@@ -11,6 +11,8 @@ import java.util.UUID;
 public class room {
     // Constants
     final private int MAX_HAND_SIZE = 7;
+    final private int MAX_PLAYERS = 10;
+    final private int MIN_PLAYERS = 2;
     public enum Status {
         Lobby,
         Start,
@@ -30,7 +32,7 @@ public class room {
         this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
-        this.deck = new deck(useBlankCards, MAX_HAND_SIZE);
+        this.deck = new deck(useBlankCards);
     }
 
     // Room Functions
@@ -60,6 +62,18 @@ public class room {
 
     public player getPlayerTurn() {
         return playerTurn;
+    }
+
+    public int getMaxHandSize() {
+        return MAX_HAND_SIZE;
+    }
+
+    public int getMaxPlayers() {
+        return MAX_PLAYERS;
+    }
+
+    public int getMinPlayers() {
+        return MIN_PLAYERS;
     }
 
     // Player Functions
@@ -97,6 +111,6 @@ public class room {
     }
 
     public card lastPlayedCard() {
-        return deck.lastPlayedCard();
+        return deck.getLastPlayedCard();
     }
 }

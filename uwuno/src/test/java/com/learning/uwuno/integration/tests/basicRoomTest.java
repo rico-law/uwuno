@@ -180,7 +180,7 @@ public class basicRoomTest {
         // Request
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
         String inputName = "room_put_new_name_valid_200";
-        String status = "Start";
+        String status = "Lobby";
         String request = jsonUtil.createPutRoomJson(inputName, roomId, status, filePath);
 
         Response response = given().pathParam("uid", roomId)
@@ -194,7 +194,6 @@ public class basicRoomTest {
         assertThat(response.statusCode(), is(equalTo(200)));
         assertThat(getRequest.path("uid"), is(equalTo(roomId)));
         assertThat(getRequest.path("name"), is(equalTo(inputName)));
-        assertThat(getRequest.path("roomStatus"), is(equalTo(status)));
     }
 
     // PUT invalid name

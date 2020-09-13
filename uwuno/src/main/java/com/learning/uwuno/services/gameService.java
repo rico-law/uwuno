@@ -80,7 +80,7 @@ public class gameService {
         room.setupDeck();
         LinkedList<player> playerList = room.getPlayers();
         for (player player:playerList) {
-            player.drawCards(room.getDeck().getMaxHandSize());
+            player.drawCards(room.getMaxHandSize());
         }
         room.flipTopCard();
     }
