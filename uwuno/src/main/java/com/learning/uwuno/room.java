@@ -4,6 +4,7 @@ import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.errors.errorNotFound;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class room {
     private LinkedList<player> playerList = new LinkedList<player>();
     private deck deck;
     private Status roomStatus;
+    private player playerTurn;
 
     // Class functions
     public room(String roomName, boolean useBlankCards) {
@@ -52,6 +54,14 @@ public class room {
         return uid;
     }
 
+    public deck getDeck() {
+        return deck;
+    }
+
+    public player getPlayerTurn() {
+        return playerTurn;
+    }
+
     // Player Functions
     public LinkedList<player> getPlayers() {
         return playerList;
@@ -70,11 +80,20 @@ public class room {
             throw new errorNotFound();
     }
 
+    public void shufflePlayers() {
+        Collections.shuffle(playerList);
+        this.playerTurn = playerList.getFirst();
+    }
+
     // Only use this to create new deck as this will ensure each player gets the same reference deck
     public void setupDeck() {
         for (player curPlayer : playerList) {
             curPlayer.setCurDeck(this.deck);
         }
+    }
+
+    public void flipTopCard() {
+        this.deck.drawStart();
     }
 
     public card lastPlayedCard() {

@@ -21,6 +21,10 @@ public class deck {
         this.maxHandSize = maxHandSize;
     }
 
+    public int getMaxHandSize() {
+        return maxHandSize;
+    }
+
     // Creates cards, fills active deck and shuffles it
     public LinkedList<card> createDeck() {
         LinkedList<card> deck = new LinkedList<card>();

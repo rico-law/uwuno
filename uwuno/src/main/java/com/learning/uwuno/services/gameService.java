@@ -11,6 +11,7 @@ import com.learning.uwuno.util.utils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 @Service
 public class gameService {
@@ -71,7 +72,17 @@ public class gameService {
         room.Status roomStatus = utils.stringToRoomState(status);
         room.setRoomStatus(roomStatus);
 
-        if (roomStatus == Status.Start) room.setupDeck();
+        if (roomStatus == Status.Start) setUpStartGame(room);
+    }
+
+    public void setUpStartGame(room room) {
+        room.shufflePlayers();
+        room.setupDeck();
+        LinkedList<player> playerList = room.getPlayers();
+        for (player player:playerList) {
+            player.drawCards(room.getDeck().getMaxHandSize());
+        }
+        room.flipTopCard();
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
