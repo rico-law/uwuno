@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.is;
 
 public class startGameTest {
     private static String roomId;
+    private static String roomName;
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
@@ -26,9 +27,12 @@ public class startGameTest {
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
         String request = jsonUtil.createPostRoomJson("room", "false", filePath);
 
-        roomId = given().contentType(ContentType.JSON)
+        Response response = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
-                .then().extract().response().path("uid");
+                .then().extract().response();
+
+        roomId = response.path("uid");
+        roomName = response.path("name");
     }
 
     @AfterEach
@@ -39,35 +43,51 @@ public class startGameTest {
     }
 
     @Test
-    public void putValidRoom200() throws IOException {
-        // TODO: check room status changed
+    public void putValidStartGame200() throws IOException {
+        // Player 1
+        String pFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
+        String pRequest = jsonUtil.createPostPutPlayerJson("player_1", pFilePath);
+
+        given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                .when().body(pRequest).post(BASE_URL + "/rooms/{uid}/players");
+
+        // Player 2
+        pRequest = jsonUtil.createPostPutPlayerJson("player_2", pFilePath);
+        given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                .when().body(pRequest).post(BASE_URL + "/rooms/{uid}/players");
+
+        // Request
+        String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
+        String status = "Start";
+        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, filePath);
+
+        Response response = given().pathParam("uid", roomId)
+                .when().body(request).put(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        Response getRequest = given().pathParam("uid", roomId)
+                .when().get(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(200)));
+        assertThat(getRequest.path("roomStatus"), is(equalTo(status)));
     }
-//        // Room
-//        String oldFilePath = JSON_REQUESTS_PATH + "/postRoom.json";
-//        String oldInputName = "room_put_old_name_valid";
-//        String oldRequest = jsonUtil.createPostRoomJson(oldInputName, "false", oldFilePath);
-//
-//        String roomId = given().contentType(ContentType.JSON)
-//                .when().body(oldRequest).post(BASE_URL + "/rooms")
-//                .then().extract().response().path("uid");
-//
-//        runningRoomIds.add(roomId);
-//
-//        // Request
-//        String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
-//        String inputName = "room_put_new_name_valid_200";
-//        String status = "Start";
-//        String request = jsonUtil.createPutRoomJson(inputName, roomId, status, filePath);
-//
-//        Response response = given().pathParam("uid", roomId)
-//                .when().body(request).put(BASE_URL + "/rooms/{uid}")
-//                .then().extract().response();
-//
-//        Response getRequest = given().pathParam("uid", roomId)
-//                .when().get(BASE_URL + "/rooms/{uid}")
-//                .then().extract().response();
-//
-//        assertThat(response.statusCode(), is(equalTo(200)));
-//        assertThat(getRequest.path("roomStatus"), is(equalTo(status)));
-//    }
+
+    @Test
+    public void putStartNoPlayers400() throws IOException {
+        String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
+        String status = "Start";
+        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, filePath);
+
+        Response response = given().pathParam("uid", roomId)
+                .when().body(request).put(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        Response getRequest = given().pathParam("uid", roomId)
+                .when().get(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(400)));
+        assertThat(getRequest.path("roomStatus"), is("Lobby"));
+    }
 }
