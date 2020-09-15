@@ -124,9 +124,18 @@ public class gameServiceTest {
             gameService.updateRoomStatus(room.getUid(), "invalid_status");
         });
 
-        // TODO: add check for Starting game
-//        gameService.updateRoomStatus(room.getUid(), newStatus);
-//        assertThat(room.getRoomStatus(), equalTo(Status.Start));
+        assertThrows(badRequest.class, () -> {
+            gameService.updateRoomStatus(room.getUid(), newStatus);
+        });
+
+        assertThrows(badRequest.class, () -> {
+            gameService.addPlayer(testPlayerName, room.getUid());
+            gameService.updateRoomStatus(room.getUid(), newStatus);
+        });
+        
+        gameService.addPlayer("testPlayer2", room.getUid());
+        gameService.updateRoomStatus(room.getUid(), newStatus);
+        assertThat(room.getRoomStatus(), equalTo(Status.Start));
     }
 
     @Test
