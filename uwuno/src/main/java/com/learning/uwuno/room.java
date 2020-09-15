@@ -1,5 +1,6 @@
 package com.learning.uwuno;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.errors.errorNotFound;
@@ -60,6 +61,7 @@ public class room {
         return deck;
     }
 
+    @JsonIgnoreProperties("cardList")
     public player getPlayerTurn() {
         return playerTurn;
     }
