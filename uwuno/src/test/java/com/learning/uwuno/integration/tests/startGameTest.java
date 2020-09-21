@@ -1,8 +1,10 @@
 package com.learning.uwuno.integration.tests;
 
 import com.learning.uwuno.integration.jsonUtil;
+
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,9 @@ import java.io.IOException;
 
 import static com.learning.uwuno.integration.constants.BASE_URL;
 import static com.learning.uwuno.integration.constants.JSON_REQUESTS_PATH;
+
 import static io.restassured.RestAssured.given;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

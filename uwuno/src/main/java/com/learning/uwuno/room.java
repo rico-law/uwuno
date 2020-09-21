@@ -1,9 +1,10 @@
 package com.learning.uwuno;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.errors.errorNotFound;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -46,7 +47,7 @@ public class room {
     }
 
     public void setRoomStatus(Status status) {
-        this.roomStatus = status;
+        roomStatus = status;
     }
 
     public Status getRoomStatus() {
@@ -55,10 +56,6 @@ public class room {
 
     public String getUid() {
         return uid;
-    }
-
-    public deck getDeck() {
-        return deck;
     }
 
     @JsonIgnoreProperties("cardList")

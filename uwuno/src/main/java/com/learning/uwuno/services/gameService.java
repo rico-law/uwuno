@@ -3,9 +3,9 @@ package com.learning.uwuno.services;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
+import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
-import com.learning.uwuno.room.Status;
 import com.learning.uwuno.util.utils;
 
 import org.springframework.stereotype.Service;
@@ -93,7 +93,7 @@ public class gameService {
                 return false;
             }
         }
-        throw new badRequest();
+        throw new internalServerError(); // Should not reach here
     }
 
     // TODO: Only Start state. May need to add other states as necessary.
