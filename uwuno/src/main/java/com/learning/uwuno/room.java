@@ -58,6 +58,7 @@ public class room {
         return uid;
     }
 
+    // Ignores the cardList field in the response JSON. We only need player id and name.
     @JsonIgnoreProperties("cardList")
     public player getPlayerTurn() {
         return playerTurn;
