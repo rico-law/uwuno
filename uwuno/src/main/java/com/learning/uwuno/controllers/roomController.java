@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 /*
@@ -64,7 +65,7 @@ public class roomController {
 
     // Returns a list of players in given room uid.
     @GetMapping(value = "rooms/{uid}/players")
-    public ResponseEntity<ArrayList<player>> getPlayers(@PathVariable String uid) {
+    public ResponseEntity<LinkedList<player>> getPlayers(@PathVariable String uid) {
         try {
             room room = containerService.getRoom(uid);
             return ResponseEntity.ok(room.getPlayers());
@@ -76,10 +77,12 @@ public class roomController {
 
     // PUTS
     @PutMapping(value = "rooms/{uid}")
-    public ResponseEntity<room> updateRoomName(@PathVariable String uid, @RequestBody String json) {
+    public ResponseEntity<Void> updateRoom(@PathVariable String uid, @RequestBody String json) {
         try {
             parser parser = new parser(json);
-            return ResponseEntity.ok(containerService.updateRoomName(uid, parser.getValue("roomName")));
+            containerService.updateRoomName(uid, parser.getValue("roomName"));
+            containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();

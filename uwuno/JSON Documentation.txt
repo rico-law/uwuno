@@ -1,5 +1,5 @@
 JSON Planning
-- spring recognizes both uid and id as the samething by default
+- spring recognizes both uid and id as the same thing by default
 - order in code POST, GET, PUT, DELETE
 
 ### ROOMS ###
@@ -17,7 +17,8 @@ PUT
 http://localhost:8080/rooms/<uid>
 {
     uid,
-    roomName
+    roomName,
+    roomStatus: lobby // state of the game either: Lobby, Start, End
 }
 
 DELETE
