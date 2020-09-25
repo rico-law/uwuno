@@ -2,10 +2,6 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
-import com.learning.uwuno.errors.badRequest;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.learning.uwuno.errors.internalServerError;
 
 import java.util.ArrayList;
 import java.util.UUID;

@@ -2,7 +2,6 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
-import com.learning.uwuno.errors.errorNotFound;
 
 import java.util.ArrayList;
 import java.util.UUID;

@@ -3,8 +3,6 @@ package com.learning.uwuno.util;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 
-import static com.learning.uwuno.cards.card.CardType.*;
-
 public final class utils {
     // Should not be instantiated
     private utils() {
