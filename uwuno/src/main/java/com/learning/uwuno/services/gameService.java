@@ -108,13 +108,14 @@ public class gameService {
         switch (status) {
             case Lobby -> {
                 // Restart game
+                return;
             }
             case Start -> {
                 setUpStartGame(room);
                 return;
             }
             case End -> {
-
+                return;
             }
         }
         throw new badRequest(status.toString() + " is not a room status");

@@ -36,7 +36,7 @@ public class roomController {
     // GETS
     // Returns .json formatted vector of rooms, private variables are shown (room name)
     @GetMapping(value = "rooms")
-    public ResponseEntity<ArrayList<room>> rooms() {
+    public ResponseEntity<ArrayList<room>> getAllRooms() {
         return ResponseEntity.ok(containerService.getRoomList()); // TODO: Fix to not return player pids
     }
 
