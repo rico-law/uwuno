@@ -73,15 +73,17 @@ public class gameService {
 
     public void updateRoomStatus(String uid, String status) {
         if (status.isBlank())
-            throw new badRequest();
-        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
+            throw new badRequest("Status cannot be blank");
+        room room = getRoom(uid);
         room.Status roomStatus = utils.stringToRoomState(status);
 
         if (validStatusChange(room, roomStatus)) {
             room.setRoomStatus(roomStatus);
             setUpGameState(room, roomStatus);
-        } else {
-            throw new badRequest();
+        }
+        else {
+            // Temp
+            throw new badRequest("Failed to change room status");
         }
     }
 
@@ -99,7 +101,7 @@ public class gameService {
                 return false;
             }
         }
-        throw new internalServerError(); // Should not reach here
+        throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
     }
 
     // TODO: Only Start state. May need to add other states as necessary.
@@ -116,7 +118,7 @@ public class gameService {
 
             }
         }
-        throw new badRequest();
+        throw new badRequest(status.toString() + " is not a room status");
     }
 
     // Is helper for setUpGameState. Should use through there.

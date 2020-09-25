@@ -76,7 +76,7 @@ public final class utils {
             return room.Status.valueOf(status);
         }
         catch (IllegalArgumentException e) {
-            throw new badRequest();
+            throw new badRequest(status + " is not a room status");
         }
     }
 }
