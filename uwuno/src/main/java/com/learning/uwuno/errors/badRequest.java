@@ -5,4 +5,8 @@ import org.springframework.http.HttpStatus;
 
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class badRequest extends RuntimeException {}
+public class badRequest extends RuntimeException {
+    public badRequest(String errorMessage){
+        super(errorMessage);
+    }
+}

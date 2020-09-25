@@ -14,20 +14,20 @@ public class parser {
     private Map<String, String> map;
 
     // Class functions
-    public parser(String json) throws JsonMappingException, JsonProcessingException {
+    public parser(String json) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             map = mapper.readValue(json, new TypeReference<Map<String, String>>() {});
         }
         catch (JsonProcessingException e) {
-            throw new internalServerError();
+            throw new internalServerError("Failed to initiate parser");
         }
     }
 
     // Assume this is called after checking for existence if handler handles multiple formats
     public String getValue(String key) {
         if (!exists(key))
-            throw new errorNotFound();
+            throw new badRequest("JSON does not contain key:" + key);
         return map.get(key);
     }
 

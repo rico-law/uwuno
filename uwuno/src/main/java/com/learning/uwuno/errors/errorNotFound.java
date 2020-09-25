@@ -5,4 +5,8 @@ import org.springframework.http.HttpStatus;
 
 // We can make these return specific html files and custom messages in the future
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class errorNotFound extends RuntimeException {}
+public class errorNotFound extends RuntimeException {
+    public errorNotFound(String errorMessage){
+        super(errorMessage);
+    }
+}

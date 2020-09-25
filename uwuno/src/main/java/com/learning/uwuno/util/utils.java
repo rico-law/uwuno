@@ -21,17 +21,17 @@ public final class utils {
             color = card.Color.valueOf(cardColor);
         }
         catch (IllegalArgumentException e) {
-            throw new badRequest();
+            throw new badRequest("Error with creating card from JSON");
         }
         if (!cardValue.isBlank() && cardType.equals("Basic") && !cardColor.equals("Black")) {
             try {
                 int value = Integer.parseInt(cardValue);
                 if (value < 0 || value > 9)
-                    throw new badRequest();
+                    throw new badRequest("Error with creating card from JSON");
                 return new basicCard(value, color);
             }
             catch (NumberFormatException e) {
-                throw new badRequest();
+                throw new badRequest("Error with creating card from JSON");
             }
         }
         else if (cardValue.isBlank() && !cardType.equals("Basic")) {
@@ -46,7 +46,7 @@ public final class utils {
                 }
             }
         }
-        throw new badRequest();
+        throw new badRequest("Error with creating card from JSON");
     }
 
     // Function to check if card is playable when compared to last played card
