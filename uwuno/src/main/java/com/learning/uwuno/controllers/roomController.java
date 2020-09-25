@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /*
 All controller requests related to game rooms should go here
@@ -47,15 +48,17 @@ public class roomController {
 
     // Returns a list of players in given room uid.
     @GetMapping(value = "rooms/{uid}/players")
-    public ResponseEntity<ArrayList<player>> getPlayers(@PathVariable String uid) {
+    public ResponseEntity<LinkedList<player>> getPlayers(@PathVariable String uid) {
         return ResponseEntity.ok(containerService.getRoom(uid).getPlayers());
     }
 
     // PUTS
     @PutMapping(value = "rooms/{uid}")
-    public ResponseEntity<room> updateRoomName(@PathVariable String uid, @RequestBody String json) {
-        parser parser = new parser(json);
-        return ResponseEntity.ok(containerService.updateRoomName(uid, parser.getValue("roomName")));
+    public ResponseEntity<Void> updateRoom(@PathVariable String uid, @RequestBody String json) {
+            parser parser = new parser(json);
+            containerService.updateRoomName(uid, parser.getValue("roomName"));
+            containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
+            return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // DELETES

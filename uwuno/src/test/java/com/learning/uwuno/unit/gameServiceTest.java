@@ -3,6 +3,7 @@ package com.learning.uwuno.unit;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.room;
+import com.learning.uwuno.room.Status;
 import com.learning.uwuno.services.gameService;
 import com.learning.uwuno.player;
 
@@ -37,6 +38,7 @@ public class gameServiceTest {
     final private String testPlayerName = "testPlayer";
     final private String newName = "newName";
     final private String wrongId = "id";
+    final private String newStatus = "Start";
 
     @Test
     public void testGameService_addRoom() throws Exception {
@@ -108,6 +110,32 @@ public class gameServiceTest {
 
         gameService.updateRoomName(room.getUid(), newName);
         assertThat(room.getName(), equalTo(newName));
+    }
+
+    @Test
+    public void testGameService_updateRoomStatus() throws Exception {
+        room room = gameService.addRoom(testRoomName, false);
+
+        assertThrows(badRequest.class, () -> {
+            gameService.updateRoomStatus(room.getUid(), "");
+        });
+
+        assertThrows(badRequest.class, () -> {
+            gameService.updateRoomStatus(room.getUid(), "invalid_status");
+        });
+
+        assertThrows(badRequest.class, () -> {
+            gameService.updateRoomStatus(room.getUid(), newStatus);
+        });
+
+        assertThrows(badRequest.class, () -> {
+            gameService.addPlayer(testPlayerName, room.getUid());
+            gameService.updateRoomStatus(room.getUid(), newStatus);
+        });
+        
+        gameService.addPlayer("testPlayer2", room.getUid());
+        gameService.updateRoomStatus(room.getUid(), newStatus);
+        assertThat(room.getRoomStatus(), equalTo(Status.Start));
     }
 
     @Test

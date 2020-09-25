@@ -10,15 +10,29 @@ public class deck {
     private LinkedList<card> activeDeck;
     private ArrayList<card> discardPile;
     final private boolean useBlankCards;
-    final private int maxHandSize;
     private card lastCardPlayed;
 
     // Class Functions
-    public deck(boolean useBlankCards, int maxHandSize) {
+    public deck(boolean useBlankCards) {
         activeDeck = createDeck();
         discardPile = new ArrayList<card>();
         this.useBlankCards = useBlankCards;
-        this.maxHandSize = maxHandSize;
+    }
+
+    public LinkedList<card> getActiveDeck() {
+        return activeDeck;
+    }
+
+    public ArrayList<card> getDiscardPile() {
+        return discardPile;
+    }
+
+    public boolean isUseBlankCards() {
+        return useBlankCards;
+    }
+
+    public card getLastPlayedCard() {
+        return lastCardPlayed;
     }
 
     // Creates cards, fills active deck and shuffles it
@@ -94,9 +108,5 @@ public class deck {
     public void addToDiscard(card card) {
         lastCardPlayed = card;
         discardPile.add(card);
-    }
-
-    public card lastPlayedCard() {
-        return lastCardPlayed;
     }
 }

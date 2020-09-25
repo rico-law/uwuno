@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 public class jsonUtil {
     private static final String ROOM_NAME = "$roomName";
     private static final String ROOM_UID = "$roomUid";
+    private static final String ROOM_STATUS = "$roomStatus";
     private static final String BLANK_CARDS = "$useBlankCards";
     private static final String PLAYER_NAME = "$playerName";
     private static final String NUM_CARDS = "$numCards";
@@ -37,8 +38,10 @@ public class jsonUtil {
         return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(BLANK_CARDS, useBlank);
     }
 
-    public static String createPutRoomJson(String roomName, String uid, String jsonPath) throws FileNotFoundException {
-        return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(ROOM_UID, uid);
+    public static String createPutRoomJson(String roomName, String uid, String status, String jsonPath)
+            throws FileNotFoundException {
+        return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(ROOM_UID, uid)
+                .replace(ROOM_STATUS, status);
     }
 
     // Create Player JSON String

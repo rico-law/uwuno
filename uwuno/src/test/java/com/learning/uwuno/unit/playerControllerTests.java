@@ -69,7 +69,7 @@ public class playerControllerTests {
 
     @Test
     public void testPlayer_GET() throws Exception {
-        testPlayer.setCurDeck(new deck(false, 1));
+        testPlayer.setCurDeck(new deck(false));
         ArrayList<card> testDraw = testPlayer.drawCards(1);
         when(gameService.getPlayer(anyString(), anyString())).thenReturn(testPlayer);
 
@@ -109,7 +109,7 @@ public class playerControllerTests {
 
     @Test
     public void testPlayer_PUT_drawCard() throws Exception {
-        testPlayer.setCurDeck(new deck(false, 1));
+        testPlayer.setCurDeck(new deck(false));
         ArrayList<card> testDraw = testPlayer.drawCards(1);
         when(gameService.drawCards(anyString(), anyString(), anyInt())).thenReturn(testPlayer);
 
@@ -144,7 +144,7 @@ public class playerControllerTests {
 
     @Test
     public void testPlayer_PUT_playCard() throws Exception {
-        testPlayer.setCurDeck(new deck(false, 1));
+        testPlayer.setCurDeck(new deck(false));
         testPlayer.drawCards(1);
         testPlayer.playCard(testPlayer.getCardList().get(0));
         when(gameService.playCard(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(testPlayer);

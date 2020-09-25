@@ -2,6 +2,7 @@ package com.learning.uwuno.util;
 
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
+import com.learning.uwuno.room;
 
 public final class utils {
     // Should not be instantiated
@@ -66,6 +67,16 @@ public final class utils {
         else {
             return toPlay.getColor() == lastPlayed.getColor() ||
                     (toPlay.getType() == lastPlayed.getType() && lastPlayed.getType() != card.CardType.Basic);
+        }
+    }
+
+    // Returns room state from string
+    static public room.Status stringToRoomState(String status) {
+        try {
+            return room.Status.valueOf(status);
+        }
+        catch (IllegalArgumentException e) {
+            throw new badRequest();
         }
     }
 }
