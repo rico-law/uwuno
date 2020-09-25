@@ -67,8 +67,7 @@ public class gameService {
     public void updateRoomName(String uid, String newName) {
         if (newName.isBlank())
             throw new badRequest("Room name cannot be blank");
-        room room = getRoom(uid);
-        room.setRoomName(newName);
+        getRoom(uid).setRoomName(newName);
     }
 
     public void updateRoomStatus(String uid, String status) {
