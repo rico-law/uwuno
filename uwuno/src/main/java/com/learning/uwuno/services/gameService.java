@@ -6,12 +6,10 @@ import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
-import com.learning.uwuno.util.utils;
 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 @Service
