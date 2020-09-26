@@ -74,14 +74,14 @@ public class gameService {
         if (status.isBlank())
             throw new badRequest("Status cannot be blank");
         room room = getRoom(uid);
-        room.Status roomStatus = utils.stringToRoomState(status);
+        room.Status roomStatus = serviceUtils.stringToRoomState(status);
 
         if (validStatusChange(room, roomStatus)) {
             room.setRoomStatus(roomStatus);
-            setUpGameState(room, roomStatus);
+            serviceUtils.setUpGameState(room, roomStatus);
         }
         else {
-            // Temp
+            // TODO: Figure out if this
             throw new badRequest("Failed to change room status");
         }
     }
@@ -101,35 +101,6 @@ public class gameService {
             }
         }
         throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
-    }
-
-    // TODO: Only Start state. May need to add other states as necessary.
-    public void setUpGameState(room room, room.Status status) {
-        switch (status) {
-            case Lobby -> {
-                // Restart game
-                return;
-            }
-            case Start -> {
-                setUpStartGame(room);
-                return;
-            }
-            case End -> {
-                return;
-            }
-        }
-        throw new badRequest(status.toString() + " is not a room status");
-    }
-
-    // Is helper for setUpGameState. Should use through there.
-    public void setUpStartGame(room room) {
-        room.shufflePlayers();
-        room.setupDeck();
-        LinkedList<player> playerList = room.getPlayers();
-        for (player player:playerList) {
-            player.drawCards(room.getMaxHandSize());
-        }
-        room.flipTopCard();
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
@@ -159,8 +130,8 @@ public class gameService {
 
         // Create a reference card  for comparison with given parameters
         // and ensure the card is compatible with the last played card
-        card toPlay = utils.inputToCard(type, color, value);
-        if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
+        card toPlay = serviceUtils.inputToCard(type, color, value);
+        if(!serviceUtils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest("Card cannot be played");
 
         // Add the player's card to discard pile
