@@ -77,12 +77,12 @@ public class roomController {
 
     // PUTS
     @PutMapping(value = "rooms/{uid}")
-    public ResponseEntity<Void> updateRoom(@PathVariable String uid, @RequestBody String json) {
+    public ResponseEntity<room> updateRoom(@PathVariable String uid, @RequestBody String json) {
         try {
             parser parser = new parser(json);
             containerService.updateRoomName(uid, parser.getValue("roomName"));
             containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.ok(containerService.getRoom(uid));
         }
         catch (NoSuchElementException e) {
             throw new errorNotFound();

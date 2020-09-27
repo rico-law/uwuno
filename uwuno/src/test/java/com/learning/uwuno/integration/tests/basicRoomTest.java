@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class basicRoomTest {
-    private static ArrayList<String> runningRoomIds = new ArrayList<String>();
+    private final static ArrayList<String> runningRoomIds = new ArrayList<>();
 
     @AfterAll
     public static void cleanUp() {
@@ -124,7 +124,7 @@ public class basicRoomTest {
 
     // GET Players in invalid Room
     @Test
-    public void getPlayersInRoom404() throws IOException {
+    public void getPlayersInRoom404() {
         // Request
         Response response = given().pathParam("uid", "invalid_uid")
                 .when().get(BASE_URL + "/rooms/{uid}/players")
@@ -155,7 +155,7 @@ public class basicRoomTest {
 
     // DELETE invalid Room
     @Test
-    public void deleteRoom404() throws IOException {
+    public void deleteRoom404() {
         Response response = given().pathParam("uid", "invalid_uid")
                 .when().delete(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();

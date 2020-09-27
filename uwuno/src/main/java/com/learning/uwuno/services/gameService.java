@@ -23,20 +23,15 @@ public class gameService {
     // Class Functions
     // POSTS
     public room addRoom(String roomName, boolean useBlankCards) {
-        if (roomName.isEmpty())
+        if (roomName.isBlank())
             throw new badRequest();
         room newRoom = new room(roomName, useBlankCards);
         roomList.add(newRoom);
         return newRoom;
     }
 
-    public String addRoom(room newRoom) {
-        roomList.add(newRoom);
-        return newRoom.getUid();
-    }
-
     public player addPlayer(String name, String uid) {
-        if (name.isEmpty())
+        if (name.isBlank())
             throw new badRequest();
         player newPlayer = new player(name);
         getRoom(uid).addPlayer(newPlayer);
@@ -101,13 +96,14 @@ public class gameService {
         switch (status) {
             case Lobby -> {
                 // Restart game
+                return;
             }
             case Start -> {
                 setUpStartGame(room);
                 return;
             }
             case End -> {
-
+                return;
             }
         }
         throw new badRequest();

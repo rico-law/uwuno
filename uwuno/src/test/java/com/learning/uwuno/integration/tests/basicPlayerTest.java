@@ -167,7 +167,7 @@ public class basicPlayerTest {
     public void putValidPlayerName200() throws FileNotFoundException {
         // Player
         String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerInputName = "player_put_old_name_valid";;
+        String playerInputName = "player_put_old_name_valid";
         String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
 
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
@@ -176,7 +176,7 @@ public class basicPlayerTest {
 
         // Request
         String filePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String inputName = "player_put_new_name_valid_200";;
+        String inputName = "player_put_new_name_valid_200";
         String request = jsonUtil.createPostPutPlayerJson(inputName, filePath);
 
         Response response = given().pathParam("uid", roomId).pathParam("pid", playerId)
@@ -193,7 +193,7 @@ public class basicPlayerTest {
     public void putInvalidPlayerName400() throws FileNotFoundException {
         // Player
         String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerInputName = "player_put_old_name_valid";;
+        String playerInputName = "player_put_old_name_valid";
         String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
 
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
@@ -216,7 +216,7 @@ public class basicPlayerTest {
     public void putInvalidPlayerName404() throws FileNotFoundException {
         // Player
         String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerInputName = "player_put_old_name_valid";;
+        String playerInputName = "player_put_old_name_valid";
         String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
 
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
