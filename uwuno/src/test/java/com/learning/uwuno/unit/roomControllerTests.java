@@ -187,7 +187,7 @@ public class roomControllerTests {
     }
 
     @Test
-    public void PUT_update_room_name_bad_req_err() throws Exception {
+    public void PUT_update_room_name_not_found() throws Exception {
         String content = testUtils.createJSON(
                 new ArrayList<>(List.of("invalidKey", "invalidKey", "invalidKey")),
                 new ArrayList<>(Arrays.asList(room.getUid(), room.getName(), room.getRoomStatus().toString())));
