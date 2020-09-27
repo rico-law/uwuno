@@ -1,4 +1,5 @@
 {
   "uid": "$roomUid",
-  "roomName": "$roomName"
+  "roomName": "$roomName",
+  "roomStatus": "$roomStatus"
 }

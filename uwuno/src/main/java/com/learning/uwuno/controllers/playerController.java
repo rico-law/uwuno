@@ -43,7 +43,12 @@ public class playerController {
     // Return list of card available to player
     @GetMapping(value = "rooms/{uid}/players/{pid}/cards")
     public ResponseEntity<ArrayList<card>> getPlayerCards(@PathVariable String uid, @PathVariable String pid) {
-        return ResponseEntity.ok(containerService.getPlayer(uid, pid).getCardList());
+        try {
+            return ResponseEntity.ok(containerService.getPlayer(uid, pid).getCardList());
+        }
+        catch (NoSuchElementException e) {
+            throw new errorNotFound();
+        }
     }
 
     // PUTS
@@ -108,7 +113,7 @@ public class playerController {
 
     // DELETES
     @DeleteMapping(value = "rooms/{uid}/players/{pid}")
-    public ResponseEntity<Void> deletePlayer(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<Void> deletePlayer(@PathVariable String uid, @PathVariable String pid) {
         try {
             containerService.deletePlayer(uid, pid);
             return ResponseEntity.status(HttpStatus.OK).build();

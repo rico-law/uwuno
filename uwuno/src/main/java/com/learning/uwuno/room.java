@@ -4,24 +4,37 @@ import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.errors.errorNotFound;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public class room {
     // Constants
     final private int MAX_HAND_SIZE = 7;
+    final private int MAX_PLAYERS = 10;
+    final private int MIN_PLAYERS = 2;
+    public enum Status {
+        Lobby,
+        Start,
+        End
+    }
 
     // Class Variables
     final private String uid;
     private String roomName;
-    private ArrayList<player> playerList = new ArrayList<player>();
+    private LinkedList<player> playerList = new LinkedList<player>();
     private deck deck;
+    private Status roomStatus;
+    private player playerTurn;
 
     // Class functions
     public room(String roomName, boolean useBlankCards) {
         this.uid = UUID.randomUUID().toString();
         this.roomName = roomName;
-        setupDeck(new deck(useBlankCards, MAX_HAND_SIZE));
+        this.roomStatus = Status.Lobby;
+        this.deck = new deck(useBlankCards);
     }
 
     // Room Functions
@@ -33,12 +46,38 @@ public class room {
         this.roomName = roomName;
     }
 
+    public void setRoomStatus(Status status) {
+        roomStatus = status;
+    }
+
+    public Status getRoomStatus() {
+        return roomStatus;
+    }
+
     public String getUid() {
         return uid;
     }
 
+    // Ignores the cardList field in the response JSON. We only need player id and name.
+    @JsonIgnoreProperties("cardList")
+    public player getPlayerTurn() {
+        return playerTurn;
+    }
+
+    public int getMaxHandSize() {
+        return MAX_HAND_SIZE;
+    }
+
+    public int getMaxPlayers() {
+        return MAX_PLAYERS;
+    }
+
+    public int getMinPlayers() {
+        return MIN_PLAYERS;
+    }
+
     // Player Functions
-    public ArrayList<player> getPlayers() {
+    public LinkedList<player> getPlayers() {
         return playerList;
     }
 
@@ -55,15 +94,23 @@ public class room {
             throw new errorNotFound();
     }
 
+    public void shufflePlayers() {
+        Collections.shuffle(playerList);
+        this.playerTurn = playerList.getFirst();
+    }
+
     // Only use this to create new deck as this will ensure each player gets the same reference deck
-    public void setupDeck(deck newDeck) {
-        deck = newDeck;
+    public void setupDeck() {
         for (player curPlayer : playerList) {
-            curPlayer.setCurDeck(newDeck);
+            curPlayer.setCurDeck(this.deck);
         }
     }
 
+    public void flipTopCard() {
+        this.deck.drawStart();
+    }
+
     public card lastPlayedCard() {
-        return deck.lastPlayedCard();
+        return deck.getLastPlayedCard();
     }
 }

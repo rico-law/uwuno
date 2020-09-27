@@ -3,6 +3,7 @@ package com.learning.uwuno.services;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
+import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 import com.learning.uwuno.util.utils;
@@ -10,6 +11,7 @@ import com.learning.uwuno.util.utils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 @Service
 public class gameService {
@@ -56,16 +58,74 @@ public class gameService {
     }
 
     // PUTS
-    public room updateRoomName(String uid, String newName) {
-        if (newName.isEmpty())
+    public void updateRoomName(String uid, String newName) {
+        if (newName.isBlank())
             throw new badRequest();
         room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
         room.setRoomName(newName);
-        return room;
+    }
+
+    public void updateRoomStatus(String uid, String status) {
+        if (status.isBlank())
+            throw new badRequest();
+        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
+        room.Status roomStatus = utils.stringToRoomState(status);
+
+        if (validStatusChange(room, roomStatus)) {
+            room.setRoomStatus(roomStatus);
+            setUpGameState(room, roomStatus);
+        } else {
+            throw new badRequest();
+        }
+    }
+
+    // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
+    public boolean validStatusChange(room room, room.Status status) {
+        switch (status) {
+            case Lobby -> {
+                return true;
+            }
+            case Start -> {
+                return room.getPlayers().size() >= room.getMinPlayers() &&
+                        room.getPlayers().size() <= room.getMaxPlayers();
+            }
+            case End -> {
+                return false;
+            }
+        }
+        throw new internalServerError(); // Should not reach here
+    }
+
+    // TODO: Only Start state. May need to add other states as necessary.
+    public void setUpGameState(room room, room.Status status) {
+        switch (status) {
+            case Lobby -> {
+                // Restart game
+            }
+            case Start -> {
+                setUpStartGame(room);
+                return;
+            }
+            case End -> {
+
+            }
+        }
+        throw new badRequest();
+    }
+
+    // Is helper for setUpGameState. Should use through there.
+    public void setUpStartGame(room room) {
+        room.shufflePlayers();
+        room.setupDeck();
+        LinkedList<player> playerList = room.getPlayers();
+        for (player player:playerList) {
+            player.drawCards(room.getMaxHandSize());
+        }
+        room.flipTopCard();
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
-        if (newName.isEmpty())
+        if (newName.isBlank())
             throw new badRequest();
         player player = getRoom(uid).getPlayer(pid);
         player.setName(newName);
@@ -81,6 +141,11 @@ public class gameService {
     // Should handle both taking card away from player and adding it back into deck
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
     public player playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
+        if (color.equals(card.Color.Black.toString()) && setWildColor.isBlank() ||
+            color.isBlank() && !setWildColor.isBlank() ||
+            !color.equals(card.Color.Black.toString()) && !setWildColor.isBlank()) {
+            throw new badRequest();
+        }
         card toPlay = utils.inputToCard(type, color, value);
         if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest();
@@ -91,7 +156,9 @@ public class gameService {
 
     // DELETES
     public void deleteRoom(String uid) {
-        if (!roomList.removeIf(t -> t.getUid().equals(uid)))
+        if (roomList.isEmpty())
+            throw new badRequest();
+        else if (!roomList.removeIf(t -> t.getUid().equals(uid)))
             throw new errorNotFound();
     }
 
