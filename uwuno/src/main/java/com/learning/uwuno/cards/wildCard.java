@@ -33,7 +33,7 @@ public class wildCard extends card {
         if (color != card.Color.Black)
             lastChosenColor = color;
         else
-            throw new badRequest();
+            throw new badRequest("Cannot set new color of Wild Card to black");
     }
 
     // If this returns black, means first use of this card,

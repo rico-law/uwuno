@@ -2,7 +2,6 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
-import com.learning.uwuno.errors.errorNotFound;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -89,9 +88,8 @@ public class room {
         playerList.add(newPlayer);
     }
 
-    public void deletePlayer(String pid) {
-        if (!playerList.removeIf(t -> t.getPid().equals(pid)))
-            throw new errorNotFound();
+    public boolean deletePlayer(String pid) {
+        return playerList.removeIf(t -> t.getPid().equals(pid));
     }
 
     public void shufflePlayers() {

@@ -6,25 +6,24 @@ import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
-import com.learning.uwuno.util.utils;
 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 @Service
 public class gameService {
     // Singleton for holding anything we need everywhere, should handle all business logic
 
     // Variables
-    private ArrayList<room> roomList = new ArrayList<room>();
+    private final ArrayList<room> roomList = new ArrayList<>();
 
     // Class Functions
     // POSTS
     public room addRoom(String roomName, boolean useBlankCards) {
         if (roomName.isBlank())
-            throw new badRequest();
+            throw new badRequest("Room name cannot be blank");
         room newRoom = new room(roomName, useBlankCards);
         roomList.add(newRoom);
         return newRoom;
@@ -32,7 +31,7 @@ public class gameService {
 
     public player addPlayer(String name, String uid) {
         if (name.isBlank())
-            throw new badRequest();
+            throw new badRequest("Player name cannot be blank");
         player newPlayer = new player(name);
         getRoom(uid).addPlayer(newPlayer);
         return newPlayer;
@@ -43,34 +42,40 @@ public class gameService {
         return roomList;
     }
 
-    // Callees must handle NoSuchElementException
     public room getRoom(String uid) {
-        return roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
+        return roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst()
+                .orElseThrow(() -> new errorNotFound("Room ID could not be found"));
     }
 
     public player getPlayer(String uid, String pid) {
-        return getRoom(uid).getPlayer(pid);
+        try {
+            return getRoom(uid).getPlayer(pid);
+        }
+        catch (NoSuchElementException e) {
+            throw new errorNotFound("Player ID could not be found");
+        }
     }
 
     // PUTS
     public void updateRoomName(String uid, String newName) {
         if (newName.isBlank())
-            throw new badRequest();
-        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
-        room.setRoomName(newName);
+            throw new badRequest("Room name cannot be blank");
+        getRoom(uid).setRoomName(newName);
     }
 
     public void updateRoomStatus(String uid, String status) {
         if (status.isBlank())
-            throw new badRequest();
-        room room = roomList.stream().filter(t -> t.getUid().equals(uid)).findFirst().get();
-        room.Status roomStatus = utils.stringToRoomState(status);
+            throw new badRequest("Status cannot be blank");
+        room room = getRoom(uid);
+        room.Status roomStatus = serviceUtils.stringToRoomState(status);
 
         if (validStatusChange(room, roomStatus)) {
             room.setRoomStatus(roomStatus);
-            setUpGameState(room, roomStatus);
-        } else {
-            throw new badRequest();
+            serviceUtils.setUpGameState(room, roomStatus);
+        }
+        else {
+            // TODO: Figure out if this
+            throw new badRequest("Failed to change room status");
         }
     }
 
@@ -88,42 +93,13 @@ public class gameService {
                 return false;
             }
         }
-        throw new internalServerError(); // Should not reach here
-    }
-
-    // TODO: Only Start state. May need to add other states as necessary.
-    public void setUpGameState(room room, room.Status status) {
-        switch (status) {
-            case Lobby -> {
-                // Restart game
-                return;
-            }
-            case Start -> {
-                setUpStartGame(room);
-                return;
-            }
-            case End -> {
-                return;
-            }
-        }
-        throw new badRequest();
-    }
-
-    // Is helper for setUpGameState. Should use through there.
-    public void setUpStartGame(room room) {
-        room.shufflePlayers();
-        room.setupDeck();
-        LinkedList<player> playerList = room.getPlayers();
-        for (player player:playerList) {
-            player.drawCards(room.getMaxHandSize());
-        }
-        room.flipTopCard();
+        throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
         if (newName.isBlank())
-            throw new badRequest();
-        player player = getRoom(uid).getPlayer(pid);
+            throw new badRequest("Player name cannot be blank");
+        player player = getPlayer(uid, pid);
         player.setName(newName);
         return player;
     }
@@ -137,29 +113,38 @@ public class gameService {
     // Should handle both taking card away from player and adding it back into deck
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
     public player playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
+        // Ensure card information passed in is viable and does not contain any extra information
         if (color.equals(card.Color.Black.toString()) && setWildColor.isBlank() ||
             color.isBlank() && !setWildColor.isBlank() ||
+            value.isBlank() && setWildColor.isBlank() ||
             !color.equals(card.Color.Black.toString()) && !setWildColor.isBlank()) {
-            throw new badRequest();
+            throw new badRequest("Card cannot be created");
         }
-        card toPlay = utils.inputToCard(type, color, value);
-        if(!utils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
-            throw new badRequest();
+
+        // Create a reference card  for comparison with given parameters
+        // and ensure the card is compatible with the last played card
+        card toPlay = serviceUtils.inputToCard(type, color, value);
+        if(!serviceUtils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
+            throw new badRequest("Card cannot be played");
+
+        // Add the player's card to discard pile
         player player = getPlayer(uid, pid);
-        player.playCard(toPlay);
+        if (!player.playCard(toPlay))
+            throw new internalServerError("Card to play does not exist in player's hand");
         return player;
     }
 
     // DELETES
     public void deleteRoom(String uid) {
         if (roomList.isEmpty())
-            throw new badRequest();
+            throw new badRequest("No Rooms to delete");
         else if (!roomList.removeIf(t -> t.getUid().equals(uid)))
-            throw new errorNotFound();
+            throw new errorNotFound("Room ID could not be found");
     }
 
     public void deletePlayer(String uid, String pid) {
-        getRoom(uid).deletePlayer(pid);
+        if (!getRoom(uid).deletePlayer(pid))
+            throw new errorNotFound("Player ID could not be found");
     }
 
 }

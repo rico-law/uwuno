@@ -2,7 +2,6 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
-import com.learning.uwuno.errors.badRequest;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -47,14 +46,13 @@ public class player {
         return drawnCards;
     }
 
-    public void playCard(card toPlay) {
+    public boolean playCard(card toPlay) {
         curDeck.addToDiscard(toPlay);
-        removeCard(toPlay);
+        return removeCard(toPlay);
     }
 
     // Used for in the case a card is used by a player, shouldn't handle game logic here
-    public void removeCard(card card) {
-        if(!cardList.remove(card))
-            throw new badRequest();
+    public boolean removeCard(card card) {
+        return cardList.remove(card);
     }
 }
