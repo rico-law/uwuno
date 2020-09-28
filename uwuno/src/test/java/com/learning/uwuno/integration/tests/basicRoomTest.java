@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class basicRoomTest {
-    private final static ArrayList<String> runningRoomIds = new ArrayList<>();
+    private static ArrayList<String> runningRoomIds = new ArrayList<>();
 
     @AfterAll
     public static void cleanUp() {

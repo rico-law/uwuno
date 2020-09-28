@@ -17,7 +17,7 @@ public class gameService {
     // Singleton for holding anything we need everywhere, should handle all business logic
 
     // Variables
-    private final ArrayList<room> roomList = new ArrayList<>();
+    private ArrayList<room> roomList = new ArrayList<>();
 
     // Class Functions
     // POSTS

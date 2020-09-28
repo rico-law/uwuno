@@ -39,6 +39,7 @@ public class roomControllerTests {
     private gameService service;
 
     room room = new room("testRoom", false);
+    player player = new player("testPlayer");
 
     @Test
     public void GET_empty_roomList() throws Exception {
@@ -68,7 +69,7 @@ public class roomControllerTests {
 
     @Test
     public void GET_room() throws Exception {
-        room.addPlayer(new player("testPlayer"));
+        room.addPlayer(player);
         when(service.getRoom(anyString())).thenReturn(room);
 
         mock.perform(get("/rooms/2"))
@@ -83,7 +84,7 @@ public class roomControllerTests {
 
     @Test
     public void GET_room_players() throws Exception {
-        room.addPlayer(new player("testPlayer"));
+        room.addPlayer(player);
         when(service.getRoom(anyString())).thenReturn(room);
 
         mock.perform(get("/rooms/2/players"))
