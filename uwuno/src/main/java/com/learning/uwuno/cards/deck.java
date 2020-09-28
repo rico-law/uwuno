@@ -88,7 +88,8 @@ public class deck {
             return ret;
         }
         catch (NoSuchElementException e) {
-            throw new internalServerError();
+            // Should never happen
+            throw new internalServerError("Tried to access non-existent element in active deck");
         }
     }
 

@@ -64,7 +64,7 @@ public class playerControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(testUtils.createJSON("wrongKey", testPlayer.getName())))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test

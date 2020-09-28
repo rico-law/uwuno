@@ -54,7 +54,7 @@ public class gameServiceTest {
     @Test
     public void testGameService_addPlayer() throws Exception {
         room room = gameService.addRoom(testRoomName, false);
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(errorNotFound.class, () -> {
             gameService.addPlayer(testPlayerName, wrongId);
         });
 
@@ -84,7 +84,7 @@ public class gameServiceTest {
         gameService.addRoom("extraRoom", false);
         assertThat(gameService.getRoom(room.getUid()).getName(), equalTo(testRoomName));
 
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(errorNotFound.class, () -> {
             gameService.getRoom(wrongId);
         });
     };
@@ -92,7 +92,7 @@ public class gameServiceTest {
     @Test
     public void testGameService_getPlayer() throws Exception {
         room room = gameService.addRoom(testRoomName, false);
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(errorNotFound.class, () -> {
             gameService.getPlayer(room.getUid(), wrongId);
         });
 
@@ -171,7 +171,7 @@ public class gameServiceTest {
     public void testGameService_deletePlayer() throws Exception {
         room room = gameService.addRoom(testRoomName, false);
         player player = gameService.addPlayer(testPlayerName, room.getUid());
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(errorNotFound.class, () -> {
             gameService.deletePlayer(wrongId,  player.getPid());
         });
 
