@@ -17,7 +17,7 @@ public class gameService {
     // Singleton for holding anything we need everywhere, should handle all business logic
 
     // Variables
-    private ArrayList<room> roomList = new ArrayList<room>();
+    private final ArrayList<room> roomList = new ArrayList<>();
 
     // Class Functions
     // POSTS
@@ -27,11 +27,6 @@ public class gameService {
         room newRoom = new room(roomName, useBlankCards);
         roomList.add(newRoom);
         return newRoom;
-    }
-
-    public String addRoom(room newRoom) {
-        roomList.add(newRoom);
-        return newRoom.getUid();
     }
 
     public player addPlayer(String name, String uid) {
