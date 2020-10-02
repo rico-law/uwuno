@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class gameServiceTest {
@@ -46,7 +46,7 @@ public class gameServiceTest {
         });
 
         gameService.addRoom(testRoomName, false);
-        ArrayList<room> rooms = gameService.getRoomList();
+        List<room> rooms = gameService.getRoomList();
         assertThat(rooms.get(0).getName(), is(testRoomName));
     }
 
@@ -62,13 +62,13 @@ public class gameServiceTest {
         });
 
         gameService.addPlayer(testPlayerName, room.getUid());
-        ArrayList<room> rooms = gameService.getRoomList();
+        List<room> rooms = gameService.getRoomList();
         assertThat(rooms.get(0).getPlayers().get(0).getName(), is(testPlayerName));
     }
 
     @Test
     public void testGameService_getRoomList() {
-        ArrayList<room> rooms = gameService.getRoomList();
+        List<room> rooms = gameService.getRoomList();
         assertThat(rooms, hasSize(0));
 
         for (int i = 0; i < 3; i++)

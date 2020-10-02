@@ -22,8 +22,8 @@ public class room {
 
     // Class Variables
     final private String uid;
+    final private LinkedList<player> playerList = new LinkedList<>();
     private String roomName;
-    private LinkedList<player> playerList = new LinkedList<player>();
     private deck deck;
     private Status roomStatus;
     private player playerTurn;
@@ -84,7 +84,7 @@ public class room {
         return playerList.stream().filter(t -> t.getPid().equals(pid)).findFirst().get();
     }
 
-    public void addPlayer(player newPlayer) {
+    public synchronized void addPlayer(player newPlayer) {
         playerList.add(newPlayer);
     }
 

@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /*
 All controller requests related to game rooms should go here
@@ -36,7 +36,7 @@ public class roomController {
     // GETS
     // Returns .json formatted vector of rooms, private variables are shown (room name)
     @GetMapping(value = "rooms")
-    public ResponseEntity<ArrayList<room>> getAllRooms() {
+    public ResponseEntity<List<room>> getAllRooms() {
         return ResponseEntity.ok(containerService.getRoomList()); // TODO: Fix to not return player pids
     }
 
@@ -69,6 +69,3 @@ public class roomController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
-
-
-

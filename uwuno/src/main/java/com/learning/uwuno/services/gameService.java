@@ -10,6 +10,8 @@ import com.learning.uwuno.room;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -17,7 +19,7 @@ public class gameService {
     // Singleton for holding anything we need everywhere, should handle all business logic
 
     // Variables
-    private final ArrayList<room> roomList = new ArrayList<>();
+    private final List<room> roomList = Collections.synchronizedList(new ArrayList<>());
 
     // Class Functions
     // POSTS
@@ -38,7 +40,7 @@ public class gameService {
     }
 
     // GETS
-    public ArrayList<room> getRoomList() {
+    public List<room> getRoomList() {
         return roomList;
     }
 
