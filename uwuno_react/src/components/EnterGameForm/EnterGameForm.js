@@ -7,7 +7,10 @@ export const EnterGameForm = () => {
   return (
     <form className="ntr-form">
       <Grid className="row">
-        <TextField id="name" label="name" variant="outlined" />
+        <TextField id="name" label="name" variant="outlined" fullWidth={true} />
+      </Grid>
+      <Grid className="row">
+        <TextField id="room-id" label="room id" variant="outlined" fullWidth={true} />
       </Grid>
       <Grid
         container
