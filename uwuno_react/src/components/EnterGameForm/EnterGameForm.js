@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, TextField } from "@material-ui/core";
-import { StyledButton as Button } from "../StyledButton/StyledButton";
+import { ButtonSubmit } from "../StyledButton/ButtonSubmit";
 import "./EnterGameForm.css";
 
 export const EnterGameForm = () => {
@@ -19,13 +19,13 @@ export const EnterGameForm = () => {
         alignItems="baseline"
         className="row"
       >
-        <Button
+        <ButtonSubmit
           variant="contained"
           label="join game"
           colour="#5BCAEF"
           fullWidth={false}
         />
-        <Button
+        <ButtonSubmit
           variant="contained"
           label="create game"
           colour="#53E997"

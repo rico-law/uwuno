@@ -1,6 +1,8 @@
 import React from "react";
-import { ButtonGroup, Checkbox, FormControlLabel, Grid, TextField } from "@material-ui/core";
-import { StyledButton as Button } from "../StyledButton/StyledButton";
+import { Checkbox, FormControlLabel, Grid, TextField } from "@material-ui/core";
+import { ButtonIncreDecrement as Button } from "../StyledButton/ButtonIncreDecrement";
+import { ButtonSubmit } from "../StyledButton/ButtonSubmit";
+import { StyledTextField } from "../StyledTextField/StyledTextField";
 import "./GameSettingForm.css";
 
 export const GameSettingForm = () => {
@@ -25,9 +27,9 @@ export const GameSettingForm = () => {
         alignItems="flex_end"
         className="row"
       >
-        <Button.IncreDecrement
-          colour="#FF69B4"
-          groupColour="secondary"
+        <StyledTextField 
+          label="number of ais"
+          background="#FFFFFF"
         />
         {/* TODO: refactor checkbox/formControlLabel into separate component? */}
         <FormControlLabel 
@@ -43,13 +45,13 @@ export const GameSettingForm = () => {
         alignItems="baseline"
         className="row"
       >
-        <Button.ButtonSubmit
+        <ButtonSubmit
           variant="contained"
           label="hover over me to view invite link"
           colour="#5BCAEF"
           fullWidth={true}
         />
-        <Button.ButtonSubmit
+        <ButtonSubmit
           variant="contained"
           label="start game"
           colour="#53E997"
