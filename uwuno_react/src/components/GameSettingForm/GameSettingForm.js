@@ -1,11 +1,12 @@
 import React from "react";
-import { Checkbox, FormControlLabel, Grid, TextField } from "@material-ui/core";
+import { ButtonGroup, Checkbox, FormControlLabel, Grid, TextField } from "@material-ui/core";
 import { StyledButton as Button } from "../StyledButton/StyledButton";
 import "./GameSettingForm.css";
 
 export const GameSettingForm = () => {
   const [state, setState] = React.useState({
     useBlankCards: false,
+    numAI: 0,
   });
 
   const handleChange = (event) => {
@@ -24,6 +25,11 @@ export const GameSettingForm = () => {
         alignItems="flex_end"
         className="row"
       >
+        <Button.IncreDecrement
+          colour="#FF69B4"
+          groupColour="secondary"
+        />
+        {/* TODO: refactor checkbox/formControlLabel into separate component? */}
         <FormControlLabel 
           id="use-blank-cards"
           control={<Checkbox checked={state.useBlankCards} onChange={handleChange} name="useBlankCards" />}
@@ -37,13 +43,13 @@ export const GameSettingForm = () => {
         alignItems="baseline"
         className="row"
       >
-        <Button
+        <Button.ButtonSubmit
           variant="contained"
           label="hover over me to view invite link"
           colour="#5BCAEF"
           fullWidth={true}
         />
-        <Button
+        <Button.ButtonSubmit
           variant="contained"
           label="start game"
           colour="#53E997"
