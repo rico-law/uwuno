@@ -1,25 +1,26 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { ButtonIncreDecrement as Button } from "../StyledButton/ButtonIncreDecrement";
+// import { ButtonIncreDecrement as Button } from "../StyledButton/ButtonIncreDecrement";
 
 export const StyledTextField = ({
   background,
   textColour,
   label,
   variant = "outlined",
+  fullWidth,
 }) => {
   const useStyles = makeStyles({
     root: {
-      '& .MuiTextField-root': {
-        width: '25ch',
-      },
-    },
-    label: {
       textTransform: "lowercase",
-      // textColor: "black",
-      color: background,
-    }
+      color: textColour,
+      fontSize: "1rem",
+    },
+    textField: {
+      padding: "0px",
+      width: fullWidth ? "100%" : "40%",
+      backgroundColor: background,
+    },
   });
 
   const classes = useStyles();
@@ -27,23 +28,16 @@ export const StyledTextField = ({
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <div>
-        {label}
+        <div>{label}</div>
         <TextField
-          id="outlined-number"
-          // label="Number"
-          // type="number" TODO: how to get rid of extra set of buttons
-          InputLabelProps={{
-            shrink: true,
-          }}
+          id="number"
+          type="number"
           InputProps={{
-            endAdornment: <Button
-                            colour="#FF69B4"
-                            groupColour="secondary"
-                          />
-          }}
-          classes={{
-            root: classes.root,
-            label: classes.label,
+            // endAdornment: <Button
+            //                 colour="#FF69B4"
+            //                 groupColour="secondary"
+            //               />,
+            className: classes.textField,
           }}
           variant={variant}
         />

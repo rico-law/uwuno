@@ -11,7 +11,6 @@ function Lobby() {
         <h3>game settings</h3>
         <GameSettingForm />
       </Box>
-      <h3>players</h3>
     </div>
   );
 }

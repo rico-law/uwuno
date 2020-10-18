@@ -1,6 +1,5 @@
 import React from "react";
-import { Checkbox, FormControlLabel, Grid, TextField } from "@material-ui/core";
-import { ButtonIncreDecrement as Button } from "../StyledButton/ButtonIncreDecrement";
+import { Checkbox, FormControlLabel, Grid } from "@material-ui/core";
 import { ButtonSubmit } from "../StyledButton/ButtonSubmit";
 import { StyledTextField } from "../StyledTextField/StyledTextField";
 import "./GameSettingForm.css";
@@ -24,17 +23,19 @@ export const GameSettingForm = () => {
         container
         direction="row"
         justify="space-between"
-        alignItems="flex_end"
+        alignItems="center"
         className="row"
       >
         <StyledTextField 
           label="number of ais"
           background="#FFFFFF"
+          textColour="#000000"
+          fullWidth={false}
         />
         {/* TODO: refactor checkbox/formControlLabel into separate component? */}
         <FormControlLabel 
           id="use-blank-cards"
-          control={<Checkbox checked={state.useBlankCards} onChange={handleChange} name="useBlankCards" />}
+          control={<Checkbox checked={state.useBlankCards} onChange={handleChange} name="useBlankCards"/>}
           label="use blank cards"
         />
       </Grid>
@@ -42,7 +43,7 @@ export const GameSettingForm = () => {
         container
         direction="column"
         justify="space-between"
-        alignItems="baseline"
+        alignItems="center"
         className="row"
       >
         <ButtonSubmit
