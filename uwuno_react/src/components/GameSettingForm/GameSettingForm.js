@@ -7,7 +7,6 @@ import "./GameSettingForm.css";
 export const GameSettingForm = () => {
   const [state, setState] = React.useState({
     useBlankCards: false,
-    numAI: 0,
   });
 
   const handleChange = (event) => {
@@ -31,7 +30,6 @@ export const GameSettingForm = () => {
           background="#FFFFFF"
           textColour="#000000"
         />
-        {/* TODO: refactor checkbox/formControlLabel into separate component? */}
         <FormControlLabel 
           id="use-blank-cards"
           control={<Checkbox checked={state.useBlankCards} onChange={handleChange} name="useBlankCards"/>}
@@ -47,7 +45,7 @@ export const GameSettingForm = () => {
       >
         <ButtonSubmit
           variant="contained"
-          label="hover over me to view invite link"
+          label="click me to copy invite link"
           colour="#5BCAEF"
           fullWidth={true}
         />
