@@ -8,7 +8,6 @@ export const StyledTextField = ({
   textColour,
   label,
   variant = "outlined",
-  fullWidth,
 }) => {
   const useStyles = makeStyles({
     root: {
@@ -18,7 +17,6 @@ export const StyledTextField = ({
     },
     textField: {
       padding: "0px",
-      width: fullWidth ? "100%" : "40%",
       backgroundColor: background,
     },
   });
@@ -38,6 +36,7 @@ export const StyledTextField = ({
             //                 groupColour="secondary"
             //               />,
             className: classes.textField,
+            inputProps: {min: 0, max: 10}
           }}
           variant={variant}
         />

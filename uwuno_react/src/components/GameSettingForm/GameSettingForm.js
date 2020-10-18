@@ -30,7 +30,6 @@ export const GameSettingForm = () => {
           label="number of ais"
           background="#FFFFFF"
           textColour="#000000"
-          fullWidth={false}
         />
         {/* TODO: refactor checkbox/formControlLabel into separate component? */}
         <FormControlLabel 
