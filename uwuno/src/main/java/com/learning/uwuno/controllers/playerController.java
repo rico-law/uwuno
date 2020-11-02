@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class playerController {
@@ -31,7 +31,7 @@ public class playerController {
     // GETS
     // Return list of card available to player
     @GetMapping(value = "rooms/{uid}/players/{pid}/cards")
-    public ResponseEntity<ArrayList<card>> getPlayerCards(@PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<List<card>> getPlayerCards(@PathVariable String uid, @PathVariable String pid) {
         return ResponseEntity.ok(containerService.getPlayer(uid, pid).getCardList());
     }
 

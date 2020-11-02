@@ -7,15 +7,15 @@ import java.util.*;
 public class deck {
     // Class variables
     // Assume the top of the list is the next card to be drawn
-    private LinkedList<card> activeDeck;
-    private ArrayList<card> discardPile;
+    private final LinkedList<card> activeDeck;
+    private final ArrayList<card> discardPile;
     final private boolean useBlankCards;
     private card lastCardPlayed;
 
     // Class Functions
     public deck(boolean useBlankCards) {
         activeDeck = createDeck();
-        discardPile = new ArrayList<card>();
+        discardPile = new ArrayList<>();
         this.useBlankCards = useBlankCards;
     }
 
@@ -37,7 +37,7 @@ public class deck {
 
     // Creates cards, fills active deck and shuffles it
     public LinkedList<card> createDeck() {
-        LinkedList<card> deck = new LinkedList<card>();
+        LinkedList<card> deck = new LinkedList<>();
         for (card.Color color : card.Color.values()) {
             if (color != card.Color.Black) {
                 // Handle basic numeric cards
@@ -66,7 +66,7 @@ public class deck {
     }
 
     // Add discard pile to active deck and shuffle it
-    public void reshuffle() {
+    public synchronized void reshuffle() {
         if (!discardPile.isEmpty()) {
             activeDeck.addAll(discardPile);
             Collections.shuffle(discardPile);
@@ -77,11 +77,11 @@ public class deck {
     // Draw numCard cards, assume first item in the ArrayList is the top card
     // don't ever use this function directly, use implementation inside gameService to ensure
     // cards are removed from deck without moving it into a player's hand
-    public ArrayList<card> drawCards(int numCards) {
+    public synchronized ArrayList<card> drawCards(int numCards) {
         if (activeDeck.isEmpty() || activeDeck.size() < numCards)
             reshuffle();
         try {
-            ArrayList<card> ret = new ArrayList<card>();
+            ArrayList<card> ret = new ArrayList<>();
             for (int i = 0; i < numCards; i++) {
                 ret.add(activeDeck.pop());
             }

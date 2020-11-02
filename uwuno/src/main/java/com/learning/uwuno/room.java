@@ -84,7 +84,7 @@ public class room {
         return playerList.stream().filter(t -> t.getPid().equals(pid)).findFirst().get();
     }
 
-    public synchronized void addPlayer(player newPlayer) {
+    public void addPlayer(player newPlayer) {
         playerList.add(newPlayer);
     }
 

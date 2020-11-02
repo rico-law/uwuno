@@ -1,17 +1,13 @@
 package com.learning.uwuno.services;
 
 import com.learning.uwuno.cards.*;
-import com.learning.uwuno.errors.badRequest;
-import com.learning.uwuno.errors.errorNotFound;
-import com.learning.uwuno.errors.internalServerError;
+import com.learning.uwuno.errors.*;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -19,7 +15,7 @@ public class gameService {
     // Singleton for holding anything we need everywhere, should handle all business logic
 
     // Variables
-    private final List<room> roomList = Collections.synchronizedList(new ArrayList<>());
+    private final ArrayList<room> roomList = new ArrayList<>();
 
     // Class Functions
     // POSTS
@@ -40,7 +36,7 @@ public class gameService {
     }
 
     // GETS
-    public List<room> getRoomList() {
+    public ArrayList<room> getRoomList() {
         return roomList;
     }
 
@@ -123,7 +119,7 @@ public class gameService {
             throw new badRequest("Card cannot be created");
         }
 
-        // Create a reference card  for comparison with given parameters
+        // Create a reference card for comparison with given parameters
         // and ensure the card is compatible with the last played card
         card toPlay = serviceUtils.inputToCard(type, color, value);
         if(!serviceUtils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
@@ -148,5 +144,4 @@ public class gameService {
         if (!getRoom(uid).deletePlayer(pid))
             throw new errorNotFound("Player ID could not be found");
     }
-
 }
