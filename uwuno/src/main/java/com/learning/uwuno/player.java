@@ -3,10 +3,7 @@ package com.learning.uwuno;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class player {
     // Class Variables
@@ -49,14 +46,14 @@ public class player {
     }
 
     // TODO: synchronize deck
-    public boolean playCard(card toPlay) {
+    public synchronized boolean playCard(card toPlay) {
         curDeck.addToDiscard(toPlay);
         return removeCard(toPlay);
     }
 
     // TODO: synchronize deck
     // Used for in the case a card is used by a player, shouldn't handle game logic here
-    public boolean removeCard(card card) {
+    public synchronized boolean removeCard(card card) {
         return cardList.remove(card);
     }
 }

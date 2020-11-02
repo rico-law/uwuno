@@ -8,14 +8,14 @@ public class deck {
     // Class variables
     // Assume the top of the list is the next card to be drawn
     private final LinkedList<card> activeDeck;
-    private final ArrayList<card> discardPile;
+    private final List<card> discardPile;
     final private boolean useBlankCards;
     private card lastCardPlayed;
 
     // Class Functions
     public deck(boolean useBlankCards) {
         activeDeck = createDeck();
-        discardPile = new ArrayList<>();
+        discardPile = Collections.synchronizedList(new ArrayList<>());
         this.useBlankCards = useBlankCards;
     }
 
@@ -23,7 +23,7 @@ public class deck {
         return activeDeck;
     }
 
-    public ArrayList<card> getDiscardPile() {
+    public List<card> getDiscardPile() {
         return discardPile;
     }
 
@@ -105,7 +105,7 @@ public class deck {
     // any checks whether the card is actually owned by the deck, should not handle game logic
     // TODO: Might need to find another way to do this, this doesn't guarantee destruction of
     //  previous card might cause debugging hell
-    public void addToDiscard(card card) {
+    public synchronized void addToDiscard(card card) {
         lastCardPlayed = card;
         discardPile.add(card);
     }

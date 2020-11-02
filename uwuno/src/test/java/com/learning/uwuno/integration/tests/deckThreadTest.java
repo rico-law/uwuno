@@ -5,8 +5,7 @@ import com.learning.uwuno.cards.deck;
 
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
@@ -58,23 +57,39 @@ public class deckThreadTest {
     @Test
     public void singlePlayerPlayCard() throws InterruptedException {
         ExecutorService service = Executors.newFixedThreadPool(NUM_THREAD);
+        player player = players.get(0);
         IntStream.range(0, 108).forEach(i -> service.execute(() -> {
-            players.get(0).drawCards(1);
-            players.get(0).playCard(players.get(0).getCardList().get(0));
+            player.drawCards(1);
+            player.playCard(player.getCardList().get(0));
         }));
         service.awaitTermination(1000, TimeUnit.MILLISECONDS);
         assertThat(deck.getActiveDeck().size(), is(0));
         assertThat(deck.getDiscardPile().size(), is(108));
-        assertThat(players.get(0).getCardList().size(), is(0));
+        assertThat(player.getCardList().size(), is(0));
     }
 
-//    @Test
-//    public void multiplePlayersPlayCard() throws InterruptedException {
-//        ArrayList<Thread> threads = new ArrayList<>();
-//        players.forEach(p -> threads.add(new Thread(() -> IntStream.range(0, 10).forEach(i -> p.drawCards(1)))));
-//        threads.forEach(Thread::start);
-//        Thread.sleep(1000);
-//        assertThat(deck.getActiveDeck().size(), is(8));
-//        players.forEach(p -> assertThat(p.getCardList().size(), is(10)));
-//    }
+    @Test
+    public void multiplePlayersPlayCard() throws InterruptedException {
+        ArrayList<Thread> threads = new ArrayList<>();
+        players.forEach(p -> threads.add(new Thread(() -> IntStream.range(0, 10)
+                        .forEach(i -> {
+                            p.drawCards(1);
+                            p.playCard(p.getCardList().get(0));
+                        }))));
+        threads.forEach(Thread::start);
+        Thread.sleep(1000);
+        assertThat(deck.getActiveDeck().size(), is(8));
+        assertThat(deck.getDiscardPile().size(), is(100));
+        players.forEach(p -> assertThat(p.getCardList().size(), is(0)));
+    }
+
+    @Test
+    public void singlePlayerShuffleCard() {
+
+    }
+
+    @Test
+    public void multiplePlayersShuffleCard() {
+
+    }
 }
