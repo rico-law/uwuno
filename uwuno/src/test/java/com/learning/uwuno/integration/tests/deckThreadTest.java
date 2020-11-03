@@ -87,12 +87,34 @@ public class deckThreadTest {
     }
 
     @Test
-    public void singlePlayerShuffleCard() {
-
+    public void singlePlayerShuffleCard() throws InterruptedException {
+        ExecutorService service = Executors.newFixedThreadPool(NUM_THREAD);
+        player player = players.get(0);
+        IntStream.range(0, 500).forEach(i -> service.execute(() -> {
+            synchronized (player) {
+                player.drawCards(1);
+                player.playCard(player.getCardList().get(0));
+            }
+            System.out.println("hand card: " + player.getCardList());
+        }));
+        service.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        assertThat(deck.getActiveDeck().size(), is(40));
+        assertThat(deck.getDiscardPile().size(), is(68));
+        assertThat(player.getCardList().size(), is(0));
     }
 
     @Test
-    public void multiplePlayersShuffleCard() {
-
+    public void multiplePlayersShuffleCard() throws InterruptedException {
+        ArrayList<Thread> threads = new ArrayList<>();
+        players.forEach(p -> threads.add(new Thread(() -> IntStream.range(0, 100)
+                .forEach(i -> {
+                    p.drawCards(1);
+                    p.playCard(p.getCardList().get(0));
+                }))));
+        threads.forEach(Thread::start);
+        Thread.sleep(1000);
+        assertThat(deck.getActiveDeck().size(), is(80));
+        assertThat(deck.getDiscardPile().size(), is(28));
+        players.forEach(p -> assertThat(p.getCardList().size(), is(0)));
     }
 }
