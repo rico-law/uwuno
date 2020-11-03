@@ -24,9 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @WebMvcTest(playerController.class)
 @AutoConfigureMockMvc
@@ -70,7 +68,7 @@ public class playerControllerTests {
     @Test
     public void testPlayer_GET() throws Exception {
         testPlayer.setCurDeck(new deck(false));
-        ArrayList<card> testDraw = testPlayer.drawCards(1);
+        List<card> testDraw = testPlayer.drawCards(1);
         when(gameService.getPlayer(anyString(), anyString())).thenReturn(testPlayer);
 
         mvc.perform(get("/rooms/123/players/123/cards")
@@ -110,7 +108,7 @@ public class playerControllerTests {
     @Test
     public void testPlayer_PUT_drawCard() throws Exception {
         testPlayer.setCurDeck(new deck(false));
-        ArrayList<card> testDraw = testPlayer.drawCards(1);
+        List<card> testDraw = testPlayer.drawCards(1);
         when(gameService.drawCards(anyString(), anyString(), anyInt())).thenReturn(testPlayer);
 
         mvc.perform(put("/rooms/123/players/123")

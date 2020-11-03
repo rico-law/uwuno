@@ -59,8 +59,11 @@ public class deckThreadTest {
         ExecutorService service = Executors.newFixedThreadPool(NUM_THREAD);
         player player = players.get(0);
         IntStream.range(0, 108).forEach(i -> service.execute(() -> {
-            player.drawCards(1);
-            player.playCard(player.getCardList().get(0));
+            synchronized (player) {
+                player.drawCards(1);
+                player.playCard(player.getCardList().get(0));
+            }
+            System.out.println("hand card: " + player.getCardList());
         }));
         service.awaitTermination(1000, TimeUnit.MILLISECONDS);
         assertThat(deck.getActiveDeck().size(), is(0));

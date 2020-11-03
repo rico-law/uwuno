@@ -25,7 +25,7 @@ public class player {
         return name;
     }
 
-    public List<card> getCardList() {
+    public synchronized List<card> getCardList() {
         return cardList;
     }
 
@@ -45,13 +45,11 @@ public class player {
         return drawnCards;
     }
 
-    // TODO: synchronize deck
     public synchronized boolean playCard(card toPlay) {
         curDeck.addToDiscard(toPlay);
         return removeCard(toPlay);
     }
 
-    // TODO: synchronize deck
     // Used for in the case a card is used by a player, shouldn't handle game logic here
     public synchronized boolean removeCard(card card) {
         return cardList.remove(card);

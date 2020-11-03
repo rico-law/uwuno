@@ -19,11 +19,11 @@ public class deck {
         this.useBlankCards = useBlankCards;
     }
 
-    public LinkedList<card> getActiveDeck() {
+    public synchronized LinkedList<card> getActiveDeck() {
         return activeDeck;
     }
 
-    public List<card> getDiscardPile() {
+    public synchronized List<card> getDiscardPile() {
         return discardPile;
     }
 
