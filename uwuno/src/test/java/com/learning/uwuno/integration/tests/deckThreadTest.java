@@ -1,6 +1,7 @@
 package com.learning.uwuno.integration.tests;
 
 import com.learning.uwuno.*;
+import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 
 import org.junit.jupiter.api.*;
@@ -62,13 +63,12 @@ public class deckThreadTest {
             synchronized (player) {
                 player.drawCards(1);
                 player.playCard(player.getCardList().get(0));
+                assertThat(player.getCardList().size(), is(0));
             }
-            System.out.println("hand card: " + player.getCardList());
         }));
         service.awaitTermination(1000, TimeUnit.MILLISECONDS);
         assertThat(deck.getActiveDeck().size(), is(0));
         assertThat(deck.getDiscardPile().size(), is(108));
-        assertThat(player.getCardList().size(), is(0));
     }
 
     @Test
@@ -94,13 +94,12 @@ public class deckThreadTest {
             synchronized (player) {
                 player.drawCards(1);
                 player.playCard(player.getCardList().get(0));
+                assertThat(player.getCardList().size(), is(0));
             }
-            System.out.println("hand card: " + player.getCardList());
         }));
         service.awaitTermination(1000, TimeUnit.MILLISECONDS);
         assertThat(deck.getActiveDeck().size(), is(40));
         assertThat(deck.getDiscardPile().size(), is(68));
-        assertThat(player.getCardList().size(), is(0));
     }
 
     @Test
@@ -108,6 +107,7 @@ public class deckThreadTest {
         ArrayList<Thread> threads = new ArrayList<>();
         players.forEach(p -> threads.add(new Thread(() -> IntStream.range(0, 100)
                 .forEach(i -> {
+                    // TODO: Edit this and singlePlayer tests after implementing lock for player turn
                     p.drawCards(1);
                     p.playCard(p.getCardList().get(0));
                 }))));

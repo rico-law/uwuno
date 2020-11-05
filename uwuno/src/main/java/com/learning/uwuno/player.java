@@ -39,19 +39,19 @@ public class player {
         this.curDeck = newDeck;
     }
 
-    public synchronized ArrayList<card> drawCards(int numCards) {
-        ArrayList<card> drawnCards = curDeck.drawCards(numCards);
+    public List<card> drawCards(int numCards) {
+        List<card> drawnCards = curDeck.drawCards(numCards);
         cardList.addAll(drawnCards);
         return drawnCards;
     }
 
-    public synchronized boolean playCard(card toPlay) {
+    public boolean playCard(card toPlay) {
         curDeck.addToDiscard(toPlay);
         return removeCard(toPlay);
     }
 
     // Used for in the case a card is used by a player, shouldn't handle game logic here
-    public synchronized boolean removeCard(card card) {
+    public boolean removeCard(card card) {
         return cardList.remove(card);
     }
 }

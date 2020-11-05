@@ -77,11 +77,11 @@ public class deck {
     // Draw numCard cards, assume first item in the ArrayList is the top card
     // don't ever use this function directly, use implementation inside gameService to ensure
     // cards are removed from deck without moving it into a player's hand
-    public synchronized ArrayList<card> drawCards(int numCards) {
+    public synchronized List<card> drawCards(int numCards) {
         if (activeDeck.isEmpty() || activeDeck.size() < numCards)
             reshuffle();
         try {
-            ArrayList<card> ret = new ArrayList<>();
+            List<card> ret = Collections.synchronizedList(new ArrayList<>());
             for (int i = 0; i < numCards; i++) {
                 ret.add(activeDeck.pop());
             }
