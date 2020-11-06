@@ -23,7 +23,6 @@ public class playerController {
     // Adds a new player to the given room uid.
     @PostMapping(value = "rooms/{uid}/players")
     public ResponseEntity<player> addPlayer(@RequestBody String json, @PathVariable String uid) {
-        // OPTIONAL TODO: Check if name already exists and append number to it
         parser parser = new parser(json);
         return ResponseEntity.ok(containerService.addPlayer(parser.getValue("name"), uid));
     }

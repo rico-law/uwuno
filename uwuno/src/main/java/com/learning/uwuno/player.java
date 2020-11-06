@@ -47,12 +47,13 @@ public class player {
     }
 
     public boolean playCard(card toPlay) {
+        // The following functions must be run together to ensure the card is both removed from the deck
         curDeck.addToDiscard(toPlay);
         return removeCard(toPlay);
     }
 
-    // Used for in the case a card is used by a player, shouldn't handle game logic here
-    public boolean removeCard(card card) {
+    // To be used when a player plays a card from their hand
+    private boolean removeCard(card card) {
         return cardList.remove(card);
     }
 }

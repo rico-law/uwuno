@@ -16,7 +16,6 @@ public class UwunoApplication {
         SpringApplication.run(UwunoApplication.class, args);
 
         // Tests for checking previous functionaility breaks, need to test via debugger for now
-        // TODO: Move this to it's own test file in the future
 //        deck testdeck = new deck(false, 5);
 //        ArrayList<card> hand = testdeck.drawHand();
 //        player testplayer = new player("test");
@@ -56,5 +55,13 @@ public class UwunoApplication {
 //        hand.remove(c5); // Should work with overriden equals()
 //
 //        int f = 3;
+
+        room r = new room("test", false);
+        r.addPlayer(new player("1"));
+        for (int i = 0; i < 4; i++) {
+            r.addPlayer(new player("test"));
+        }
+        r.addPlayer(new player("2"));
+        int f = 3;
     }
 }

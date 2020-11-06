@@ -37,8 +37,8 @@ public class gameService {
     public player addPlayer(String name, String uid) {
         if (name.isBlank())
             throw new badRequest("Player name cannot be blank");
-        player newPlayer = new player(name);
-        getRoom(uid).addPlayer(newPlayer);
+//        player newPlayer = new player(name);
+        player newPlayer = getRoom(uid).addPlayer(new player(name));
         return newPlayer;
     }
 
@@ -132,7 +132,7 @@ public class gameService {
         if(!serviceUtils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest("Card cannot be played");
 
-        // Add the player's card to discard pile
+        // Add the player's card to discard pile and remove it from the player's hand
         player player = getPlayer(uid, pid);
         if (!player.playCard(toPlay))
             throw new internalServerError("Card to play does not exist in player's hand");
