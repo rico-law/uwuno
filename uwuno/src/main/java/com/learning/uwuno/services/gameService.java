@@ -146,5 +146,4 @@ public class gameService {
         if (!getRoom(uid).deletePlayer(pid))
             throw new errorNotFound("Player ID could not be found");
     }
-
 }
