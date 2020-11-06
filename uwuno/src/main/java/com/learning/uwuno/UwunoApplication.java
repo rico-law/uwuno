@@ -55,13 +55,5 @@ public class UwunoApplication {
 //        hand.remove(c5); // Should work with overriden equals()
 //
 //        int f = 3;
-
-        room r = new room("test", false);
-        r.addPlayer(new player("1"));
-        for (int i = 0; i < 4; i++) {
-            r.addPlayer(new player("test"));
-        }
-        r.addPlayer(new player("2"));
-        int f = 3;
     }
 }
