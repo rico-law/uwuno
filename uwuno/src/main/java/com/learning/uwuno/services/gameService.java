@@ -73,7 +73,7 @@ public class gameService {
         room room = getRoom(uid);
         room.Status roomStatus = serviceUtils.stringToRoomState(status);
 
-        if (validStatusChange(room, roomStatus)) {
+        if (serviceUtils.validStatusChange(room, roomStatus)) {
             room.setRoomStatus(roomStatus);
             serviceUtils.setUpGameState(room, roomStatus);
         }
@@ -83,29 +83,10 @@ public class gameService {
         }
     }
 
-    // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
-    public boolean validStatusChange(room room, room.Status status) {
-        switch (status) {
-            case Lobby -> {
-                return true;
-            }
-            case Start -> {
-                return room.getPlayers().size() >= room.getMinPlayers() &&
-                        room.getPlayers().size() <= room.getMaxPlayers();
-            }
-            case End -> {
-                return false;
-            }
-        }
-        throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
-    }
-
     public player updatePlayerName(String uid, String pid, String newName) {
         if (newName.isBlank())
             throw new badRequest("Player name cannot be blank");
-        player player = getPlayer(uid, pid);
-        player.setName(newName);
-        return player;
+        return getRoom(uid).updatePlayerName(pid, newName);
     }
 
     public player drawCards(String uid, String pid, int numCards) {

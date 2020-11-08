@@ -5,6 +5,7 @@ import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.sColorCard;
 import com.learning.uwuno.cards.wildCard;
 import com.learning.uwuno.errors.badRequest;
+import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
@@ -112,6 +113,23 @@ public final class serviceUtils {
             player.drawCards(room.getMaxHandSize());
         }
         room.flipTopCard();
+    }
+
+    // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
+    static public boolean validStatusChange(room room, room.Status status) {
+        switch (status) {
+            case Lobby -> {
+                return true;
+            }
+            case Start -> {
+                return room.getPlayers().size() >= room.getMinPlayers() &&
+                        room.getPlayers().size() <= room.getMaxPlayers();
+            }
+            case End -> {
+                return false;
+            }
+        }
+        throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
     }
 
 }
