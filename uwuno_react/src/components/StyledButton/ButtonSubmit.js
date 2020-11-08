@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, makeStyles } from "@material-ui/core";
 
-export const StyledButton = ({
+export const ButtonSubmit = ({
   colour,
   label,
   fullWidth,
@@ -21,15 +21,15 @@ export const StyledButton = ({
   const classes = useStyles();
 
   return (
-    <Button
-      size="large"
-      variant={variant}
-      classes={{
-        root: classes.root,
-        label: classes.label,
-      }}
-    >
-      {label}
-    </Button>
+      <Button
+        size="large"
+        variant={variant}
+        classes={{
+          root: classes.root,
+          label: classes.label,
+        }}
+      >
+        {label}
+      </Button>
   );
 };

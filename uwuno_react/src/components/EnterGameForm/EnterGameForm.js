@@ -1,13 +1,16 @@
 import React from "react";
 import { Grid, TextField } from "@material-ui/core";
-import { StyledButton as Button } from "../StyledButton/StyledButton";
+import { ButtonSubmit } from "../StyledButton/ButtonSubmit";
 import "./EnterGameForm.css";
 
 export const EnterGameForm = () => {
   return (
     <form className="ntr-form">
       <Grid className="row">
-        <TextField id="name" label="name" variant="outlined" />
+        <TextField id="name" label="name" variant="outlined" fullWidth={true} />
+      </Grid>
+      <Grid className="row">
+        <TextField id="room-id" label="room id" variant="outlined" fullWidth={true} />
       </Grid>
       <Grid
         container
@@ -16,13 +19,13 @@ export const EnterGameForm = () => {
         alignItems="baseline"
         className="row"
       >
-        <Button
+        <ButtonSubmit
           variant="contained"
           label="join game"
           colour="#5BCAEF"
           fullWidth={false}
         />
-        <Button
+        <ButtonSubmit
           variant="contained"
           label="create game"
           colour="#53E997"
