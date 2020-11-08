@@ -9,10 +9,34 @@ import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.UUID;
 
 public final class serviceUtils {
     private serviceUtils() {
+    }
+
+    static public String createUID(ArrayList<room> roomList) {
+        String uid = UUID.randomUUID().toString();
+        boolean isUidInUse = checkUidExists(roomList, uid);
+        while (isUidInUse) {
+            uid = UUID.randomUUID().toString();
+            isUidInUse = checkUidExists(roomList, uid);
+        }
+        return uid;
+    }
+
+    // Function to check if uid already exists
+    static public boolean checkUidExists(ArrayList<room> roomList, String uid) {
+        boolean ret = false;
+        for (room room : roomList) {
+            if (room.getUid().equals(uid)) {
+                ret = true;
+                break;
+            }
+        }
+        return ret;
     }
 
     // Function to create the proper card interface given cardType, cardColor, cardValue as strings

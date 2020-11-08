@@ -28,8 +28,8 @@ public class room {
     private player playerTurn;
 
     // Class functions
-    public room(String roomName, boolean useBlankCards) {
-        this.uid = UUID.randomUUID().toString();
+    public room(String roomName, boolean useBlankCards, String uid) {
+        this.uid = uid;
         this.playerList = new playerList(this.uid);
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;

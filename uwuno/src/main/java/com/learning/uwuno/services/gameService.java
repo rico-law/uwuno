@@ -24,7 +24,7 @@ public class gameService {
     public room addRoom(String roomName, boolean useBlankCards) {
         if (roomName.isBlank())
             throw new badRequest("Room name cannot be blank");
-        room newRoom = new room(roomName, useBlankCards);
+        room newRoom = new room(roomName, useBlankCards, serviceUtils.createUID(roomList));
         roomList.add(newRoom);
         return newRoom;
     }

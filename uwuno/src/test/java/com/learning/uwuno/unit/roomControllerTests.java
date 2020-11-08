@@ -38,7 +38,7 @@ public class roomControllerTests {
     @MockBean
     private gameService service;
 
-    room room = new room("testRoom", false);
+    room room = new room("testRoom", false, "123");
     player player = new player("testPlayer");
 
     @Test
