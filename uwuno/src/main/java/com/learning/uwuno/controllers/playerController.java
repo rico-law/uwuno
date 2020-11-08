@@ -46,7 +46,6 @@ public class playerController {
         // TODO: Change this to return a JSON Object, returning a POJO screws with JSON return
         // Handle updating name
         if (parser.exists("name")) {
-            // TODO: Check if name already exists and append number to it
             // Should we do it this way? Def good for debugging front end at least
             return ResponseEntity.ok(containerService.updatePlayerName(uid, pid, parser.getValue("name")));
         }

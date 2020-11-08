@@ -78,7 +78,6 @@ public class gameService {
             serviceUtils.setUpGameState(room, roomStatus);
         }
         else {
-            // TODO: Figure out if this
             throw new badRequest("Failed to change room status");
         }
     }

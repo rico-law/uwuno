@@ -5,7 +5,6 @@ import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.util.playerList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.learning.uwuno.errors.internalServerError;
 
 import java.util.*;
 
@@ -91,8 +90,7 @@ public class room {
     }
 
     // Only use this function to edit player names
-    public player updatePlayerName(String pid, String newName)
-    {
+    public player updatePlayerName(String pid, String newName) {
         player player = getPlayer(pid);
         playerList.changeName(player, newName);
         return player;
