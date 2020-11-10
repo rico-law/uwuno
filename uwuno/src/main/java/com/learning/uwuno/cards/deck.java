@@ -103,8 +103,6 @@ public class deck {
 
     // Place given card into the discard pile at the end of the list, does not perform
     // any checks whether the card is actually owned by the deck, should not handle game logic
-    // TODO: Might need to find another way to do this, this doesn't guarantee destruction of
-    //  previous card might cause debugging hell
     public void addToDiscard(card card) {
         lastCardPlayed = card;
         discardPile.add(card);

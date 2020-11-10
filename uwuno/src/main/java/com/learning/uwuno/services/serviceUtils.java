@@ -5,13 +5,38 @@ import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.sColorCard;
 import com.learning.uwuno.cards.wildCard;
 import com.learning.uwuno.errors.badRequest;
+import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.UUID;
 
 public final class serviceUtils {
     private serviceUtils() {
+    }
+
+    static public String createUID(ArrayList<room> roomList) {
+        String uid = UUID.randomUUID().toString();
+        boolean isUidInUse = checkUidExists(roomList, uid);
+        while (isUidInUse) {
+            uid = UUID.randomUUID().toString();
+            isUidInUse = checkUidExists(roomList, uid);
+        }
+        return uid;
+    }
+
+    // Function to check if uid already exists
+    static public boolean checkUidExists(ArrayList<room> roomList, String uid) {
+        boolean ret = false;
+        for (room room : roomList) {
+            if (room.getUid().equals(uid)) {
+                ret = true;
+                break;
+            }
+        }
+        return ret;
     }
 
     // Function to create the proper card interface given cardType, cardColor, cardValue as strings
@@ -112,6 +137,23 @@ public final class serviceUtils {
             player.drawCards(room.getMaxHandSize());
         }
         room.flipTopCard();
+    }
+
+    // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
+    static public boolean validStatusChange(room room, room.Status status) {
+        switch (status) {
+            case Lobby -> {
+                return true;
+            }
+            case Start -> {
+                return room.getPlayers().size() >= room.getMinPlayers() &&
+                        room.getPlayers().size() <= room.getMaxPlayers();
+            }
+            case End -> {
+                return false;
+            }
+        }
+        throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
     }
 
 }
