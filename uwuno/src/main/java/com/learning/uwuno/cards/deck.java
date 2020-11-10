@@ -97,14 +97,13 @@ public class deck {
     public card drawStart() {
         card start =  activeDeck.pop();
         lastCardPlayed = start;
-        discardPile.add(start);
         return start;
     }
 
     // Place given card into the discard pile at the end of the list, does not perform
     // any checks whether the card is actually owned by the deck, should not handle game logic
     public void addToDiscard(card card) {
+        discardPile.add(lastCardPlayed);
         lastCardPlayed = card;
-        discardPile.add(card);
     }
 }

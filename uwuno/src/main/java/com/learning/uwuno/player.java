@@ -10,12 +10,14 @@ public class player {
     // Class Variables
     final private String pid;
     private String name;
-    private ArrayList<card> cardList = new ArrayList<card>(); // TODO: Start game must check to make sure this value is not empty
+    private ArrayList<card> cardList = new ArrayList<>(); // TODO: Start game must check to make sure this value is not empty
     private deck curDeck;
+    private Integer score;
 
     public player(String name) {
         this.pid = UUID.randomUUID().toString();
         this.name = name;
+        this.score = 0;
     }
 
     public String getPid() {
