@@ -53,5 +53,6 @@ Play a card
     cardType,
     cardColor,
     cardValue, // empty if non-basic card
-    setWildColor // set to the colour of the player's choosing. empty if not a wild card
+    setWildColor, // set to the colour of the player's choosing. empty if not a wild card
+    skip // true if voluntarily ends turn without playing a card, otherwise false
 }

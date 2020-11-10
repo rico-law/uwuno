@@ -147,11 +147,12 @@ public class playerControllerTests {
         testPlayer.setCurDeck(new deck(false));
         testPlayer.drawCards(1);
         testPlayer.playCard(testPlayer.getCardList().get(0));
-        when(gameService.playCard(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(testPlayer);
+        when(gameService.playCard(anyString(), anyString(), anyString(), anyString(),
+                anyString(), anyString(), anyString())).thenReturn(testPlayer);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor")),
-                new ArrayList<>(Arrays.asList("Basic", "Green", "6", "")));
+                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor", "skip")),
+                new ArrayList<>(Arrays.asList("Basic", "Green", "6", "", "false")));
 
         mvc.perform(put("/rooms/123/players/123")
                 .contentType(MediaType.APPLICATION_JSON)

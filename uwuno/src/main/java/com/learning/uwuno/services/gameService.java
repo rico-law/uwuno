@@ -91,7 +91,7 @@ public class gameService {
 
     // Should handle both taking card away from player and adding it back into deck
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
-    public player playCard(String uid, String pid, String type, String color, String value, String setWildColor) {
+    public player playCard(String uid, String pid, String type, String color, String value, String setWildColor, String skip) {
         // Ensure card information passed in is viable and does not contain any extra information
         if (color.equals(card.Color.Black.toString()) && setWildColor.isBlank() ||
             color.isBlank() && !setWildColor.isBlank() ||

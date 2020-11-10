@@ -22,6 +22,7 @@ public class jsonUtil {
     private static final String CARD_COLOR = "$cardColor";
     private static final String CARD_VALUE = "$cardValue";
     private static final String SET_WILD_COLOR = "$setWildCard";
+    private static final String SKIP = "$skip";
 
     private jsonUtil() {
         // Should not run
@@ -54,9 +55,9 @@ public class jsonUtil {
     }
 
     public static String createPutPlayerPlayCardJson(String cardType, String cardColor, String cardValue,
-                                                     String setWildColor, String jsonPath)
+                                                     String setWildColor,String skip, String jsonPath)
             throws FileNotFoundException {
         return jsonFileToString(jsonPath).replace(CARD_TYPE, cardType).replace(CARD_COLOR, cardColor)
-                .replace(CARD_VALUE, cardValue).replace(SET_WILD_COLOR, setWildColor);
+                .replace(CARD_VALUE, cardValue).replace(SET_WILD_COLOR, setWildColor).replace(SKIP, skip);
     }
 }

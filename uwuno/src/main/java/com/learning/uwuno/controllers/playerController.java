@@ -64,18 +64,21 @@ public class playerController {
         else if (parser.exists("cardType") &&
                 parser.exists("cardColor") &&
                 parser.exists("cardValue") &&
-                parser.exists("setWildColor")) {
+                parser.exists("setWildColor") &&
+                parser.exists("skip")) {
             return ResponseEntity.ok(containerService.playCard(uid, pid,
                                         parser.getValue("cardType"),
                                         parser.getValue("cardColor"),
                                         parser.getValue("cardValue"),
-                                        parser.getValue("setWildColor")));
+                                        parser.getValue("setWildColor"),
+                                        parser.getValue("skip")));
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||
                 parser.exists("cardColor") ||
                 parser.exists("cardValue") ||
-                parser.exists("setWildColor")) {
+                parser.exists("setWildColor") ||
+                parser.exists("skip")) {
             throw new badRequest("Missing Key for playing card");
         }
         else {
