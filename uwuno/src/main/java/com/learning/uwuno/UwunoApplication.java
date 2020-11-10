@@ -16,7 +16,6 @@ public class UwunoApplication {
         SpringApplication.run(UwunoApplication.class, args);
 
         // Tests for checking previous functionaility breaks, need to test via debugger for now
-        // TODO: Move this to it's own test file in the future
 //        deck testdeck = new deck(false, 5);
 //        ArrayList<card> hand = testdeck.drawHand();
 //        player testplayer = new player("test");

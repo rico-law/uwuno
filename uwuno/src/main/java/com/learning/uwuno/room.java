@@ -2,12 +2,11 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
+import com.learning.uwuno.util.playerList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
 
 public class room {
     // Constants
@@ -23,14 +22,15 @@ public class room {
     // Class Variables
     final private String uid;
     private String roomName;
-    private LinkedList<player> playerList = new LinkedList<player>();
+    private playerList playerList;
     private deck deck;
     private Status roomStatus;
     private player playerTurn;
 
     // Class functions
-    public room(String roomName, boolean useBlankCards) {
-        this.uid = UUID.randomUUID().toString();
+    public room(String roomName, boolean useBlankCards, String uid) {
+        this.uid = uid;
+        this.playerList = new playerList(this.uid);
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
@@ -84,8 +84,16 @@ public class room {
         return playerList.stream().filter(t -> t.getPid().equals(pid)).findFirst().get();
     }
 
-    public void addPlayer(player newPlayer) {
+    public player addPlayer(player newPlayer) {
         playerList.add(newPlayer);
+        return newPlayer;
+    }
+
+    // Only use this function to edit player names
+    public player updatePlayerName(String pid, String newName) {
+        player player = getPlayer(pid);
+        playerList.changeName(player, newName);
+        return player;
     }
 
     public boolean deletePlayer(String pid) {

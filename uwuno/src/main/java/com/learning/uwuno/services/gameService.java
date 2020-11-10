@@ -24,7 +24,7 @@ public class gameService {
     public room addRoom(String roomName, boolean useBlankCards) {
         if (roomName.isBlank())
             throw new badRequest("Room name cannot be blank");
-        room newRoom = new room(roomName, useBlankCards);
+        room newRoom = new room(roomName, useBlankCards, serviceUtils.createUID(roomList));
         roomList.add(newRoom);
         return newRoom;
     }
@@ -32,8 +32,7 @@ public class gameService {
     public player addPlayer(String name, String uid) {
         if (name.isBlank())
             throw new badRequest("Player name cannot be blank");
-        player newPlayer = new player(name);
-        getRoom(uid).addPlayer(newPlayer);
+        player newPlayer = getRoom(uid).addPlayer(new player(name));
         return newPlayer;
     }
 
@@ -69,39 +68,19 @@ public class gameService {
         room room = getRoom(uid);
         room.Status roomStatus = serviceUtils.stringToRoomState(status);
 
-        if (validStatusChange(room, roomStatus)) {
+        if (serviceUtils.validStatusChange(room, roomStatus)) {
             room.setRoomStatus(roomStatus);
             serviceUtils.setUpGameState(room, roomStatus);
         }
         else {
-            // TODO: Figure out if this
             throw new badRequest("Failed to change room status");
         }
-    }
-
-    // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
-    public boolean validStatusChange(room room, room.Status status) {
-        switch (status) {
-            case Lobby -> {
-                return true;
-            }
-            case Start -> {
-                return room.getPlayers().size() >= room.getMinPlayers() &&
-                        room.getPlayers().size() <= room.getMaxPlayers();
-            }
-            case End -> {
-                return false;
-            }
-        }
-        throw new internalServerError("Room Status should never be " + status.toString()); // Should not reach here
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
         if (newName.isBlank())
             throw new badRequest("Player name cannot be blank");
-        player player = getPlayer(uid, pid);
-        player.setName(newName);
-        return player;
+        return getRoom(uid).updatePlayerName(pid, newName);
     }
 
     public player drawCards(String uid, String pid, int numCards) {
@@ -127,7 +106,7 @@ public class gameService {
         if(!serviceUtils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
             throw new badRequest("Card cannot be played");
 
-        // Add the player's card to discard pile
+        // Add the player's card to discard pile and remove it from the player's hand
         player player = getPlayer(uid, pid);
         if (!player.playCard(toPlay))
             throw new internalServerError("Card to play does not exist in player's hand");
