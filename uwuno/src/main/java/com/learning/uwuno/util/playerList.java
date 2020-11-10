@@ -198,7 +198,9 @@ public class playerList extends LinkedList<player> {
 
     @Override
     public player set(int index, player element) {
-        throw new internalServerError("set is not supported");
+        playerNames.remove(this.get(index).getName());
+        playerNames.add(element.getName());
+        return super.set(index, element);
     }
 
     // TODO: Need to fix this, but only way to do this seems to be to return a new playerList object?
