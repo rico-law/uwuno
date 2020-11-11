@@ -112,10 +112,16 @@ public final class serviceUtils {
         room.shufflePlayers();
         room.setupDeck();
         LinkedList<player> playerList = room.getPlayers();
-        for (player player:playerList) {
+        for (player player : playerList) {
             player.drawCards(room.getMaxHandSize());
         }
-        room.flipTopCard();
+        card card = room.flipTopCard();
+
+        // Reshuffle if flipped card is not a Basic card
+        while (!(card instanceof basicCard)) {
+            room.restartGame();
+            card = room.flipTopCard();
+        }
     }
 
     // TODO: Only has Lobby -> Start check. May need to add other states as necessary.

@@ -69,7 +69,7 @@ public class deck {
     public void reshuffle() {
         if (!discardPile.isEmpty()) {
             activeDeck.addAll(discardPile);
-            Collections.shuffle(discardPile);
+            Collections.shuffle(activeDeck);
             discardPile.clear(); // Faster than removeAll
         }
     }
@@ -101,7 +101,8 @@ public class deck {
     }
 
     // Place given card into the discard pile at the end of the list, does not perform
-    // any checks whether the card is actually owned by the deck, should not handle game logic
+    // any checks whether the card is actually owned by the deck, should not handle game logic.
+    // For in-game purposes.
     public void addToDiscard(card card) {
         discardPile.add(lastCardPlayed);
         lastCardPlayed = card;

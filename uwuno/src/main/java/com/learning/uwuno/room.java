@@ -112,11 +112,34 @@ public class room {
         }
     }
 
-    public void flipTopCard() {
-        this.deck.drawStart();
+    public card flipTopCard() {
+        return this.deck.drawStart();
     }
 
     public card lastPlayedCard() {
         return deck.getLastPlayedCard();
+    }
+
+    public ArrayList<card> getDiscardPile() {
+        return deck.getDiscardPile();
+    }
+
+    // Restarts game after cards have been dealt/played. Does not include final step of flipping top card.
+    public void restartGame() {
+        // Place last played card back in deck
+        if (lastPlayedCard() != null)
+            getDiscardPile().add(lastPlayedCard());
+
+        // Place hand cards back in deck
+        for (player player : getPlayers()) {
+            ArrayList<card> handCards = player.getCardList();
+            getDiscardPile().addAll(handCards);
+        }
+
+        // Deal hand cards
+        deck.reshuffle();
+        for (player player : getPlayers()) {
+            player.drawCards(getMaxHandSize());
+        }
     }
 }
