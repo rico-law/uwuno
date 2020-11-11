@@ -7,8 +7,8 @@ import java.util.*;
 public class deck {
     // Class variables
     // Assume the top of the list is the next card to be drawn
-    private LinkedList<card> activeDeck;
-    private ArrayList<card> discardPile;
+    private final LinkedList<card> activeDeck;
+    private final ArrayList<card> discardPile;
     final private boolean useBlankCards;
     private card lastCardPlayed;
 
@@ -81,7 +81,7 @@ public class deck {
         if (activeDeck.isEmpty() || activeDeck.size() < numCards)
             reshuffle();
         try {
-            ArrayList<card> ret = new ArrayList<card>();
+            ArrayList<card> ret = new ArrayList<>();
             for (int i = 0; i < numCards; i++) {
                 ret.add(activeDeck.pop());
             }
@@ -102,8 +102,9 @@ public class deck {
 
     // Place given card into the discard pile at the end of the list, does not perform
     // any checks whether the card is actually owned by the deck, should not handle game logic.
-    // For in-game purposes.
     public void addToDiscard(card card) {
+        if (lastCardPlayed instanceof wildCard)
+            ((wildCard) lastCardPlayed).resetColor();
         discardPile.add(lastCardPlayed);
         lastCardPlayed = card;
     }

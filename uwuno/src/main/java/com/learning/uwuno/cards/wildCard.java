@@ -36,6 +36,11 @@ public class wildCard extends card {
             throw new badRequest("Cannot set new color of Wild Card to black");
     }
 
+    // Reset tempColour after sending to discardPile
+    public void resetColor() {
+        lastChosenColor = Color.Black;
+    }
+
     // If this returns black, means first use of this card,
     // can use this to check if this is a new card if that is ever needed
     public card.Color getTempColor() {

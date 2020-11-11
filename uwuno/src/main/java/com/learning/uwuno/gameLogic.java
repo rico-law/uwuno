@@ -3,8 +3,6 @@ package com.learning.uwuno;
 import com.learning.uwuno.cards.basicCard;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.wildCard;
-import com.learning.uwuno.errors.badRequest;
-import com.learning.uwuno.errors.internalServerError;
 
 import java.util.ArrayList;
 
@@ -50,7 +48,6 @@ public final class gameLogic {
     static public void endTurn(player player, room room, gameResponse response) {
         response.setPlayerTurnPid(player.getPid());
         response.setPlayableCards(getPlayableCards(player, room.lastPlayedCard()));
-        return;
     }
 
     static public boolean playCard(card toPlay, card lastPlayed, player player) {
@@ -70,8 +67,12 @@ public final class gameLogic {
 
     // Function to check if card is playable when compared to last played card
     static public boolean checkPlayable(card toPlay, card lastPlayed) {
-        // If current card is a black card, can always be played
-        if (toPlay instanceof wildCard) {
+        // Get colour of last played card
+        card.Color lastPlayedColour = (lastPlayed instanceof wildCard) ?
+                ((wildCard) lastPlayed).getTempColor() : lastPlayed.getColor();
+        // If current card is an unset black card, can always be played. Otherwise, check whether the colour matches.
+        if (toPlay instanceof wildCard && ((wildCard) toPlay).getTempColor() == card.Color.Black ||
+            toPlay instanceof wildCard && ((wildCard) toPlay).getTempColor() == lastPlayedColour) {
             return true;
         }
         // Check if current and previous card has the same value
@@ -79,13 +80,9 @@ public final class gameLogic {
                 ((basicCard) toPlay).getValue() == ((basicCard) lastPlayed).getValue()) {
             return true;
         }
-        // If last played card is a wild card need to check the temp color
-        else if (lastPlayed instanceof wildCard) {
-            return ((wildCard) lastPlayed).getTempColor() == toPlay.getColor();
-        }
         // Check if same color or same type, if same type the type must not be a basic numeric card
         else {
-            return toPlay.getColor() == lastPlayed.getColor() ||
+            return toPlay.getColor() == lastPlayedColour ||
                     (toPlay.getType() == lastPlayed.getType() && lastPlayed.getType() != card.CardType.Basic);
         }
     }

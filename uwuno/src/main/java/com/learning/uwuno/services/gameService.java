@@ -3,7 +3,6 @@ package com.learning.uwuno.services;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
-import com.learning.uwuno.errors.internalServerError;
 import com.learning.uwuno.gameLogic;
 import com.learning.uwuno.gameResponse;
 import com.learning.uwuno.player;

@@ -41,6 +41,7 @@ public final class serviceUtils {
 
     // Function to create the proper card interface given cardType, cardColor, cardValue as strings
     // This function is case sensitive, for exact qualifiers look in card.java
+    // Only use this function for player PUT request for turn taking.
     static public card generateCard(String cardType, String cardColor, String cardValue, String setWildCard) {
         card.CardType type;
         card.Color color;
@@ -63,7 +64,7 @@ public final class serviceUtils {
                 throw new badRequest("Error with creating card from JSON");
             }
         }
-        // Special Card or Wild Card
+        // Special Card or Wild Card (sets wild card temp colour)
         else if (cardValue.isBlank() && !cardType.equals("Basic")) {
             switch (type) {
                 case Skip, Reverse, Draw2 -> {
@@ -71,8 +72,12 @@ public final class serviceUtils {
                         return new sColorCard(type, color);
                 }
                 case Draw4, ChangeColor, Blank -> {
-                    if (color == card.Color.Black && !setWildCard.isBlank())
-                        return new wildCard(type);
+                    if (color == card.Color.Black && !setWildCard.isBlank()) {
+                        wildCard wildCard = new wildCard(type);
+                        card.Color setColor = card.Color.valueOf(setWildCard);
+                        wildCard.setTempColor(setColor);
+                        return wildCard;
+                    }
                 }
             }
         }
