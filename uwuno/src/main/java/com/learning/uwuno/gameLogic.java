@@ -15,9 +15,6 @@ public final class gameLogic {
 //         - Match by number, colour or symbol/action. Or can play wildcard.
 //         - Player can choose not to play their card OR if they can't play a card => will need to draw 1 from deck
 //         - After drawing, if card can be played, they can play that card
-//         - Must say UNO before playing 2nd last card
-//                - If you forget and another player catches you, DRAW 4
-//                - If no one catches you before next player plays/draw a card, there is no penalty
 //         - First card, reshuffle if not number cards
 //         - Stacking: Can mix +2 and +4
 //
@@ -38,19 +35,37 @@ public final class gameLogic {
     // TODO: have option for max turns and game mode: original UNO or point based UNO.
     //  If game ends by max turns, winner determined by points.
 
-    static public boolean endTurn(player player) {
-        ArrayList<card> drawn = player.drawCards(1);
-        // TODO: allow the player to play the card if valid
-        return true;
+    static public void skipTurn(player player, room room, gameResponse response) {
+        ArrayList<card> cards = player.drawCards(1);
+        // If the card is valid to play, return response with current pid and drawn card
+        if (checkPlayable(cards.get(0), room.lastPlayedCard())) {
+            response.setPlayerTurnPid(player.getPid());
+            response.setPlayableCards(cards);
+            return;
+        }
+        // If card cannot be played, return response with next player's pid and their playable cards
+        endTurn(room.getNextPlayer(), room, response);
     }
 
-    static public void playCard(card toPlay, card lastPlayed, player player) {
-        if (!checkPlayable(toPlay, lastPlayed))
-            throw new badRequest("Card cannot be played");
+    static public void endTurn(player player, room room, gameResponse response) {
+        response.setPlayerTurnPid(player.getPid());
+        response.setPlayableCards(getPlayableCards(player, room.lastPlayedCard()));
+        return;
+    }
 
+    static public boolean playCard(card toPlay, card lastPlayed, player player) {
         // Add the player's card to discard pile and remove it from the player's hand
-        if (!player.playCard(toPlay))
-            throw new internalServerError("Card to play does not exist in player's hand");
+        return checkPlayable(toPlay, lastPlayed) && player.playCard(toPlay);
+    }
+
+    static public ArrayList<card> getPlayableCards(player player, card lastPlayed) {
+        ArrayList<card> playableCards = new ArrayList<>();
+        for (card card : player.getCardList()) {
+            if (checkPlayable(card, lastPlayed)) {
+                playableCards.add(card);
+            }
+        }
+        return playableCards;
     }
 
     // Function to check if card is playable when compared to last played card

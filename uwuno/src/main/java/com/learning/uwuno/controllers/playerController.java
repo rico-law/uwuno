@@ -40,7 +40,7 @@ public class playerController {
     // 2) Draw Card
     // 3) Play Card
     @PutMapping(value = "rooms/{uid}/players/{pid}")
-    public ResponseEntity<player> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<Object> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         parser parser = new parser(json);
 
         // TODO: Change this to return a JSON Object, returning a POJO screws with JSON return

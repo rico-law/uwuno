@@ -3,6 +3,7 @@ package com.learning.uwuno.unit;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.controllers.playerController;
+import com.learning.uwuno.gameResponse;
 import com.learning.uwuno.player;
 import com.learning.uwuno.services.gameService;
 
@@ -41,6 +42,7 @@ public class playerControllerTests {
     private gameService gameService;
 
     player testPlayer = new player("testPlayer");
+    gameResponse gameResponse = new gameResponse();
 
     @Test
     public void testPlayer_POST() throws Exception {
@@ -142,13 +144,14 @@ public class playerControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
+    // TODO: write tests for PUT. Right now, only testing that the return type is the same.
     @Test
     public void testPlayer_PUT_playCard() throws Exception {
         testPlayer.setCurDeck(new deck(false));
         testPlayer.drawCards(1);
         testPlayer.playCard(testPlayer.getCardList().get(0));
         when(gameService.takeTurn(anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString())).thenReturn(testPlayer);
+                anyString(), anyString(), anyString())).thenReturn(gameResponse);
 
         String content = testUtils.createJSON(
                 new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor", "skip")),
@@ -159,9 +162,7 @@ public class playerControllerTests {
                 .content(content)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.cardList").isArray())
-                .andExpect(jsonPath("$.cardList", hasSize(0)));
+                .andExpect(status().isOk());
     }
 
     @Test

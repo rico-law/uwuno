@@ -12,12 +12,12 @@ public class playerList extends LinkedList<player> {
     // Class Variables
     private final String parentUID;
     // Ensure that this HashSet and the LinkedList is kept in a consistent state
-    private HashSet<String> playerNames;
+    private final HashSet<String> playerNames;
 
     // Class functions
     public playerList(String uid) {
         parentUID = uid;
-        playerNames = new HashSet<String>();
+        playerNames = new HashSet<>();
     }
 
     // Only Call this function from within this.add(), all the checking code is there

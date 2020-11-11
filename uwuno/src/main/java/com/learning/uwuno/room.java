@@ -26,6 +26,7 @@ public class room {
     private deck deck;
     private Status roomStatus;
     private player playerTurn;
+    private boolean turnDirection; // true if forward, otherwise reverse direction
 
     // Class functions
     public room(String roomName, boolean useBlankCards, String uid) {
@@ -34,6 +35,7 @@ public class room {
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
+        this.turnDirection = true;
     }
 
     // Room Functions
@@ -103,6 +105,38 @@ public class room {
     public void shufflePlayers() {
         Collections.shuffle(playerList);
         this.playerTurn = playerList.getFirst();
+    }
+
+    public void changeDirection() {
+        turnDirection = !turnDirection;
+    }
+
+    // TODO: replace this placeholder function until next/prev functionality is implemented in playerList
+    // Sets next player and returns it
+    public player getNextPlayer() {
+        ListIterator<player> players = playerList.listIterator();
+        while (players.hasNext()) {
+            if (playerTurn.equals(players.next())) {
+                if (turnDirection) {
+                    if (players.hasNext()) {
+                        playerTurn = players.next();
+                        break;
+                    } else {
+                        playerTurn = playerList.getFirst();
+                        break;
+                    }
+                } else {
+                    if (players.hasPrevious()) {
+                        playerTurn = players.previous();
+                        break;
+                    } else {
+                        playerTurn = playerList.getLast();
+                        break;
+                    }
+                }
+            }
+        }
+        return playerTurn;
     }
 
     // Only use this to create new deck as this will ensure each player gets the same reference deck
