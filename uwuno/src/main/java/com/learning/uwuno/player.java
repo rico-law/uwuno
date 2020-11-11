@@ -49,9 +49,15 @@ public class player {
     }
 
     public boolean playCard(card toPlay) {
-        // The following functions must be run together to ensure the card is both removed from the deck
-        curDeck.addToDiscard(toPlay);
-        return removeCard(toPlay);
+        // Find whether card exits in hand given reference card
+        for (card card : getCardList()) {
+            if (card.equals(toPlay)) {
+                // The following functions must be run together to ensure the card is both removed from the deck
+                curDeck.addToDiscard(card);
+                return removeCard(card);
+            }
+        }
+        return false;
     }
 
     // To be used when a player plays a card from their hand

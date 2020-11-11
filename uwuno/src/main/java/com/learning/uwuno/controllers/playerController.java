@@ -66,7 +66,7 @@ public class playerController {
                 parser.exists("cardValue") &&
                 parser.exists("setWildColor") &&
                 parser.exists("skip")) {
-            return ResponseEntity.ok(containerService.playCard(uid, pid,
+            return ResponseEntity.ok(containerService.takeTurn(uid, pid,
                                         parser.getValue("cardType"),
                                         parser.getValue("cardColor"),
                                         parser.getValue("cardValue"),

@@ -4,6 +4,7 @@ import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.errors.internalServerError;
+import com.learning.uwuno.gameLogic;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
@@ -91,25 +92,22 @@ public class gameService {
 
     // Should handle both taking card away from player and adding it back into deck
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
-    public player playCard(String uid, String pid, String type, String color, String value, String setWildColor, String skip) {
-        // Ensure card information passed in is viable and does not contain any extra information
-        if (color.equals(card.Color.Black.toString()) && setWildColor.isBlank() ||
-            color.isBlank() && !setWildColor.isBlank() ||
-            value.isBlank() && setWildColor.isBlank() ||
-            !color.equals(card.Color.Black.toString()) && !setWildColor.isBlank()) {
-            throw new badRequest("Card cannot be created");
-        }
-
-        // Create a reference card  for comparison with given parameters
-        // and ensure the card is compatible with the last played card
-        card toPlay = serviceUtils.inputToCard(type, color, value);
-        if(!serviceUtils.checkPlayable(toPlay, getRoom(uid).lastPlayedCard()))
-            throw new badRequest("Card cannot be played");
-
-        // Add the player's card to discard pile and remove it from the player's hand
+    public player takeTurn(String uid, String pid, String type, String color,
+                           String value, String setWildColor, String skip) {
         player player = getPlayer(uid, pid);
-        if (!player.playCard(toPlay))
-            throw new internalServerError("Card to play does not exist in player's hand");
+        // Check whether player is skipping turn
+        if (Boolean.parseBoolean(skip)) {
+            if (type.isBlank() && color.isBlank() && value.isBlank() && setWildColor.isBlank()) {
+                gameLogic.endTurn(player);
+            } else {
+                throw new badRequest("Invalid skip turn request");
+            }
+        } else {
+            // Create a reference card for comparison with given parameters
+            // and ensure the card is compatible with the last played card
+            card toPlay = serviceUtils.generateCard(type, color, value, setWildColor);
+            gameLogic.playCard(toPlay, getRoom(uid).lastPlayedCard(), player);
+        }
         return player;
     }
 

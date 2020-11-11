@@ -147,7 +147,7 @@ public class playerControllerTests {
         testPlayer.setCurDeck(new deck(false));
         testPlayer.drawCards(1);
         testPlayer.playCard(testPlayer.getCardList().get(0));
-        when(gameService.playCard(anyString(), anyString(), anyString(), anyString(),
+        when(gameService.takeTurn(anyString(), anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString())).thenReturn(testPlayer);
 
         String content = testUtils.createJSON(

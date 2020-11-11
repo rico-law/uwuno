@@ -37,7 +37,7 @@ public class deck {
 
     // Creates cards, fills active deck and shuffles it
     public LinkedList<card> createDeck() {
-        LinkedList<card> deck = new LinkedList<card>();
+        LinkedList<card> deck = new LinkedList<>();
         for (card.Color color : card.Color.values()) {
             if (color != card.Color.Black) {
                 // Handle basic numeric cards

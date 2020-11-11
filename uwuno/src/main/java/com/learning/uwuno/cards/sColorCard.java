@@ -6,4 +6,18 @@ public class sColorCard extends card {
         this.cardType = cardType;
         this.color = color;
     }
+
+    // Override Functions
+    // Overrides equal to compare only CardType and Color
+    @Override
+    public boolean equals(Object obj) {
+        // Default checks
+        if (this == obj)
+            return true;
+        else if (obj == null || getClass() != obj.getClass())
+            return false;
+        // Extra checks, only need cardType and cardColor to be the same
+        sColorCard toTest = (sColorCard) obj;
+        return this.cardType == toTest.getType() && this.color == toTest.getColor();
+    }
 }
