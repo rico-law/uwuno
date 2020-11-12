@@ -2,8 +2,8 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
-import com.learning.uwuno.game.gameMode;
-import com.learning.uwuno.game.gameState;
+import com.learning.uwuno.errors.badRequest;
+import com.learning.uwuno.game.*;
 import com.learning.uwuno.util.playerList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -33,17 +33,30 @@ public class room {
     private gameState gameState;
 
     // Class functions
-    public room(String roomName, boolean useBlankCards, String uid) {
+    public room(String roomName, boolean useBlankCards, String uid, String gameMode) {
         this.uid = uid;
         this.playerList = new playerList(this.uid);
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
         this.turnDirection = true;
+        this.gameMode = getGameMode(gameMode);
         this.gameState = new gameState();
     }
 
     // Room Functions
+    private gameMode getGameMode(String mode) {
+        return switch (mode.toLowerCase()) {
+            case "normal" -> new normalMode();
+            case "point" -> new pointMode();
+            default -> throw new badRequest("Requesting invalid game mode");
+        };
+    }
+
+    public void setGameMode(String mode) {
+        this.gameMode = getGameMode(mode);
+    }
+
     public String getName() {
         return roomName;
     }
@@ -118,7 +131,7 @@ public class room {
 
     // TODO: replace this placeholder function until next/prev functionality is implemented in playerList
     // Sets next player and returns it
-    public player getNextPlayer() {
+    public player nextPlayer() {
         ListIterator<player> players = playerList.listIterator();
         while (players.hasNext()) {
             if (playerTurn.equals(players.next())) {
@@ -164,7 +177,7 @@ public class room {
     }
 
     // Restarts game after cards have been dealt/played. Does not include final step of flipping top card.
-    public void restartGame() {
+    public void reshuffleDeck() {
         // Place last played card back in deck
         if (lastPlayedCard() != null)
             getDiscardPile().add(lastPlayedCard());

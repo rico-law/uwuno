@@ -22,10 +22,10 @@ public class gameService {
 
     // Class Functions
     // POSTS
-    public room addRoom(String roomName, boolean useBlankCards) {
+    public room addRoom(String roomName, boolean useBlankCards, String gameMode) {
         if (roomName.isBlank())
             throw new badRequest("Room name cannot be blank");
-        room newRoom = new room(roomName, useBlankCards, serviceUtils.createUID(roomList));
+        room newRoom = new room(roomName, useBlankCards, serviceUtils.createUID(roomList), gameMode);
         roomList.add(newRoom);
         return newRoom;
     }
@@ -76,6 +76,10 @@ public class gameService {
         else {
             throw new badRequest("Failed to change room status");
         }
+    }
+
+    public void updateGameMode(String uid, String gameMode) {
+        getRoom(uid).setGameMode(gameMode);
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {

@@ -3,6 +3,7 @@ package com.learning.uwuno.game;
 import com.learning.uwuno.cards.basicCard;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.wildCard;
+import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
@@ -37,8 +38,13 @@ public final class gameLogic {
 //      - Wild ... 50 pts
 //      - Wild Draw 4 ... 50 pts
 
-    // TODO: have option for max turns and game mode: original UNO or point based UNO.
-    //  If game ends by max turns, winner determined by points.
+    static public gameMode getGameMode(String mode) {
+        return switch (mode.toLowerCase()) {
+            case "normal" -> new normalMode();
+            case "point" -> new pointMode();
+            default -> throw new badRequest("Requesting invalid game mode");
+        };
+    }
 
     static public void skipTurn(player player, room room, gameResponse response) {
         ArrayList<card> cards = player.drawCards(1);
@@ -54,10 +60,11 @@ public final class gameLogic {
     // If the given player has won, return winning response
     // Otherwise, return response with next player's pid and their playable cards
     static public void endTurn(player player, room room, gameResponse response) {
+        // TODO: also check whether maxTurn has been reached
         if (player.getCardList().isEmpty()) {
             response.setWinResponse(player);
         } else {
-            player nextPlayer = room.getNextPlayer();
+            player nextPlayer = room.nextPlayer();
             response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.lastPlayedCard()));
         }
     }

@@ -38,7 +38,7 @@ public class roomControllerTests {
     @MockBean
     private gameService service;
 
-    room room = new room("testRoom", false, "123");
+    room room = new room("testRoom", false, "123", "normal");
     player player = new player("testPlayer");
 
     @Test
@@ -97,11 +97,11 @@ public class roomControllerTests {
 
     @Test
     public void POST_add_room() throws Exception {
-        when(service.addRoom(anyString(), anyBoolean())).thenReturn(room);
+        when(service.addRoom(anyString(), anyBoolean(), anyString())).thenReturn(room);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("roomName", "useBlankCards")),
-                new ArrayList<>(Arrays.asList(room.getName(), "false")));
+                new ArrayList<>(List.of("roomName", "useBlankCards", "gameMode")),
+                new ArrayList<>(Arrays.asList(room.getName(), "false", "normal")));
 
         mock.perform(post("/rooms")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -173,8 +173,8 @@ public class roomControllerTests {
         when(service.getRoom(room.getUid())).thenReturn(room);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("uid", "roomName", "roomStatus")),
-                new ArrayList<>(Arrays.asList(room.getUid(), room.getName(), room.getRoomStatus().toString())));
+                new ArrayList<>(List.of("uid", "roomName", "roomStatus", "gameMode")),
+                new ArrayList<>(Arrays.asList(room.getUid(), room.getName(), room.getRoomStatus().toString(), "normal")));
 
         mock.perform(put("/rooms/" + room.getUid())
                 .contentType(MediaType.APPLICATION_JSON)

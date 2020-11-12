@@ -124,7 +124,7 @@ public final class serviceUtils {
 
         // Reshuffle if flipped card is not a Basic card
         while (!(card instanceof basicCard)) {
-            room.restartGame();
+            room.reshuffleDeck();
             card = room.flipTopCard();
         }
     }

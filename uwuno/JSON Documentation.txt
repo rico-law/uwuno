@@ -7,7 +7,8 @@ POST
 http://localhost:8080/rooms
 {
     roomName,
-    useBlankCards // boolean
+    useBlankCards, // boolean
+    gameMode       // normal or point
 }
 
 GET
@@ -19,6 +20,7 @@ http://localhost:8080/rooms/<uid>
     uid,
     roomName,
     roomStatus: lobby // state of the game either: Lobby, Start, End
+    gameMode       // normal or point
 }
 
 DELETE

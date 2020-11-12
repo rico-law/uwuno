@@ -1,5 +1,6 @@
 {
   "uid": "$roomUid",
   "roomName": "$roomName",
-  "roomStatus": "$roomStatus"
+  "roomStatus": "$roomStatus",
+  "gameMode": "$gameMode"
 }
