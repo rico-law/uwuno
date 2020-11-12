@@ -33,14 +33,15 @@ public class room {
     private gameState gameState;
 
     // Class functions
-    public room(String roomName, boolean useBlankCards, String uid, String gameMode) {
+    // TODO: move useBlankCards to gameSettings
+    public room(String roomName, boolean useBlankCards, String uid) {
         this.uid = uid;
         this.playerList = new playerList(this.uid);
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
         this.turnDirection = true;
-        this.gameMode = getGameMode(gameMode);
+        this.gameMode = getGameMode("normal");
         this.gameState = new gameState();
     }
 

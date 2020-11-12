@@ -1,5 +1,4 @@
 {
   "roomName": "$roomName",
-  "useBlankCards": "$useBlankCards",
-  "gameMode": "$gameMode"
+  "useBlankCards": "$useBlankCards"
 }

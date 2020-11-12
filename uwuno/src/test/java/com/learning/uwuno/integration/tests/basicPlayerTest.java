@@ -20,7 +20,7 @@ public class basicPlayerTest {
     @BeforeEach
     public void setUp() throws FileNotFoundException {
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson("room", "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson("room", "false", filePath);
 
         roomId = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")

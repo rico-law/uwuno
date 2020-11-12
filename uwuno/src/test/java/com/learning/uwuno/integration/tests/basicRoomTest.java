@@ -30,7 +30,7 @@ public class basicRoomTest {
     @Test
     public void createValidRoom200() throws IOException {
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson(inputName, "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson(inputName, "false", filePath);
 
         Response response = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
@@ -49,7 +49,7 @@ public class basicRoomTest {
     @Test
     public void createRoomEmptyName400() throws IOException {
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson("", "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson("", "false", filePath);
 
         Response response = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
@@ -73,7 +73,7 @@ public class basicRoomTest {
     public void getRoom200() throws IOException {
         // Room
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson(inputName, "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson(inputName, "false", filePath);
 
         String roomId = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
@@ -104,7 +104,7 @@ public class basicRoomTest {
     public void getPlayersInRoom200() throws IOException {
         // Room
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson(inputName, "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson(inputName, "false", filePath);
 
         String roomId = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
@@ -136,7 +136,7 @@ public class basicRoomTest {
     public void deleteRoom200() throws IOException {
         // Room
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson(inputName, "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson(inputName, "false", filePath);
 
         String roomId = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
@@ -166,7 +166,7 @@ public class basicRoomTest {
         // Room
         String oldFilePath = JSON_REQUESTS_PATH + "/postRoom.json";
         String oldInputName = "room_put_old_name_valid";
-        String oldRequest = jsonUtil.createPostRoomJson(oldInputName, "false", "normal", oldFilePath);
+        String oldRequest = jsonUtil.createPostRoomJson(oldInputName, "false", oldFilePath);
 
         String roomId = given().contentType(ContentType.JSON)
                 .when().body(oldRequest).post(BASE_URL + "/rooms")
@@ -177,7 +177,7 @@ public class basicRoomTest {
         // Request
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
         String status = "Lobby";
-        String request = jsonUtil.createPutRoomJson(inputName, roomId, status, "normal", filePath);
+        String request = jsonUtil.createPutRoomJson(inputName, roomId, status, filePath);
 
         Response response = given().pathParam("uid", roomId)
                 .when().body(request).put(BASE_URL + "/rooms/{uid}")
@@ -197,7 +197,7 @@ public class basicRoomTest {
     public void putInvalidRoomName400() throws IOException {
         // Room
         String oldFilePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String oldRequest = jsonUtil.createPostRoomJson(inputName, "false", "normal", oldFilePath);
+        String oldRequest = jsonUtil.createPostRoomJson(inputName, "false", oldFilePath);
 
         String roomId = given().contentType(ContentType.JSON)
                 .when().body(oldRequest).post(BASE_URL + "/rooms")
@@ -207,7 +207,7 @@ public class basicRoomTest {
 
         // Request
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
-        String request = jsonUtil.createPutRoomJson("", roomId, "Start", "normal", filePath);
+        String request = jsonUtil.createPutRoomJson("", roomId, "Start", filePath);
 
         Response response = given().pathParam("uid", roomId)
                 .when().body(request).put(BASE_URL + "/rooms/{uid}")
@@ -221,7 +221,7 @@ public class basicRoomTest {
     public void putInvalidRoomStatus400() throws IOException {
         // Room
         String oldFilePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String oldRequest = jsonUtil.createPostRoomJson(inputName, "false", "normal", oldFilePath);
+        String oldRequest = jsonUtil.createPostRoomJson(inputName, "false", oldFilePath);
 
         String roomId = given().contentType(ContentType.JSON)
                 .when().body(oldRequest).post(BASE_URL + "/rooms")
@@ -231,7 +231,7 @@ public class basicRoomTest {
 
         // Request
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
-        String request = jsonUtil.createPutRoomJson("valid_name", roomId, "invalid_status", "normal", filePath);
+        String request = jsonUtil.createPutRoomJson("valid_name", roomId, "invalid_status", filePath);
 
         Response response = given().pathParam("uid", roomId)
                 .when().body(request).put(BASE_URL + "/rooms/{uid}")
@@ -245,7 +245,7 @@ public class basicRoomTest {
     public void putInvalidRoomUid404() throws IOException {
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
         String status = "Start";
-        String request = jsonUtil.createPutRoomJson(inputName, "invalid_uid", status, "normal", filePath);
+        String request = jsonUtil.createPutRoomJson(inputName, "invalid_uid", status, filePath);
 
         Response response = given().pathParam("uid", "invalid_uid")
                 .when().body(request).put(BASE_URL + "/rooms/{uid}")

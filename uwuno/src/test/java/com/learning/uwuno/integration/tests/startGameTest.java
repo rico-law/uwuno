@@ -23,11 +23,12 @@ public class startGameTest {
     private static String roomId;
     private static String roomName;
 
+    // TODO: restructure variables so that it is easier to modify
     @BeforeEach
     public void setUp() throws FileNotFoundException {
         // Create room
         String filePath = JSON_REQUESTS_PATH + "/postRoom.json";
-        String request = jsonUtil.createPostRoomJson("room", "false", "normal", filePath);
+        String request = jsonUtil.createPostRoomJson("room", "false", filePath);
 
         Response response = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
@@ -61,7 +62,7 @@ public class startGameTest {
         // Request
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
         String status = "Start";
-        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, "normal", filePath);
+        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, filePath);
 
         Response response = given().pathParam("uid", roomId)
                 .when().body(request).put(BASE_URL + "/rooms/{uid}")
@@ -79,7 +80,7 @@ public class startGameTest {
     public void putStartNoPlayers400() throws IOException {
         String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
         String status = "Start";
-        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, "normal", filePath);
+        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, filePath);
 
         Response response = given().pathParam("uid", roomId)
                 .when().body(request).put(BASE_URL + "/rooms/{uid}")

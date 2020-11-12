@@ -23,7 +23,6 @@ public class jsonUtil {
     private static final String CARD_VALUE = "$cardValue";
     private static final String SET_WILD_COLOR = "$setWildCard";
     private static final String SKIP = "$skip";
-    private static final String GAME_MODE = "$gameMode";
 
     private jsonUtil() {
         // Should not run
@@ -35,16 +34,16 @@ public class jsonUtil {
     }
 
     // Create Room JSON String
-    public static String createPostRoomJson(String roomName, String useBlank, String gameMode, String jsonPath)
+    public static String createPostRoomJson(String roomName, String useBlank, String jsonPath)
             throws FileNotFoundException {
         return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName)
-                .replace(BLANK_CARDS, useBlank).replace(GAME_MODE, gameMode);
+                .replace(BLANK_CARDS, useBlank);
     }
 
-    public static String createPutRoomJson(String roomName, String uid, String status, String gameMode, String jsonPath)
+    public static String createPutRoomJson(String roomName, String uid, String status, String jsonPath)
             throws FileNotFoundException {
         return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(ROOM_UID, uid)
-                .replace(ROOM_STATUS, status).replace(GAME_MODE, gameMode);
+                .replace(ROOM_STATUS, status);
     }
 
     // Create Player JSON String

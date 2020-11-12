@@ -30,8 +30,7 @@ public class roomController {
     public ResponseEntity<room> addRoom(@RequestBody String json) {
             parser parser = new parser(json);
             return ResponseEntity.ok(containerService.addRoom(parser.getValue("roomName"),
-                        Boolean.parseBoolean(parser.getValue("useBlankCards")),
-                        parser.getValue("gameMode")));
+                        Boolean.parseBoolean(parser.getValue("useBlankCards"))));
 }
 
     // GETS
@@ -59,7 +58,6 @@ public class roomController {
             parser parser = new parser(json);
             containerService.updateRoomName(uid, parser.getValue("roomName"));
             containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
-            containerService.updateGameMode(uid, parser.getValue("gameMode"));
             return ResponseEntity.ok(containerService.getRoom(uid));
     }
 
