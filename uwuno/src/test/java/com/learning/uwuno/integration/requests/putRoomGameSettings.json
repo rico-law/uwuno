@@ -1,0 +1,7 @@
+{
+  "uid": "$roomUid",
+  "gameMode": "$gameMode",
+  "maxTurn": "$maxTurn",
+  "maxScore": "$maxScore",
+  "useBlankCards": "$useBlankCards"
+}

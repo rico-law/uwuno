@@ -1,6 +1,13 @@
 package com.learning.uwuno.game;
 
 public class pointMode implements gameMode {
+    final private String NAME = "POINT";
+
+    @Override
+    public String getModeName() {
+        return NAME;
+    }
+
     @Override
     public void calculateScore() {
 

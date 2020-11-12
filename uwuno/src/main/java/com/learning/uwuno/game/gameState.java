@@ -7,7 +7,7 @@ public class gameState {
     final private int SPECIAL_CARDS = 20;   // Reverse, Skip, +2
     final private int WILD_CARDS = 50;      // Wild, Wild +4
 
-    private int cardsToDraw;
+    private int cardsToDraw;    // Keeps track of +4, +2 stacking
     private int maxTurn;
     private int maxScore;
     private HashMap<String, Float> scores;

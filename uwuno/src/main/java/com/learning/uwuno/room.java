@@ -2,7 +2,6 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
-import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.game.*;
 import com.learning.uwuno.util.playerList;
 
@@ -29,11 +28,11 @@ public class room {
     private Status roomStatus;
     private player playerTurn;
     private boolean turnDirection; // true if forward, otherwise reverse direction
-    private gameMode gameMode;
+    private gameSettings gameSettings;
     private gameState gameState;
 
     // Class functions
-    // TODO: move useBlankCards to gameSettings
+    // TODO: remove useBlankCards from param (useBlankCards moved to gameSettings)
     public room(String roomName, boolean useBlankCards, String uid) {
         this.uid = uid;
         this.playerList = new playerList(this.uid);
@@ -41,23 +40,11 @@ public class room {
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
         this.turnDirection = true;
-        this.gameMode = getGameMode("normal");
+        this.gameSettings = new gameSettings();
         this.gameState = new gameState();
     }
 
     // Room Functions
-    private gameMode getGameMode(String mode) {
-        return switch (mode.toLowerCase()) {
-            case "normal" -> new normalMode();
-            case "point" -> new pointMode();
-            default -> throw new badRequest("Requesting invalid game mode");
-        };
-    }
-
-    public void setGameMode(String mode) {
-        this.gameMode = getGameMode(mode);
-    }
-
     public String getName() {
         return roomName;
     }
@@ -76,6 +63,14 @@ public class room {
 
     public String getUid() {
         return uid;
+    }
+
+    public gameSettings getGameSettings() {
+        return gameSettings;
+    }
+
+    public gameState getGameState() {
+        return gameState;
     }
 
     // Ignores the cardList field in the response JSON. We only need player id and name.

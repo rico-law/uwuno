@@ -5,6 +5,7 @@ import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
 import com.learning.uwuno.game.gameLogic;
 import com.learning.uwuno.game.gameResponse;
+import com.learning.uwuno.game.gameSettings;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
@@ -76,6 +77,14 @@ public class gameService {
         else {
             throw new badRequest("Failed to change room status");
         }
+    }
+
+    public void updateGameSettings(String uid, String gameMode, int maxTurn, int maxScore, boolean useBlankCards) {
+        gameSettings gameSettings = getRoom(uid).getGameSettings();
+        gameSettings.setGameMode(gameMode);
+        gameSettings.setMaxTurn(maxTurn);
+        gameSettings.setMaxScore(maxScore);
+        gameSettings.setUseBlankCards(useBlankCards);
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {

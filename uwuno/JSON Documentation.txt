@@ -23,6 +23,15 @@ http://localhost:8080/rooms/<uid>
     gameMode       // normal or point
 }
 
+Game settings
+{
+  "uid": "$roomUid",
+  "gameMode": "$gameMode",
+  "maxTurn": "$maxTurn",
+  "maxScore": "$maxScore",
+  "useBlankCards": "$useBlankCards"
+}
+
 DELETE
 http://localhost:8080/rooms/<uid>
 

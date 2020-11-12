@@ -1,6 +1,7 @@
 package com.learning.uwuno.controllers;
 
 import com.learning.uwuno.*;
+import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.services.gameService;
 import com.learning.uwuno.util.parser;
 
@@ -55,10 +56,19 @@ public class roomController {
     // PUTS
     @PutMapping(value = "rooms/{uid}")
     public ResponseEntity<room> updateRoom(@PathVariable String uid, @RequestBody String json) {
-            parser parser = new parser(json);
+        parser parser = new parser(json);
+        if (parser.exists("roomName") && parser.exists("roomStatus")) {
             containerService.updateRoomName(uid, parser.getValue("roomName"));
             containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
-            return ResponseEntity.ok(containerService.getRoom(uid));
+        } else if (parser.exists("gameMode") && parser.exists("maxTurn")
+                && parser.exists("maxScore") && parser.exists("useBlankCards")) {
+            containerService.updateGameSettings(uid, parser.getValue("gameMode"),
+                    Integer.parseInt(parser.getValue("maxTurn")), Integer.parseInt(parser.getValue("maxScore")),
+                    Boolean.parseBoolean(parser.getValue("useBlankCards")));
+        } else {
+            throw new badRequest("Unknown Room Modification");
+        }
+        return ResponseEntity.ok(containerService.getRoom(uid));
     }
 
     // DELETES
