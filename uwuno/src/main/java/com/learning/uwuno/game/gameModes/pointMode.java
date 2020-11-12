@@ -1,8 +1,7 @@
-package com.learning.uwuno.game;
+package com.learning.uwuno.game.gameModes;
 
-public class normalMode implements gameMode {
-    final private String NAME = "NORMAL";
-
+public class pointMode implements gameMode {
+    final private String NAME = "POINT";
 
     @Override
     public String getModeName() {

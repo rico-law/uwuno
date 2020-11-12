@@ -1,7 +1,7 @@
-package com.learning.uwuno.game;
+package com.learning.uwuno.game.gameModes;
 
-public class pointMode implements gameMode {
-    final private String NAME = "POINT";
+public class normalMode implements gameMode {
+    final private String NAME = "NORMAL";
 
     @Override
     public String getModeName() {
@@ -10,7 +10,6 @@ public class pointMode implements gameMode {
 
     @Override
     public void calculateScore() {
-
     }
 
     @Override

@@ -41,7 +41,7 @@ public class room {
         this.deck = new deck(useBlankCards);
         this.turnDirection = true;
         this.gameSettings = new gameSettings();
-        this.gameState = new gameState();
+        this.gameState = new gameState(playerList);
     }
 
     // Room Functions
@@ -189,5 +189,9 @@ public class room {
         for (player player : getPlayers()) {
             player.drawCards(getMaxHandSize());
         }
+    }
+
+    public void resetGameState() {
+        this.gameState = new gameState(playerList);
     }
 }

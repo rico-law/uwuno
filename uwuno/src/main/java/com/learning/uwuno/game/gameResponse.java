@@ -9,10 +9,12 @@ public class gameResponse {
     private ArrayList<card> playableCards;
     private String playerTurnPid;
     private String winnerPid;
+    private String winnerName;
 
     public gameResponse() {
         playableCards = new ArrayList<>();
         winnerPid = "";
+        winnerName = "";
     }
 
     public ArrayList<card> getPlayableCards() {
@@ -27,6 +29,10 @@ public class gameResponse {
         return winnerPid;
     }
 
+    public String getWinnerName() {
+        return winnerName;
+    }
+
     public void setPlayerTurnResponse(String pid, ArrayList<card> playableCards) {
         setPlayerTurnPid(pid);
         setPlayableCards(playableCards);
@@ -34,6 +40,7 @@ public class gameResponse {
 
     public void setWinResponse(player player) {
         this.winnerPid = player.getPid();
+        this.winnerName = player.getName();
         this.setPlayableCards(player.getCardList());
     }
 

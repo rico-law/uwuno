@@ -1,4 +1,4 @@
-package com.learning.uwuno.game;
+package com.learning.uwuno.game.gameModes;
 
 public interface gameMode {
 

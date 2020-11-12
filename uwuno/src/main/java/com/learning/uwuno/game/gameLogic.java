@@ -38,14 +38,6 @@ public final class gameLogic {
 //      - Wild ... 50 pts
 //      - Wild Draw 4 ... 50 pts
 
-    static public gameMode getGameMode(String mode) {
-        return switch (mode.toLowerCase()) {
-            case "normal" -> new normalMode();
-            case "point" -> new pointMode();
-            default -> throw new badRequest("Requesting invalid game mode");
-        };
-    }
-
     static public void skipTurn(player player, room room, gameResponse response) {
         ArrayList<card> cards = player.drawCards(1);
         // If the card is valid to play, return response with current pid and drawn card
