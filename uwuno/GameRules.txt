@@ -5,13 +5,18 @@ Rules:
     - First card, reshuffle if not number cards
     - Stacking: Can mix +2 and +4
 
-Scoring:
+Game modes:
     - Normal game mode:
-        - When you get rid of all your cards, you get points equal to the cards left in other players' hands
-        - First to 500 pts is the winner
-    - Modified game mode (& for max turns):
-        - [(number of points in your hand) / (player with the most points)] * 100
+        - First to get rid of all your cards win
+        - If reached maxTurn before finishing the game,
+            calculate scores based on [(number of points in your hand) / (player with the most points)] * 100
         - Player with the least points wins
+    - Point mode (multiple rounds):
+        - When you get rid of all your cards, you get points equal to the cards left in other players' hands
+        - First to reach the set number of pts wins (e.g. 500 pts)
+        - If reached maxTurn before finishing the game, calculate pts equal to the cards in other players' hands
+
+Scoring:
     - All number cards (0-9) ... Face value
     - Draw 2 ... 20 pts
     - Reverse ... 20 pts

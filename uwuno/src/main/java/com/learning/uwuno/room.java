@@ -2,6 +2,8 @@ package com.learning.uwuno;
 
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
+import com.learning.uwuno.game.gameMode;
+import com.learning.uwuno.game.gameState;
 import com.learning.uwuno.util.playerList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -27,6 +29,8 @@ public class room {
     private Status roomStatus;
     private player playerTurn;
     private boolean turnDirection; // true if forward, otherwise reverse direction
+    private gameMode gameMode;
+    private gameState gameState;
 
     // Class functions
     public room(String roomName, boolean useBlankCards, String uid) {
@@ -36,6 +40,7 @@ public class room {
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
         this.turnDirection = true;
+        this.gameState = new gameState();
     }
 
     // Room Functions

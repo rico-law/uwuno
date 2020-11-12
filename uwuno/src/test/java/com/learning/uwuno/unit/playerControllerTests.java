@@ -3,7 +3,7 @@ package com.learning.uwuno.unit;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.controllers.playerController;
-import com.learning.uwuno.gameResponse;
+import com.learning.uwuno.game.gameResponse;
 import com.learning.uwuno.player;
 import com.learning.uwuno.services.gameService;
 

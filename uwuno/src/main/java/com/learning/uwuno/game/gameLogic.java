@@ -1,34 +1,41 @@
-package com.learning.uwuno;
+package com.learning.uwuno.game;
 
 import com.learning.uwuno.cards.basicCard;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.wildCard;
+import com.learning.uwuno.player;
+import com.learning.uwuno.room;
 
 import java.util.ArrayList;
 
 public final class gameLogic {
     private gameLogic() {}
 
-//     Rules:
-//         - Match by number, colour or symbol/action. Or can play wildcard.
-//         - Player can choose not to play their card OR if they can't play a card => will need to draw 1 from deck
-//         - After drawing, if card can be played, they can play that card
-//         - First card, reshuffle if not number cards
-//         - Stacking: Can mix +2 and +4
+//    Rules:
+//      - Match by number, colour or symbol/action. Or can play wildcard.
+//      - Player can choose not to play their card OR if they can't play a card => will need to draw 1 from deck
+//      - After drawing, if card can be played, they can play that card
+//      - First card, reshuffle if not number cards
+//      - Stacking: Can mix +2 and +4
 //
-//     Scoring:
-//         - Normal game mode:
-//                - When you get rid of all your cards, you get points equal to the cards left in other players' hands
-//                - First to 500 pts is the winner
-//         - Modified game mode (& for max turns):
-//                - [(number of points in your hand) / (player with the most points)] * 100
-//                - Player with the least points wins
-//         - All number cards (0-9) ... Face value
-//         - Draw 2 ... 20 pts
-//         - Reverse ... 20 pts
-//         - Skip ... 20 pts
-//         - Wild ... 50 pts
-//         - Wild Draw 4 ... 50 pts
+//    Game modes:
+//      - Normal game mode:
+//          - First to get rid of all your cards win
+//          - If reached maxTurn before finishing the game,
+//              calculate scores based on [(number of points in your hand) / (player with the most points)] * 100
+//          - Player with the least points wins
+//      - Point mode (multiple rounds):
+//          - When you get rid of all your cards, you get points equal to the cards left in other players' hands
+//          - First to reach the set number of pts wins (e.g. 500 pts)
+//          - If reached maxTurn before finishing the game, calculate pts equal to the cards in other players' hands
+//
+//    Scoring:
+//      - All number cards (0-9) ... Face value
+//      - Draw 2 ... 20 pts
+//      - Reverse ... 20 pts
+//      - Skip ... 20 pts
+//      - Wild ... 50 pts
+//      - Wild Draw 4 ... 50 pts
 
     // TODO: have option for max turns and game mode: original UNO or point based UNO.
     //  If game ends by max turns, winner determined by points.
@@ -37,17 +44,22 @@ public final class gameLogic {
         ArrayList<card> cards = player.drawCards(1);
         // If the card is valid to play, return response with current pid and drawn card
         if (checkPlayable(cards.get(0), room.lastPlayedCard())) {
-            response.setPlayerTurnPid(player.getPid());
-            response.setPlayableCards(cards);
+            response.setPlayerTurnResponse(player.getPid(), cards);
             return;
         }
         // If card cannot be played, return response with next player's pid and their playable cards
-        endTurn(room.getNextPlayer(), room, response);
+        endTurn(player, room, response);
     }
 
+    // If the given player has won, return winning response
+    // Otherwise, return response with next player's pid and their playable cards
     static public void endTurn(player player, room room, gameResponse response) {
-        response.setPlayerTurnPid(player.getPid());
-        response.setPlayableCards(getPlayableCards(player, room.lastPlayedCard()));
+        if (player.getCardList().isEmpty()) {
+            response.setWinResponse(player);
+        } else {
+            player nextPlayer = room.getNextPlayer();
+            response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.lastPlayedCard()));
+        }
     }
 
     static public boolean playCard(card toPlay, card lastPlayed, player player) {
@@ -55,6 +67,7 @@ public final class gameLogic {
         return checkPlayable(toPlay, lastPlayed) && player.playCard(toPlay);
     }
 
+    // Returns list of playable cards from given player's hand based on given last played card
     static public ArrayList<card> getPlayableCards(player player, card lastPlayed) {
         ArrayList<card> playableCards = new ArrayList<>();
         for (card card : player.getCardList()) {

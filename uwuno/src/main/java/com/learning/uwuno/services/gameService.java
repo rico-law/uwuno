@@ -3,8 +3,8 @@ package com.learning.uwuno.services;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
-import com.learning.uwuno.gameLogic;
-import com.learning.uwuno.gameResponse;
+import com.learning.uwuno.game.gameLogic;
+import com.learning.uwuno.game.gameResponse;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
@@ -112,13 +112,14 @@ public class gameService {
             card toPlay = serviceUtils.generateCard(type, color, value, setWildColor);
             if (gameLogic.playCard(toPlay, room.lastPlayedCard(), player))
                 // If played card is valid, return response with next player's pid and their playable cards
-                gameLogic.endTurn(room.getNextPlayer(), room, response);
+                // Or declare the winner
+                gameLogic.endTurn(player, room, response);
             else {
                 // TODO: somehow return gameResponse without modifying it (since no card has been played,
                 //  the properties should be the same as before)
                 // If played an invalid card, return response with same pid and their playable cards
-                response.setPlayerTurnPid(player.getPid());
-                response.setPlayableCards(gameLogic.getPlayableCards(player, room.lastPlayedCard()));
+                response.setPlayerTurnResponse(player.getPid(),
+                        gameLogic.getPlayableCards(player, room.lastPlayedCard()));
             }
         }
         return response;
