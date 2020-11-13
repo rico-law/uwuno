@@ -3,8 +3,7 @@ package com.learning.uwuno.game;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class gameResponse {
     private ArrayList<card> playableCards;
@@ -25,6 +24,14 @@ public class gameResponse {
 
     public String getPlayerTurnPid() {
         return playerTurnPid;
+    }
+
+    public ArrayList<player> getWinners() {
+        return winners;
+    }
+
+    public HashMap<player, Integer> getScores() {
+        return scores;
     }
 
     public void setPlayerTurnResponse(String pid, ArrayList<card> playableCards) {

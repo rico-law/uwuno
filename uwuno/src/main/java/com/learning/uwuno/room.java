@@ -1,5 +1,6 @@
 package com.learning.uwuno;
 
+import com.learning.uwuno.cards.basicCard;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.game.*;
@@ -17,7 +18,7 @@ public class room {
     public enum Status {
         Lobby,
         Start,
-        End
+        Restart
     }
 
     // Class Variables
@@ -184,9 +185,24 @@ public class room {
         for (player player : getPlayers()) {
             player.drawCards(getMaxHandSize());
         }
+
+        setValidFirstCard();
+    }
+
+    public void setValidFirstCard() {
+        card card = flipTopCard();
+
+        // Reshuffle if flipped card is not a Basic card
+        if (!(card instanceof basicCard))
+            reshuffleDeck();
     }
 
     public void resetGameState() {
         this.gameState = new gameState(playerList);
+    }
+
+    // For Point Mode: resets game state fields except scores
+    public void resetRoundGameState() {
+        gameState.resetRound();
     }
 }

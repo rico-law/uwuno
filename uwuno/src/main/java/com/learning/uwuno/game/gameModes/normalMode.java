@@ -7,9 +7,7 @@ import com.learning.uwuno.cards.wildCard;
 import com.learning.uwuno.player;
 import com.learning.uwuno.util.playerList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class normalMode implements gameMode {
     final private int SPECIAL_CARDS_POINTS = 20;   // Reverse, Skip, +2

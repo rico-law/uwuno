@@ -98,14 +98,15 @@ public final class serviceUtils {
     static public void setUpGameState(room room, room.Status status) {
         switch (status) {
             case Lobby -> {
-                // Restart game
                 return;
             }
             case Start -> {
                 serviceUtils.setUpStartGame(room);
                 return;
             }
-            case End -> {
+            case Restart -> {
+                // For Point Mode: restart game for next round
+                serviceUtils.setUpNextRound(room);
                 return;
             }
         }
@@ -116,17 +117,14 @@ public final class serviceUtils {
     static public void setUpStartGame(room room) {
         room.shufflePlayers();
         room.setupDeck();
-        LinkedList<player> playerList = room.getPlayers();
-        for (player player : playerList) {
-            player.drawCards(room.getMaxHandSize());
-        }
-        card card = room.flipTopCard();
+        room.reshuffleDeck();
+    }
 
-        // Reshuffle if flipped card is not a Basic card
-        while (!(card instanceof basicCard)) {
-            room.reshuffleDeck();
-            card = room.flipTopCard();
-        }
+    // Is helper for setUpGameState. Should use through there.
+    // Resets game for next round except the scores.
+    static public void setUpNextRound(room room) {
+        room.resetRoundGameState();
+        room.reshuffleDeck();
     }
 
     // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
@@ -139,7 +137,8 @@ public final class serviceUtils {
                 return room.getPlayers().size() >= room.getMinPlayers() &&
                         room.getPlayers().size() <= room.getMaxPlayers();
             }
-            case End -> {
+            case Restart -> {
+                // TODO: see if there is anything to validate. Otherwise don't need this case.
                 return false;
             }
         }

@@ -19,7 +19,7 @@ http://localhost:8080/rooms/<uid>
 {
     uid,
     roomName,
-    roomStatus: lobby // state of the game either: Lobby, Start, End
+    roomStatus: lobby // state of the game either: Lobby, Start, Restart (for Point Mode where there are multiple rounds)
     gameMode       // normal or point
 }
 

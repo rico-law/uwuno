@@ -34,8 +34,7 @@ public class gameService {
     public player addPlayer(String name, String uid) {
         if (name.isBlank())
             throw new badRequest("Player name cannot be blank");
-        player newPlayer = getRoom(uid).addPlayer(new player(name));
-        return newPlayer;
+        return getRoom(uid).addPlayer(new player(name));
     }
 
     // GETS

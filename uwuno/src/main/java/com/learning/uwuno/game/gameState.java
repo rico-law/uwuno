@@ -7,15 +7,29 @@ import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 import com.learning.uwuno.util.playerList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class gameState {
     private int cardsToDraw;    // Keeps track of +4, +2 stacking
-    // TODO: increment turnsTaken
     private int turnsTaken;
     private boolean turnDirection; // true if forward, otherwise reverse direction
-    private HashMap<player, Integer> scores;
+    private final HashMap<player, Integer> scores;
+
+    public int getCardsToDraw() {
+        return cardsToDraw;
+    }
+
+    public int getTurnsTaken() {
+        return turnsTaken;
+    }
+
+    public boolean isTurnDirection() {
+        return turnDirection;
+    }
+
+    public HashMap<player, Integer> getScores() {
+        return scores;
+    }
 
     // To keep track of points and other current game properties
     public gameState(playerList playerList) {
@@ -29,7 +43,14 @@ public class gameState {
         }
     }
 
-    public void applyEffect(card.CardType type) {
+    // For Point Mode: resets game state fields except scores
+    public void resetRound() {
+        cardsToDraw = 0;
+        turnsTaken = 0;
+        turnDirection = true;
+    }
+
+    public void applyCardEffect(card.CardType type) {
         if (type == card.CardType.Draw2) {
             cardsToDraw += 2;
         } else if (type == card.CardType.Draw4) {
@@ -73,7 +94,8 @@ public class gameState {
                     scores, gameSettings.getMaxScore());
             if (winners.isEmpty()) {
                 // No winners should only happen in Point Mode
-                // TODO: have trigger somewhere to reset game state except scores and restart game (should only be for point mode)
+                // TODO: better way to trigger reset game state (except scores) for next round?
+                //  Right now, using PUT room gameStatus "Restart" to indicate restarting round
                 response.setNextRoundResponse(scores);
             } else {
                 response.setWinResponse(winners);
@@ -88,14 +110,14 @@ public class gameState {
     public boolean playCard(card toPlay, card lastPlayed, player player) {
         // Add the player's card to discard pile and remove it from the player's hand
         if (checkPlayable(toPlay, lastPlayed) && player.playCard(toPlay)) {
-            applyEffect(toPlay.getType());
+            applyCardEffect(toPlay.getType());
             return true;
         }
         return false;
     }
 
     // Returns list of playable cards from given player's hand based on given last played card
-    static public ArrayList<card> getPlayableCards(player player, card lastPlayed) {
+    public ArrayList<card> getPlayableCards(player player, card lastPlayed) {
         ArrayList<card> playableCards = new ArrayList<>();
         for (card card : player.getCardList()) {
             if (checkPlayable(card, lastPlayed)) {
@@ -106,7 +128,7 @@ public class gameState {
     }
 
     // Function to check if card is playable when compared to last played card
-    static public boolean checkPlayable(card toPlay, card lastPlayed) {
+    public boolean checkPlayable(card toPlay, card lastPlayed) {
         // Get colour of last played card
         card.Color lastPlayedColour = (lastPlayed instanceof wildCard) ?
                 ((wildCard) lastPlayed).getTempColor() : lastPlayed.getColor();

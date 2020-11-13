@@ -3,8 +3,7 @@ package com.learning.uwuno.game.gameModes;
 import com.learning.uwuno.player;
 import com.learning.uwuno.util.playerList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public interface gameMode {
 
