@@ -20,4 +20,14 @@ public class sColorCard extends card {
         sColorCard toTest = (sColorCard) obj;
         return this.cardType == toTest.getType() && this.color == toTest.getColor();
     }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        if (cardType != null)
+            result = 31 * result + cardType.hashCode();
+        if (color != null)
+            result = 31 * result + color.hashCode();
+        return result;
+    }
 }

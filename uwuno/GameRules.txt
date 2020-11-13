@@ -8,9 +8,9 @@ Rules:
 Game modes:
     - Normal game mode:
         - First to get rid of all your cards win
-        - If reached maxTurn before finishing the game,
-            calculate scores based on [(number of points in your hand) / (player with the most points)] * 100
+        - If reached maxTurn before finishing the game, each player get points equal to the cards they have left
         - Player with the least points wins
+        - If tie, player with less cards wins
     - Point mode (multiple rounds):
         - When you get rid of all your cards, you get points equal to the cards left in other players' hands
         - First to reach the set number of pts wins (e.g. 500 pts)

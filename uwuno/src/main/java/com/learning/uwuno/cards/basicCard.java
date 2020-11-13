@@ -28,4 +28,15 @@ public class basicCard extends card {
         basicCard toTest = (basicCard) obj;
         return this.cardType == toTest.getType() && this.color == toTest.getColor() && this.value == toTest.getValue();
     }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        if (cardType != null)
+            result = 31 * result + cardType.hashCode();
+        if (color != null)
+            result = 31 * result + color.hashCode();
+        result = 31 * result + value;
+        return result;
+    }
 }

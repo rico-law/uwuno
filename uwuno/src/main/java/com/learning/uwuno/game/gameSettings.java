@@ -12,8 +12,8 @@ public class gameSettings {
     private boolean useBlankCards;
 
     // TODO: may want to make a controller for gameSettings
-    public String getGameModeName() {
-        return gameMode.getModeName();
+    public gameMode getGameMode() {
+        return gameMode;
     }
 
     public int getMaxTurn() {

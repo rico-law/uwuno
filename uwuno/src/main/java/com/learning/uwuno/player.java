@@ -64,4 +64,24 @@ public class player {
     private boolean removeCard(card card) {
         return cardList.remove(card);
     }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        if (pid != null)
+            result = 31 * result + pid.hashCode();
+        if (name != null)
+            result = 31 * result + name.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (!(obj instanceof player))
+            return false;
+        player other = (player) obj;
+        return this.getPid().equals(other.getPid()) && this.getName().equals(other.getName());
+    }
 }

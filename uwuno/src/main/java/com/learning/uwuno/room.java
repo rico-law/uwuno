@@ -27,7 +27,6 @@ public class room {
     private deck deck;
     private Status roomStatus;
     private player playerTurn;
-    private boolean turnDirection; // true if forward, otherwise reverse direction
     private gameSettings gameSettings;
     private gameState gameState;
 
@@ -39,7 +38,6 @@ public class room {
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
-        this.turnDirection = true;
         this.gameSettings = new gameSettings();
         this.gameState = new gameState(playerList);
     }
@@ -92,7 +90,7 @@ public class room {
     }
 
     // Player Functions
-    public LinkedList<player> getPlayers() {
+    public playerList getPlayers() {
         return playerList;
     }
 
@@ -121,13 +119,10 @@ public class room {
         this.playerTurn = playerList.getFirst();
     }
 
-    public void changeDirection() {
-        turnDirection = !turnDirection;
-    }
 
     // TODO: replace this placeholder function until next/prev functionality is implemented in playerList
     // Sets next player and returns it
-    public player nextPlayer() {
+    public player nextPlayer(boolean turnDirection) {
         ListIterator<player> players = playerList.listIterator();
         while (players.hasNext()) {
             if (playerTurn.equals(players.next())) {

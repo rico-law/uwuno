@@ -3,9 +3,9 @@ package com.learning.uwuno.services;
 import com.learning.uwuno.cards.*;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.errorNotFound;
-import com.learning.uwuno.game.gameLogic;
 import com.learning.uwuno.game.gameResponse;
 import com.learning.uwuno.game.gameSettings;
+import com.learning.uwuno.game.gameState;
 import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
@@ -105,13 +105,14 @@ public class gameService {
                            String value, String setWildColor, String skip) {
         player player = getPlayer(uid, pid);
         room room = getRoom(uid);
+        gameState gameState = room.getGameState();
         gameResponse response = new gameResponse();
         // Check whether player is skipping turn
         if (Boolean.parseBoolean(skip)) {
             if (type.isBlank() && color.isBlank() && value.isBlank() && setWildColor.isBlank()) {
                 // If player can play drawn card, return response with same pid and the drawn card
                 // If player cannot play drawn card, return response with next player's pid and their playable cards
-                gameLogic.skipTurn(player, room, response);
+                gameState.skipTurn(player, room, response);
             } else {
                 throw new badRequest("Invalid skip turn request");
             }
@@ -119,16 +120,16 @@ public class gameService {
             // Create a reference card for comparison with given parameters
             // and ensure the card is compatible with the last played card
             card toPlay = serviceUtils.generateCard(type, color, value, setWildColor);
-            if (gameLogic.playCard(toPlay, room.lastPlayedCard(), player))
+            if (gameState.playCard(toPlay, room.lastPlayedCard(), player))
                 // If played card is valid, return response with next player's pid and their playable cards
                 // Or declare the winner
-                gameLogic.endTurn(player, room, response);
+                gameState.endTurn(player, room, response);
             else {
                 // TODO: somehow return gameResponse without modifying it (since no card has been played,
                 //  the properties should be the same as before)
                 // If played an invalid card, return response with same pid and their playable cards
                 response.setPlayerTurnResponse(player.getPid(),
-                        gameLogic.getPlayableCards(player, room.lastPlayedCard()));
+                        gameState.getPlayableCards(player, room.lastPlayedCard()));
             }
         }
         return response;
