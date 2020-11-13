@@ -1,9 +1,6 @@
 package com.learning.uwuno.game.gameModes;
 
-import com.learning.uwuno.cards.basicCard;
-import com.learning.uwuno.cards.card;
-import com.learning.uwuno.cards.sColorCard;
-import com.learning.uwuno.cards.wildCard;
+import com.learning.uwuno.cards.*;
 import com.learning.uwuno.player;
 import com.learning.uwuno.util.playerList;
 
