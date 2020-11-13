@@ -9,15 +9,13 @@ import java.util.HashMap;
 public class gameResponse {
     private ArrayList<card> playableCards;
     private String playerTurnPid;
-    private String winnerPid;
-    private String winnerName;
+    private ArrayList<player> winners;
     private HashMap<player, Integer> scores;
 
     public gameResponse() {
         playerTurnPid = "";
         playableCards = new ArrayList<>();
-        winnerPid = "";
-        winnerName = "";
+        winners = new ArrayList<>();
         scores = new HashMap<>();
     }
 
@@ -29,36 +27,19 @@ public class gameResponse {
         return playerTurnPid;
     }
 
-    public String getWinnerPid() {
-        return winnerPid;
-    }
-
-    public String getWinnerName() {
-        return winnerName;
-    }
-
     public void setPlayerTurnResponse(String pid, ArrayList<card> playableCards) {
-        setPlayerTurnPid(pid);
-        setPlayableCards(playableCards);
-    }
-
-    public void setWinResponse(player player) {
-        this.winnerPid = player.getPid();
-        this.winnerName = player.getName();
-        setPlayableCards(player.getCardList());
-    }
-
-    public void setNextRoundResponse(HashMap<player, Integer> scores) {
-        setPlayerTurnPid("");
-        this.scores = scores;
-        setPlayableCards(new ArrayList<>());
-    }
-
-    private void setPlayableCards(ArrayList<card> playableCards) {
+        this.playerTurnPid = pid;
         this.playableCards = playableCards;
     }
 
-    private void setPlayerTurnPid(String pid) {
-        this.playerTurnPid = pid;
+    public void setWinResponse(ArrayList<player> players) {
+        winners = players;
+        this.playableCards = new ArrayList<>();
+    }
+
+    public void setNextRoundResponse(HashMap<player, Integer> scores) {
+        this.playerTurnPid = "";
+        this.scores = scores;
+        this.playableCards = new ArrayList<>();
     }
 }

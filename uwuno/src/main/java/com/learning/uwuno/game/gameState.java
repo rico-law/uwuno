@@ -64,20 +64,22 @@ public class gameState {
         }
     }
 
-    // If the given player has won, return winning response
-    // Otherwise, return response with next player's pid and their playable cards
     public void endTurn(player player, room room, gameResponse response) {
+        ++turnsTaken;
         gameSettings gameSettings = room.getGameSettings();
+        // If the given player has won, return winning response
         if (player.getCardList().isEmpty() || turnsTaken == gameSettings.getMaxTurn()) {
-            ArrayList<player> winner = gameSettings.getGameMode().determineWinner(player, room.getPlayers(),
+            ArrayList<player> winners = gameSettings.getGameMode().determineWinner(player, room.getPlayers(),
                     scores, gameSettings.getMaxScore());
-            if (winner.isEmpty()) {
+            if (winners.isEmpty()) {
+                // No winners should only happen in Point Mode
                 // TODO: have trigger somewhere to reset game state except scores and restart game (should only be for point mode)
                 response.setNextRoundResponse(scores);
             } else {
-                response.setWinResponse(player);
+                response.setWinResponse(winners);
             }
         } else {
+            // Otherwise, return response with next player's pid and their playable cards
             player nextPlayer = room.nextPlayer(turnDirection);
             response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.lastPlayedCard()));
         }
