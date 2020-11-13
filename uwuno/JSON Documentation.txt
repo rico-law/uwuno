@@ -25,11 +25,11 @@ http://localhost:8080/rooms/<uid>
 
 Game settings
 {
-  "uid": "$roomUid",
-  "gameMode": "$gameMode",
-  "maxTurn": "$maxTurn",
-  "maxScore": "$maxScore",
-  "useBlankCards": "$useBlankCards"
+  uid,
+  gameMode,
+  maxTurn,
+  maxScore,
+  useBlankCards
 }
 
 DELETE
