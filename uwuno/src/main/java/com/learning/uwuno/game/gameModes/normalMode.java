@@ -1,9 +1,14 @@
 package com.learning.uwuno.game.gameModes;
 
+import com.learning.uwuno.cards.basicCard;
+import com.learning.uwuno.cards.card;
+import com.learning.uwuno.cards.sColorCard;
+import com.learning.uwuno.cards.wildCard;
 import com.learning.uwuno.player;
 import com.learning.uwuno.util.playerList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class normalMode implements gameMode {
@@ -19,14 +24,46 @@ public class normalMode implements gameMode {
     @Override
     public ArrayList<player> determineWinner(player playerTurn, playerList players,
                                              HashMap<player, Integer> scores, int maxScore) {
-        ArrayList<player> winners = new ArrayList<player>();
         // If player has no hand cards, they win
-        if (playerTurn.getCardList().isEmpty()) {
-            winners.add(playerTurn);
-        } else {
-            // Otherwise, calculate all the points and return player with the least points as the winner.
-            // If a tie, choose player with least cards
+        if (playerTurn.getCardList().isEmpty())
+            return new ArrayList<>(Arrays.asList(playerTurn));
 
+        // Otherwise, calculate all the points and return player with the least points as the winner.
+        // If a tie, choose player with least cards
+        ArrayList<player> nominees = new ArrayList<player>();
+        ArrayList<player> winners = new ArrayList<player>();
+        int minScore = Integer.MAX_VALUE;
+        for (player player : players) {
+            int points = 0;
+            for (card card : player.getCardList()) {
+                if (card instanceof wildCard) {
+                    points += WILD_CARDS_POINTS;
+                } else if (card instanceof sColorCard) {
+                    points += SPECIAL_CARDS_POINTS;
+                } else {
+                    points += ((basicCard) card).getValue();
+                }
+            }
+            if (points > minScore)
+                continue;
+            if (points < minScore)
+                nominees.clear();
+            nominees.add(player);
+            minScore = points;
+        }
+        if (nominees.size() > 1) {
+            int minCards = Integer.MAX_VALUE;
+            for (player player : nominees) {
+                int size = player.getCardList().size();
+                if (size > minCards)
+                    continue;
+                if (size < minCards)
+                    winners.clear();
+                winners.add(player);
+                minCards = size;
+            }
+        } else {
+            winners = nominees;
         }
         return winners;
     }
