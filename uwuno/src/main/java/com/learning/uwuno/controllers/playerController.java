@@ -36,9 +36,14 @@ public class playerController {
 
     // PUTS
     // Possible calls for player PUT, for differing json inputs check JSON Documentation.txt
-    // 1) Update player name
-    // 2) Draw Card
+    // 1) Update player name - Returns player
+    // 2) Draw Card - Returns player
     // 3) Play Card
+    //      - Returns gameResponse:
+    //          - Of current or next player's pid and their playable card options OR
+    //          - Of the winning player OR
+    //          - Of the current scores carrying over for next round (in the case of Point Mode)
+    // TODO: Convert RequestBody to Object
     @PutMapping(value = "rooms/{uid}/players/{pid}")
     public ResponseEntity<Object> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         parser parser = new parser(json);

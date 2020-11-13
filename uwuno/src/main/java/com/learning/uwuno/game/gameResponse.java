@@ -41,6 +41,7 @@ public class gameResponse {
 
     public void setWinResponse(ArrayList<player> players) {
         winners = players;
+        // TODO: figure out how to use JSON ignore to omit playerTurnPid and playableCards
         this.playableCards = new ArrayList<>();
     }
 
