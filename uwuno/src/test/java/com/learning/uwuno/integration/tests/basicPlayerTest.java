@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.*;
 public class basicPlayerTest {
     private static String roomId;
     private final static String inputName = "test_player_name";
+    private static String postPutPlayerJSON;
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
@@ -25,6 +26,8 @@ public class basicPlayerTest {
         roomId = given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
                 .then().extract().response().path("uid");
+
+        postPutPlayerJSON = jsonUtil.createPostPutPlayerJson(inputName, JSON_REQUESTS_PATH + "/postPutPlayer.json");
     }
 
     @AfterEach
@@ -35,12 +38,9 @@ public class basicPlayerTest {
 
     // POST valid Player
     @Test
-    public void createValidPlayerInRoom200() throws IOException {
-        String filePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String request = jsonUtil.createPostPutPlayerJson(inputName, filePath);
-
+    public void createValidPlayerInRoom200() {
         Response response = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(request).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response();
 
         assertThat(response.statusCode(), is(equalTo(200)));
@@ -64,13 +64,10 @@ public class basicPlayerTest {
 
     // GET Player cards
     @Test
-    public void getPlayerCards200() throws IOException {
+    public void getPlayerCards200() {
         // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(inputName, playerFilePath);
-
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response().path("pid");
 
         // Request
@@ -93,13 +90,10 @@ public class basicPlayerTest {
 
     // GET invalid Player cards - via invalid uid
     @Test
-    public void getPlayerCardsInvalidUid404() throws IOException {
+    public void getPlayerCardsInvalidUid404() {
         // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(inputName, playerFilePath);
-
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response().path("pid");
 
         // Request
@@ -112,13 +106,10 @@ public class basicPlayerTest {
 
     // DELETE valid Player
     @Test
-    public void deletePlayer200() throws IOException {
+    public void deletePlayer200() {
         // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(inputName, playerFilePath);
-
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response().path("pid");
 
         // Request
@@ -141,13 +132,10 @@ public class basicPlayerTest {
 
     // DELETE invalid Player - via invalid uid
     @Test
-    public void deletePlayerInvalidUid404() throws FileNotFoundException {
+    public void deletePlayerInvalidUid404() {
         // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(inputName, playerFilePath);
-
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response().path("pid");
 
         // Request
@@ -162,17 +150,13 @@ public class basicPlayerTest {
     @Test
     public void putValidPlayerName200() throws FileNotFoundException {
         // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerInputName = "player_put_old_name_valid";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
-
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response().path("pid");
 
         // Request
-        String filePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String request = jsonUtil.createPostPutPlayerJson(inputName, filePath);
+        String new_name = "new_name";
+        String request = jsonUtil.createPostPutPlayerJson(new_name, JSON_REQUESTS_PATH + "/postPutPlayer.json");
 
         Response response = given().pathParam("uid", roomId).pathParam("pid", playerId)
                 .when().body(request).put(BASE_URL + "/rooms/{uid}/players/{pid}")
@@ -180,40 +164,15 @@ public class basicPlayerTest {
 
         assertThat(response.statusCode(), is(equalTo(200)));
         assertThat(response.path("pid"), is(equalTo(playerId)));
-        assertThat(response.path("name"), is(equalTo(inputName)));
+        assertThat(response.path("name"), is(equalTo(new_name)));
     }
 
     // PUT invalid name
     @Test
     public void putInvalidPlayerName400() throws FileNotFoundException {
         // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(inputName, playerFilePath);
-
         String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
-                .then().extract().response().path("pid");
-
-        // Request
-        String filePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String request = jsonUtil.createPostPutPlayerJson("", filePath);
-
-        Response response = given().pathParam("uid", roomId).pathParam("pid", playerId)
-                .when().body(request).put(BASE_URL + "/rooms/{uid}/players/{pid}")
-                .then().extract().response();
-
-        assertThat(response.statusCode(), is(equalTo(400)));
-    }
-
-    // PUT invalid name
-    @Test
-    public void putInvalidPlayerName404() throws FileNotFoundException {
-        // Player
-        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String playerRequest = jsonUtil.createPostPutPlayerJson(inputName, playerFilePath);
-
-        String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
+                .when().body(postPutPlayerJSON).post(BASE_URL + "/rooms/{uid}/players")
                 .then().extract().response().path("pid");
 
         // Request

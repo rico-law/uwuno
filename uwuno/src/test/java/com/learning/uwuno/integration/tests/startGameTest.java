@@ -21,9 +21,10 @@ import static org.hamcrest.Matchers.is;
 
 public class startGameTest {
     private static String roomId;
-    private static String roomName;
+    private static String putRoomJSON;
+    private static final String testStatus = "Start";
+    private static final String postPutPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
 
-    // TODO: restructure variables so that it is easier to modify
     @BeforeEach
     public void setUp() throws FileNotFoundException {
         // Create room
@@ -35,7 +36,10 @@ public class startGameTest {
                 .then().extract().response();
 
         roomId = response.path("uid");
-        roomName = response.path("name");
+
+        // Setup JSON requests from templates
+        putRoomJSON = jsonUtil.createPutRoomJson(response.path("name"), roomId,
+                testStatus, JSON_REQUESTS_PATH + "/putRoom.json");
     }
 
     @AfterEach
@@ -47,43 +51,26 @@ public class startGameTest {
 
     @Test
     public void putValidStartGame200() throws IOException {
-        // Player 1
-        String pFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-        String pRequest = jsonUtil.createPostPutPlayerJson("player_1", pFilePath);
+        // Create 2 players
+        for (int i = 0; i < 2; i++) {
+            String request = jsonUtil.createPostPutPlayerJson("player_" + i, postPutPlayerPath);
+            given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                    .when().body(request).post(BASE_URL + "/rooms/{uid}/players");
+        }
 
-        given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(pRequest).post(BASE_URL + "/rooms/{uid}/players");
-
-        // Player 2
-        pRequest = jsonUtil.createPostPutPlayerJson("player_2", pFilePath);
-        given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(pRequest).post(BASE_URL + "/rooms/{uid}/players");
-
-        // Request
-        String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
-        String status = "Start";
-        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, filePath);
-
+        // PUT request to Start game
         Response response = given().pathParam("uid", roomId)
-                .when().body(request).put(BASE_URL + "/rooms/{uid}")
-                .then().extract().response();
-
-        Response getRequest = given().pathParam("uid", roomId)
-                .when().get(BASE_URL + "/rooms/{uid}")
+                .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();
 
         assertThat(response.statusCode(), is(equalTo(200)));
-        assertThat(getRequest.path("roomStatus"), is(equalTo(status)));
+        assertThat(response.path("roomStatus"), is(equalTo(testStatus)));
     }
 
     @Test
-    public void putStartNoPlayers400() throws IOException {
-        String filePath = JSON_REQUESTS_PATH + "/putRoom.json";
-        String status = "Start";
-        String request = jsonUtil.createPutRoomJson(roomName, roomId, status, filePath);
-
+    public void putStartNoPlayers400() {
         Response response = given().pathParam("uid", roomId)
-                .when().body(request).put(BASE_URL + "/rooms/{uid}")
+                .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();
 
         Response getRequest = given().pathParam("uid", roomId)

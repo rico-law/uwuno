@@ -23,6 +23,9 @@ public class jsonUtil {
     private static final String CARD_VALUE = "$cardValue";
     private static final String SET_WILD_COLOR = "$setWildCard";
     private static final String SKIP = "$skip";
+    private static final String GAME_MODE = "$gameMode";
+    private static final String MAX_TURN = "$maxTurn";
+    private static final String MAX_SCORE = "$maxScore";
 
     private jsonUtil() {
         // Should not run
@@ -44,6 +47,13 @@ public class jsonUtil {
             throws FileNotFoundException {
         return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(ROOM_UID, uid)
                 .replace(ROOM_STATUS, status);
+    }
+
+    public static String createPutGameSettings(String uid, String gameMode, String maxTurn,
+                                               String maxScore, String useBlank, String jsonPath)
+            throws  FileNotFoundException {
+        return jsonFileToString(jsonPath).replace(ROOM_UID, uid).replace(GAME_MODE, gameMode).replace(MAX_TURN, maxTurn)
+                .replace(MAX_SCORE, maxScore).replace(BLANK_CARDS, useBlank);
     }
 
     // Create Player JSON String
