@@ -194,13 +194,13 @@ public class playerList extends LinkedList<player> {
         if (!this.isEmpty()) {
             // Find index of object to be removed, if the iterator is ahead of the object removed or is removing
             // the object the index is pointing at lower iterator index by 1
-            int removeObjIndex;
-            for (removeObjIndex = 0; removeObjIndex < this.size(); removeObjIndex++) {
-                if (o.equals(this.get(removeObjIndex)))
+            for (int removeObjIndex = 0; removeObjIndex < this.size(); removeObjIndex++) {
+                if (o.equals(this.get(removeObjIndex))) {
+                    if (iteratorIndex >= removeObjIndex)
+                        iteratorIndex--;
                     break;
+                }
             }
-            if (iteratorIndex >= removeObjIndex)
-                iteratorIndex--;
 
             if (this.get(0).getClass() == o.getClass()) {
                 playerNames.remove(((player) o).getName());
