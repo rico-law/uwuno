@@ -13,6 +13,8 @@ public class playerList extends LinkedList<player> {
     private final String parentUID;
     // Ensure that this HashSet and the LinkedList is kept in a consistent state
     private HashSet<String> playerNames;
+    // Used to keep track of current index for iterator functions
+    private int iteratorIndex = 0;
 
     // Class functions
     public playerList(String uid) {
@@ -55,9 +57,33 @@ public class playerList extends LinkedList<player> {
         return playerNames.contains(name);
     }
 
+    // Iterator functions, all assume the state of the iterator index is correct, it's up to setters
+    // to ensure that the iterator index is correctly after changes to the object
+    public player next()
+    {
+        if (++iteratorIndex >= this.size()) {
+            iteratorIndex = 0;
+        }
+        return this.get(iteratorIndex);
+
+    }
+
+    public player prev()
+    {
+        if (--iteratorIndex < 0)
+            iteratorIndex = this.size() - 1;
+        return this.get(iteratorIndex);
+    }
+
+    public player cur()
+    {
+        return this.get(iteratorIndex);
+    }
+
     // Override Functions
     // Need to reimplement some of the base LinkedList functions, leaving some to throw
     // as we do not need them, can fill them out when needed
+    // All setters are required to ensure the iterator in a valid state
     @Override
     public boolean add(player newPlayer) {
         if (this.contains(newPlayer))
@@ -166,6 +192,16 @@ public class playerList extends LinkedList<player> {
     @Override
     public boolean remove(Object o) {
         if (!this.isEmpty()) {
+            // Find index of object to be removed, if the iterator is ahead of the object removed or is removing
+            // the object the index is pointing at lower iterator index by 1
+            for (int removeObjIndex = 0; removeObjIndex < this.size(); removeObjIndex++) {
+                if (o.equals(this.get(removeObjIndex))) {
+                    if (iteratorIndex >= removeObjIndex)
+                        iteratorIndex--;
+                    break;
+                }
+            }
+
             if (this.get(0).getClass() == o.getClass()) {
                 playerNames.remove(((player) o).getName());
             }
