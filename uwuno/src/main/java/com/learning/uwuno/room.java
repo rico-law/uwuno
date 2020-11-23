@@ -125,32 +125,9 @@ public class room {
         this.playerTurn = playerList.getFirst();
     }
 
-
-    // TODO: replace this placeholder function until next/prev functionality is implemented in playerList
     // Sets next player and returns it
     public player nextPlayer(boolean turnDirection) {
-        ListIterator<player> players = playerList.listIterator();
-        while (players.hasNext()) {
-            if (playerTurn.equals(players.next())) {
-                if (turnDirection) {
-                    if (players.hasNext()) {
-                        playerTurn = players.next();
-                        break;
-                    } else {
-                        playerTurn = playerList.getFirst();
-                        break;
-                    }
-                } else {
-                    if (players.hasPrevious()) {
-                        playerTurn = players.previous();
-                        break;
-                    } else {
-                        playerTurn = playerList.getLast();
-                        break;
-                    }
-                }
-            }
-        }
+        playerTurn = (turnDirection) ? playerList.next() : playerList.prev();
         return playerTurn;
     }
 
