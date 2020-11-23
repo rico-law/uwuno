@@ -24,6 +24,7 @@ public class startGameTest {
     private static final String testStatus = "Start";
     private static final String postPutPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
     private static String putDrawCardJSON;
+    private static String invalidPutDrawJSON;
     private static final int startingHandCardSize = 7;
     private static final int totalCards = 108;
     private static final int drawNumCards = 5;
@@ -43,6 +44,7 @@ public class startGameTest {
         // Setup JSON requests from templates
         putRoomJSON = jsonUtil.createPutRoomJson(response.path("name"), roomId, testStatus, JSON_REQUESTS_PATH + "/putRoom.json");
         putDrawCardJSON = jsonUtil.createPutPlayerDrawCardJson(Integer.toString(drawNumCards), JSON_REQUESTS_PATH + "/putPlayerDrawCard.json");
+        invalidPutDrawJSON = jsonUtil.createPutPlayerDrawCardJson("invalid", JSON_REQUESTS_PATH + "/putPlayerDrawCard.json");
     }
 
     @AfterEach
@@ -118,5 +120,23 @@ public class startGameTest {
         assertThat(response.statusCode(), is(equalTo(200)));
         assertThat(response.jsonPath().getList("cardList").size(), is(equalTo(startingHandCardSize + drawNumCards)));
         assertThat(getResponse.path("activeDeckSize"), is(equalTo(totalCards - startingHandCardSize*2 - drawNumCards - 1)));
+    }
+
+    // PUT invalid draw card - via non-numeric number
+    @Test
+    public void putInvalidDrawCards400() throws FileNotFoundException {
+        Response player1 = createPlayer("player_1");
+        createPlayer("player_2");
+
+        // Change room status to Start
+        given().pathParam("uid", roomId)
+                .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}");
+
+        // Request
+        Response response = given().pathParam("uid", roomId).pathParam("pid", player1.path("pid"))
+                .when().body(invalidPutDrawJSON).put(BASE_URL + "/rooms/{uid}/players/{pid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(400)));
     }
 }
