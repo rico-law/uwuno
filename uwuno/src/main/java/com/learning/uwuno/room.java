@@ -158,8 +158,7 @@ public class room {
 
         // Place hand cards back in deck
         for (player player : getPlayers()) {
-            ArrayList<card> handCards = player.getCardList();
-            getDiscardPile().addAll(handCards);
+            player.removeHandCards();
         }
 
         // Deal hand cards

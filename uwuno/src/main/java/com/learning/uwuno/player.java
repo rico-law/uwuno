@@ -59,6 +59,12 @@ public class player {
         return false;
     }
 
+    // Place all cards in discard pile
+    public void removeHandCards() {
+        curDeck.getDiscardPile().addAll(cardList);
+        cardList.clear();
+    }
+
     // To be used when a player plays a card from their hand
     private boolean removeCard(card card) {
         return cardList.remove(card);

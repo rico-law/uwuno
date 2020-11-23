@@ -24,9 +24,9 @@ public class startGameTest {
     private static final String testStatus = "Start";
     private static final String postPutPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
     private static String putDrawCardJSON;
-    private static int startingHandCardSize = 7;
-    private static int totalCards = 108;
-    private static int drawNumCards = 5;
+    private static final int startingHandCardSize = 7;
+    private static final int totalCards = 108;
+    private static final int drawNumCards = 5;
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
