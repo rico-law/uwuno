@@ -90,6 +90,11 @@ public class room {
         return MIN_PLAYERS;
     }
 
+    // TODO: refactor room (e.g. too many reference to deck properties)
+    public int getActiveDeckSize() {
+        return deck.getActiveDeck().size();
+    }
+
     // Player Functions
     public playerList getPlayers() {
         return playerList;
@@ -160,7 +165,7 @@ public class room {
         return this.deck.drawStart();
     }
 
-    public card lastPlayedCard() {
+    public card getLastPlayedCard() {
         return deck.getLastPlayedCard();
     }
 
@@ -171,8 +176,8 @@ public class room {
     // Restarts game after cards have been dealt/played. Does not include final step of flipping top card.
     public void reshuffleDeck() {
         // Place last played card back in deck
-        if (lastPlayedCard() != null)
-            getDiscardPile().add(lastPlayedCard());
+        if (getLastPlayedCard() != null)
+            getDiscardPile().add(getLastPlayedCard());
 
         // Place hand cards back in deck
         for (player player : getPlayers()) {

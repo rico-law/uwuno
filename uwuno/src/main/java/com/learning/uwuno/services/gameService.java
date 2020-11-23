@@ -119,7 +119,7 @@ public class gameService {
             // Create a reference card for comparison with given parameters
             // and ensure the card is compatible with the last played card
             card toPlay = serviceUtils.generateCard(type, color, value, setWildColor);
-            if (gameState.playCard(toPlay, room.lastPlayedCard(), player))
+            if (gameState.playCard(toPlay, room.getLastPlayedCard(), player))
                 // If played card is valid, return response with next player's pid and their playable cards
                 // Or declare the winner
                 gameState.endTurn(player, room, response);
@@ -128,7 +128,7 @@ public class gameService {
                 //  the properties should be the same as before)
                 // If played an invalid card, return response with same pid and their playable cards
                 response.setPlayerTurnResponse(player.getPid(),
-                        gameState.getPlayableCards(player, room.lastPlayedCard()));
+                        gameState.getPlayableCards(player, room.getLastPlayedCard()));
             }
         }
         return response;

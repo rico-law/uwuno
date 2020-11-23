@@ -69,7 +69,7 @@ public class gameState {
             cardsToDraw = 0;
             // If the card is valid to play, return response with current pid and playable cards
             for (card card : cards) {
-                if (checkPlayable(card, room.lastPlayedCard())) {
+                if (checkPlayable(card, room.getLastPlayedCard())) {
                     playableCards.add(card);
                 }
             }
@@ -78,7 +78,7 @@ public class gameState {
             return;
         }
         ArrayList<card> cards = player.drawCards(1);
-        if (checkPlayable(cards.get(0), room.lastPlayedCard())) {
+        if (checkPlayable(cards.get(0), room.getLastPlayedCard())) {
             response.setPlayerTurnResponse(player.getPid(), cards);
             // If card cannot be played, return response with next player's pid and their playable cards
             endTurn(player, room, response);
@@ -103,7 +103,7 @@ public class gameState {
         } else {
             // Otherwise, return response with next player's pid and their playable cards
             player nextPlayer = room.nextPlayer(turnDirection);
-            response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.lastPlayedCard()));
+            response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.getLastPlayedCard()));
         }
     }
 

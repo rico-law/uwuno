@@ -66,7 +66,7 @@ public class deck {
     }
 
     // Add discard pile to active deck and shuffle it
-    public void reshuffle() {
+    public synchronized void reshuffle() {
         if (!discardPile.isEmpty()) {
             activeDeck.addAll(discardPile);
             Collections.shuffle(activeDeck);

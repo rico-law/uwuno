@@ -6,7 +6,7 @@ import com.learning.uwuno.player;
 import java.util.*;
 
 public class gameResponse {
-    private ArrayList<card> playableCards;
+    private List<card> playableCards;
     private String playerTurnPid;
     private ArrayList<player> winners;
     private HashMap<player, Integer> scores;
@@ -18,7 +18,7 @@ public class gameResponse {
         scores = new HashMap<>();
     }
 
-    public ArrayList<card> getPlayableCards() {
+    public List<card> getPlayableCards() {
         return playableCards;
     }
 
@@ -34,7 +34,7 @@ public class gameResponse {
         return scores;
     }
 
-    public void setPlayerTurnResponse(String pid, ArrayList<card> playableCards) {
+    public void setPlayerTurnResponse(String pid, List<card> playableCards) {
         this.playerTurnPid = pid;
         this.playableCards = playableCards;
     }

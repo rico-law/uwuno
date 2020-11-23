@@ -9,21 +9,24 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.given;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class startGameTest {
     private static String roomId;
     private static String putRoomJSON;
     private static final String testStatus = "Start";
     private static final String postPutPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
+    private static String putDrawCardJSON;
+    private static int startingHandCardSize = 7;
+    private static int totalCards = 108;
+    private static int drawNumCards = 5;
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
@@ -38,8 +41,8 @@ public class startGameTest {
         roomId = response.path("uid");
 
         // Setup JSON requests from templates
-        putRoomJSON = jsonUtil.createPutRoomJson(response.path("name"), roomId,
-                testStatus, JSON_REQUESTS_PATH + "/putRoom.json");
+        putRoomJSON = jsonUtil.createPutRoomJson(response.path("name"), roomId, testStatus, JSON_REQUESTS_PATH + "/putRoom.json");
+        putDrawCardJSON = jsonUtil.createPutPlayerDrawCardJson(Integer.toString(drawNumCards), JSON_REQUESTS_PATH + "/putPlayerDrawCard.json");
     }
 
     @AfterEach
@@ -49,24 +52,36 @@ public class startGameTest {
                 .when().delete(BASE_URL + "/rooms/{uid}");
     }
 
-    @Test
-    public void putValidStartGame200() throws IOException {
-        // Create 2 players
-        for (int i = 0; i < 2; i++) {
-            String request = jsonUtil.createPostPutPlayerJson("player_" + i, postPutPlayerPath);
-            given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                    .when().body(request).post(BASE_URL + "/rooms/{uid}/players");
-        }
+    // Create player - returns player id
+    public static Response createPlayer(String playerName) throws FileNotFoundException {
+        String request = jsonUtil.createPostPutPlayerJson(playerName, postPutPlayerPath);
+        return given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                .when().body(request).post(BASE_URL + "/rooms/{uid}/players")
+                .then().extract().response();
+    }
 
-        // PUT request to Start game
+    // PUT request to Start game
+    @Test
+    public void putValidStartGame200() throws FileNotFoundException {
+        createPlayer("player_1");
+        createPlayer("player_2");
         Response response = given().pathParam("uid", roomId)
                 .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();
 
+        List<Object> cardList1 = response.jsonPath().getList("players[0].cardList");
+        List<Object> cardList2 = response.jsonPath().getList("players[1].cardList");
+
         assertThat(response.statusCode(), is(equalTo(200)));
         assertThat(response.path("roomStatus"), is(equalTo(testStatus)));
+        assertThat(response.path("activeDeckSize"), is(equalTo(totalCards - startingHandCardSize*2 - 1)));
+        assertThat(response.path("lastPlayedCard"), is(not(equalTo(null))));
+        assertThat(response.jsonPath().getList("discardPile").size(), is(equalTo(0)));
+        assertThat(cardList1.size(), is(equalTo(startingHandCardSize)));
+        assertThat(cardList2.size(), is(equalTo(startingHandCardSize)));
     }
 
+    // PUT invalid Start game request - via no players
     @Test
     public void putStartNoPlayers400() {
         Response response = given().pathParam("uid", roomId)
@@ -79,5 +94,29 @@ public class startGameTest {
 
         assertThat(response.statusCode(), is(equalTo(400)));
         assertThat(getRequest.path("roomStatus"), is("Lobby"));
+    }
+
+    // PUT draw card
+    @Test
+    public void putPlayerDrawCards200() throws FileNotFoundException {
+        Response player1 = createPlayer("player_1");
+        createPlayer("player_2");
+
+        // Change room status to Start
+        given().pathParam("uid", roomId)
+                .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}");
+
+        // Request
+        Response response = given().pathParam("uid", roomId).pathParam("pid", player1.path("pid"))
+                .when().body(putDrawCardJSON).put(BASE_URL + "/rooms/{uid}/players/{pid}")
+                .then().extract().response();
+
+        Response getResponse = given().pathParam("uid", roomId)
+                .when().get(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(200)));
+        assertThat(response.jsonPath().getList("cardList").size(), is(equalTo(startingHandCardSize + drawNumCards)));
+        assertThat(getResponse.path("activeDeckSize"), is(equalTo(totalCards - startingHandCardSize*2 - drawNumCards - 1)));
     }
 }

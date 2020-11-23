@@ -185,29 +185,4 @@ public class basicPlayerTest {
 
         assertThat(response.statusCode(), is(equalTo(400)));
     }
-
-    // PUT draw card
-//    @Test
-//    public void putPlayerDrawCards() throws FileNotFoundException {
-//        // Player
-//        String playerFilePath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
-//        String playerInputName = "put_player_draw_cards_200";;
-//        String playerRequest = jsonUtil.createPostPutPlayerJson(playerInputName, playerFilePath);
-//
-//        String playerId = given().contentType(ContentType.JSON).pathParam("uid", roomId)
-//                .when().body(playerRequest).post(BASE_URL + "/rooms/{uid}/players")
-//                .then().extract().response().path("pid");
-//
-//        // Request
-//        String filePath = JSON_REQUESTS_PATH + "/putPlayerDrawCard.json";
-//        String inputNum = "5";
-//        String request = jsonUtil.createPutPlayerDrawCardJson(inputNum, filePath);
-//
-//        Response response = given().pathParam("uid", roomId).pathParam("pid", playerId)
-//                .when().body(request).put(BASE_URL + "/rooms/{uid}/players/{pid}")
-//                .then().extract().response();
-//
-//        assertThat(response.statusCode(), is(equalTo(200)));
-////        assertThat(response.path())
-//    }
 }
