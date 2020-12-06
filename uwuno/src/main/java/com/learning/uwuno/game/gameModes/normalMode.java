@@ -25,8 +25,8 @@ public class normalMode implements gameMode {
 
         // Otherwise, calculate all the points and return player with the least points as the winner.
         // If a tie, choose player with least cards
-        ArrayList<player> nominees = new ArrayList<player>();
-        ArrayList<player> winners = new ArrayList<player>();
+        ArrayList<player> nominees = new ArrayList<>();
+        ArrayList<player> winners = new ArrayList<>();
         int minScore = Integer.MAX_VALUE;
         for (player player : players) {
             int points = 0;

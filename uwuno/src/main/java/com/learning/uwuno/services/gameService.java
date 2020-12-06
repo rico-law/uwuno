@@ -20,6 +20,8 @@ public class gameService {
 
     // Variables
     private final ArrayList<room> roomList = new ArrayList<>();
+    private final int pointMinScore = 500;
+    private final int normalDefaultScore = 0;
 
     // Class Functions
     // POSTS
@@ -80,12 +82,17 @@ public class gameService {
 
     // Should only be able to modify game settings when gameState is Lobby
     public void updateGameSettings(String uid, String gameMode, int maxTurn, int maxScore, boolean useBlankCards) {
-        if (getRoom(uid).getRoomStatus() == room.Status.Lobby) {
-            gameSettings gameSettings = getRoom(uid).getGameSettings();
+        room rm = getRoom(uid);
+        if (rm.getRoomStatus().equals(room.Status.Lobby)) {
+            gameSettings gameSettings = rm.getGameSettings();
             gameSettings.setGameMode(gameMode);
             gameSettings.setMaxTurn(maxTurn);
-            gameSettings.setMaxScore(maxScore);
             gameSettings.setUseBlankCards(useBlankCards);
+
+            // maxScore only relevant for point mode. For normal mode, setting maxScore to a default value.
+            if (gameMode.toLowerCase().equals("normal")) gameSettings.setMaxScore(normalDefaultScore);
+            if (gameMode.toLowerCase().equals("point") && maxScore >= pointMinScore) gameSettings.setMaxScore(maxScore);
+            else throw new badRequest("Max score must be equal to or greater than 500 for Point Mode");
         }
     }
 

@@ -28,7 +28,7 @@ Game settings
   uid,
   gameMode,
   maxTurn,
-  maxScore,
+  maxScore,     // only used in point mode (must be equal to or greater than 500)
   useBlankCards
 }
 
