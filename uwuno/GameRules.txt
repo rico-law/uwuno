@@ -23,3 +23,7 @@ Scoring:
     - Skip ... 20 pts
     - Wild ... 50 pts
     - Wild Draw 4 ... 50 pts
+
+Misc:
+    - maxTurn must be >= 15
+    - maxScore only relevant to point mode and must be >= 500

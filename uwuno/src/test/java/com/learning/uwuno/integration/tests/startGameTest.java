@@ -54,7 +54,7 @@ public class startGameTest {
                 .when().delete(BASE_URL + "/rooms/{uid}");
     }
 
-    // Create player - returns player id
+    // Create player - returns player response
     public static Response createPlayer(String playerName) throws FileNotFoundException {
         String request = jsonUtil.createPostPutPlayerJson(playerName, postPutPlayerPath);
         return given().contentType(ContentType.JSON).pathParam("uid", roomId)

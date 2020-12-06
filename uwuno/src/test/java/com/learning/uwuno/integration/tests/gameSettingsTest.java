@@ -20,10 +20,11 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class gameSettingsTest {
     private static String roomId;
-    private static final String testStatus = "Lobby";
-    private static String putPointRoomJSON;
-    private static String putNormalRoomJSON;
-    private static final int maxTurn = 30;
+    private static final String testStatus = "Start";
+    private static final String jsonPath = JSON_REQUESTS_PATH + "/putRoomGameSettings.json";
+    private static final String postPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
+    private static final String putRoomStatusPath = JSON_REQUESTS_PATH + "/putRoom.json";
+    private static final int maxTurn = 15;
     private static final int pointMinScore = 500;
     private static final int normalDefaultScore = 0;
     private static final boolean useBlank = false;
@@ -42,12 +43,6 @@ public class gameSettingsTest {
                 .then().extract().response();
 
         roomId = response.path("uid");
-
-        // Setup JSON PUT request from template
-        putPointRoomJSON = jsonUtil.createPutGameSettings(roomId, pointMode, String.valueOf(maxTurn),String.valueOf(pointMinScore),
-                String.valueOf(useBlank), JSON_REQUESTS_PATH + "/putRoomGameSettings.json");
-        putNormalRoomJSON = jsonUtil.createPutGameSettings(roomId, normalMode, String.valueOf(maxTurn),String.valueOf(100),
-                String.valueOf(useBlank), JSON_REQUESTS_PATH + "/putRoomGameSettings.json");
     }
 
     @AfterEach
@@ -59,9 +54,12 @@ public class gameSettingsTest {
 
     // PUT game setting - point mode
     @Test
-    public void putValidPointSetting200() {
+    public void putValidPointSetting200() throws FileNotFoundException {
+        String JSON = jsonUtil.createPutGameSettings(roomId, pointMode, String.valueOf(maxTurn),
+                String.valueOf(pointMinScore), String.valueOf(useBlank), jsonPath);
+
         Response response = given().pathParam("uid", roomId)
-                .when().body(putPointRoomJSON).put(BASE_URL + "/rooms/{uid}")
+                .when().body(JSON).put(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();
 
         assertThat(response.statusCode(), is(equalTo(200)));
@@ -73,9 +71,12 @@ public class gameSettingsTest {
 
     // PUT game setting - normal mode (maxScore should always be 0, regardless of input maxScore)
     @Test
-    public void putValidNormalSetting200() {
+    public void putValidNormalSetting200() throws FileNotFoundException {
+        String JSON = jsonUtil.createPutGameSettings(roomId, normalMode, String.valueOf(maxTurn), "100",
+                String.valueOf(useBlank), jsonPath);
+
         Response response = given().pathParam("uid", roomId)
-                .when().body(putNormalRoomJSON).put(BASE_URL + "/rooms/{uid}")
+                .when().body(JSON).put(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();
 
         assertThat(response.statusCode(), is(equalTo(200)));
@@ -83,5 +84,63 @@ public class gameSettingsTest {
         assertThat(response.path("gameSettings.maxScore"), is(equalTo(normalDefaultScore)));
         assertThat(response.path("gameSettings.useBlankCards"), is(equalTo(useBlank)));
         assertThat(response.path("gameSettings.gameMode.modeName"), is(equalTo(normalMode)));
+    }
+
+    // PUT - invalid setting via maxTurn < 15
+    @Test
+    public void putInvalidMaxTurn400() throws FileNotFoundException {
+        String JSON = jsonUtil.createPutGameSettings(roomId, normalMode, "10", String.valueOf(pointMinScore),
+                String.valueOf(useBlank), jsonPath);
+
+        Response response = given().pathParam("uid", roomId)
+                .when().body(JSON).put(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(400)));
+    }
+
+    // PUT - invalid setting via maxScore < 500 (point mode)
+    @Test
+    public void putInvalidMaxScore400() throws FileNotFoundException {
+        String JSON = jsonUtil.createPutGameSettings(roomId, pointMode, String.valueOf(maxTurn), "100",
+                String.valueOf(useBlank), jsonPath);
+
+        Response response = given().pathParam("uid", roomId)
+                .when().body(JSON).put(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(400)));
+    }
+
+    // PUT - invalid setting via room status not Lobby
+    @Test
+    public void putInvalidRoomStatus400() throws FileNotFoundException {
+        // Add 2 players
+        createPlayer("player_1");
+        createPlayer("player_2");
+
+        // Change room status to Start
+        String putRoomJSON = jsonUtil.createPutRoomJson("room", roomId, testStatus, putRoomStatusPath);
+        given().pathParam("uid", roomId)
+                .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        // Request
+        String JSON = jsonUtil.createPutGameSettings(roomId, pointMode, String.valueOf(maxTurn),
+                String.valueOf(pointMinScore), String.valueOf(useBlank), jsonPath);
+
+        Response response = given().pathParam("uid", roomId)
+                .when().body(JSON).put(BASE_URL + "/rooms/{uid}")
+                .then().extract().response();
+
+        assertThat(response.statusCode(), is(equalTo(400)));
+    }
+
+    // Create player - returns player response
+    public static Response createPlayer(String playerName) throws FileNotFoundException {
+        String request = jsonUtil.createPostPutPlayerJson(playerName, postPlayerPath);
+        return given().contentType(ContentType.JSON).pathParam("uid", roomId)
+                .when().body(request).post(BASE_URL + "/rooms/{uid}/players")
+                .then().extract().response();
     }
 }

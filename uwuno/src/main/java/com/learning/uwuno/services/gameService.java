@@ -20,8 +20,9 @@ public class gameService {
 
     // Variables
     private final ArrayList<room> roomList = new ArrayList<>();
-    private final int pointMinScore = 500;
-    private final int normalDefaultScore = 0;
+    private final int POINT_MIN_SCORE = 500;
+    private final int NORMAL_DEFAULT_SCORE = 0;
+    private final int MIN_TURN = 15;
 
     // Class Functions
     // POSTS
@@ -80,19 +81,27 @@ public class gameService {
         }
     }
 
-    // Should only be able to modify game settings when gameState is Lobby
+    // Should only be able to modify game settings when room status is Lobby
     public void updateGameSettings(String uid, String gameMode, int maxTurn, int maxScore, boolean useBlankCards) {
         room rm = getRoom(uid);
         if (rm.getRoomStatus().equals(room.Status.Lobby)) {
             gameSettings gameSettings = rm.getGameSettings();
             gameSettings.setGameMode(gameMode);
-            gameSettings.setMaxTurn(maxTurn);
             gameSettings.setUseBlankCards(useBlankCards);
 
             // maxScore only relevant for point mode. For normal mode, setting maxScore to a default value.
-            if (gameMode.toLowerCase().equals("normal")) gameSettings.setMaxScore(normalDefaultScore);
-            else if (gameMode.toLowerCase().equals("point") && maxScore >= pointMinScore) gameSettings.setMaxScore(maxScore);
+            if (gameMode.toLowerCase().equals("normal"))
+                gameSettings.setMaxScore(NORMAL_DEFAULT_SCORE);
+            else if (gameMode.toLowerCase().equals("point") && maxScore >= POINT_MIN_SCORE)
+                gameSettings.setMaxScore(maxScore);
             else throw new badRequest("Max score must be equal to or greater than 500 for Point Mode");
+
+            if (maxTurn >= MIN_TURN)
+                gameSettings.setMaxTurn(maxTurn);
+            else throw new badRequest("Max turn must be equal to or greater than 15");
+        }
+        else {
+            throw new badRequest("Room must be in Lobby status to update game settings");
         }
     }
 
