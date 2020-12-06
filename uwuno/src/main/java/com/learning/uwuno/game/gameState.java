@@ -78,11 +78,11 @@ public class gameState {
             return;
         }
         ArrayList<card> cards = player.drawCards(1);
-        if (checkPlayable(cards.get(0), room.getLastPlayedCard())) {
+        if (checkPlayable(cards.get(0), room.getLastPlayedCard()))
             response.setPlayerTurnResponse(player.getPid(), cards);
+        else
             // If card cannot be played, return response with next player's pid and their playable cards
             endTurn(player, room, response);
-        }
     }
 
     public void endTurn(player player, room room, gameResponse response) {

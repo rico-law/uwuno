@@ -38,19 +38,16 @@ public class playCardTest {
     }
 
     // PUT player skips turn
-    // TODO: sometimes return all empty (i.e. no pid)
-    // TODO: should only be able to submit request if id matches playerTurn
     @Test
     public void putSkipTurn200() throws FileNotFoundException {
         Response response = testUtil.playerPlayCard(roomId, playerTurnId, "", "", "",
                 "", "true");
         assertThat(response.statusCode(), is(equalTo(200)));
-        String pid = response.path("playerTurnPid");
         assertThat(response.path("playerTurnPid"), is(not(emptyString())));
-        System.out.println(pid);
+        assertThat(response.path("playableCards"), is(not(empty())));
     }
 
-    // PUT player invalid skip turn
+    // PUT player invalid skip turn - via having card info while skipping
     @Test
     public void putInvalidSkipTurn400() throws FileNotFoundException {
         Response response = testUtil.playerPlayCard(roomId, playerTurnId, "Basic", "Yellow", "2",
@@ -58,6 +55,12 @@ public class playCardTest {
         assertThat(response.statusCode(), is(equalTo(400)));
     }
 
-    // TODO: id must match player taking turn
-    // PUT player invalid play - via not player's turn
+    // PUT player invalid request - via incorrect player's turn
+    @Test
+    public void putInvalidPlayerTurn400() throws FileNotFoundException {
+        String playerId = (playerTurnId.equals(playerId1)) ? playerId2 : playerId1;
+        Response response = testUtil.playerPlayCard(roomId, playerId, "", "", "",
+                "", "true");
+        assertThat(response.statusCode(), is(equalTo(400)));
+    }
 }

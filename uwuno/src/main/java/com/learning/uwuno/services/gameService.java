@@ -122,8 +122,12 @@ public class gameService {
     // type = cardType, color = cardColor, value = number on card, setWildColor = color to set wild card to
     public gameResponse takeTurn(String uid, String pid, String type, String color,
                            String value, String setWildColor, String skip) {
-        player player = getPlayer(uid, pid);
         room room = getRoom(uid);
+        // If pid is not the same as current player's turn, reject
+        if (!pid.equals(room.getPlayerTurn().getPid()))
+            throw new badRequest("Pid of play card request does not match that of current player's turn");
+
+        player player = getPlayer(uid, pid);
         gameState gameState = room.getGameState();
         gameResponse response = new gameResponse();
         // Check whether player is skipping turn
