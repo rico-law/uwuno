@@ -81,6 +81,7 @@ public class gameService {
         }
     }
 
+    // TODO: set a MAX_TURN?
     // Should only be able to modify game settings when room status is Lobby
     public void updateGameSettings(String uid, String gameMode, int maxTurn, int maxScore, boolean useBlankCards) {
         room rm = getRoom(uid);

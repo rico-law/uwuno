@@ -72,6 +72,15 @@ public final class testUtil {
                 .then().extract().response();
     }
 
+    // PUT - Player play card - returns gameResponse response
+    public static Response playerPlayCard(String roomId, String playerId, String cardType, String cardColor,
+                                          String cardValue, String setWildColor, String skip) throws FileNotFoundException {
+        String request = jsonUtil.createPutPlayerPlayCardJson(cardType, cardColor, cardValue, setWildColor, skip, putPlayerPlayCard);
+        return given().pathParam("uid", roomId).pathParam("pid", playerId)
+                .when().body(request).put(BASE_URL + "/rooms/{uid}/players/{pid}")
+                .then().extract().response();
+    }
+
     // GET - Get room - returns room response
     public static Response getRoom(String roomId) {
         return given().pathParam("uid", roomId)
