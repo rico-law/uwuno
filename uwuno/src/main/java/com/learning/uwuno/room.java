@@ -126,8 +126,8 @@ public class room {
     }
 
     // Sets next player and returns it
-    public player nextPlayer(boolean turnDirection) {
-        playerTurn = (turnDirection) ? playerList.next() : playerList.prev();
+    public player nextPlayer(boolean turnClockwise) {
+        playerTurn = (turnClockwise) ? playerList.next() : playerList.prev();
         return playerTurn;
     }
 

@@ -12,7 +12,7 @@ import java.util.*;
 public class gameState {
     private int cardsToDraw;    // Keeps track of +4, +2 stacking
     private int turnsTaken;
-    private boolean turnDirection; // true if forward, otherwise reverse direction
+    private boolean turnClockwise; // true if forward, otherwise reverse direction
     private final HashMap<player, Integer> scores;
 
     public int getCardsToDraw() {
@@ -23,8 +23,8 @@ public class gameState {
         return turnsTaken;
     }
 
-    public boolean isTurnDirection() {
-        return turnDirection;
+    public boolean isTurnClockwise() {
+        return turnClockwise;
     }
 
     public HashMap<player, Integer> getScores() {
@@ -35,7 +35,7 @@ public class gameState {
     public gameState(playerList playerList) {
         cardsToDraw = 0;
         turnsTaken = 0;
-        turnDirection = true;
+        turnClockwise = true;
         scores = new HashMap<>();
 
         for (player player : playerList) {
@@ -47,7 +47,7 @@ public class gameState {
     public void resetRound() {
         cardsToDraw = 0;
         turnsTaken = 0;
-        turnDirection = true;
+        turnClockwise = true;
     }
 
     public void applyCardEffect(card.CardType type) {
@@ -56,7 +56,7 @@ public class gameState {
         } else if (type == card.CardType.Draw4) {
             cardsToDraw += 4;
         } else if (type == card.CardType.Reverse) {
-            turnDirection = !turnDirection;
+            turnClockwise = !turnClockwise;
         }
     }
 
@@ -102,7 +102,7 @@ public class gameState {
             }
         } else {
             // Otherwise, return response with next player's pid and their playable cards
-            player nextPlayer = room.nextPlayer(turnDirection);
+            player nextPlayer = room.nextPlayer(turnClockwise);
             response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.getLastPlayedCard()));
         }
     }
