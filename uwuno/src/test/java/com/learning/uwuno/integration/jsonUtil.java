@@ -1,17 +1,13 @@
 package com.learning.uwuno.integration;
 
 import io.micrometer.core.instrument.util.IOUtils;
-import org.junit.jupiter.api.DisplayNameGenerator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
-public class jsonUtil {
+public final class jsonUtil {
     private static final String ROOM_NAME = "$roomName";
     private static final String ROOM_UID = "$roomUid";
     private static final String ROOM_STATUS = "$roomStatus";

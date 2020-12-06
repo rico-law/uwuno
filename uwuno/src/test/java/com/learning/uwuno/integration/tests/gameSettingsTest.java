@@ -1,6 +1,7 @@
 package com.learning.uwuno.integration.tests;
 
 import com.learning.uwuno.integration.jsonUtil;
+import static com.learning.uwuno.integration.testUtil.createPlayer;
 import static com.learning.uwuno.integration.constants.BASE_URL;
 import static com.learning.uwuno.integration.constants.JSON_REQUESTS_PATH;
 
@@ -22,7 +23,6 @@ public class gameSettingsTest {
     private static String roomId;
     private static final String testStatus = "Start";
     private static final String jsonPath = JSON_REQUESTS_PATH + "/putRoomGameSettings.json";
-    private static final String postPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
     private static final String putRoomStatusPath = JSON_REQUESTS_PATH + "/putRoom.json";
     private static final int maxTurn = 15;
     private static final int pointMinScore = 500;
@@ -30,7 +30,6 @@ public class gameSettingsTest {
     private static final boolean useBlank = false;
     private static final String pointMode = "POINT";
     private static final String normalMode = "NORMAL";
-
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
@@ -116,8 +115,8 @@ public class gameSettingsTest {
     @Test
     public void putInvalidRoomStatus400() throws FileNotFoundException {
         // Add 2 players
-        createPlayer("player_1");
-        createPlayer("player_2");
+        createPlayer("player_1", roomId);
+        createPlayer("player_2", roomId);
 
         // Change room status to Start
         String putRoomJSON = jsonUtil.createPutRoomJson("room", roomId, testStatus, putRoomStatusPath);
@@ -134,13 +133,5 @@ public class gameSettingsTest {
                 .then().extract().response();
 
         assertThat(response.statusCode(), is(equalTo(400)));
-    }
-
-    // Create player - returns player response
-    public static Response createPlayer(String playerName) throws FileNotFoundException {
-        String request = jsonUtil.createPostPutPlayerJson(playerName, postPlayerPath);
-        return given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(request).post(BASE_URL + "/rooms/{uid}/players")
-                .then().extract().response();
     }
 }

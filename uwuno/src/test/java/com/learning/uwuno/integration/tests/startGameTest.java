@@ -1,6 +1,7 @@
 package com.learning.uwuno.integration.tests;
 
 import com.learning.uwuno.integration.jsonUtil;
+import static com.learning.uwuno.integration.testUtil.createPlayer;
 import static com.learning.uwuno.integration.constants.BASE_URL;
 import static com.learning.uwuno.integration.constants.JSON_REQUESTS_PATH;
 
@@ -22,7 +23,6 @@ public class startGameTest {
     private static String roomId;
     private static String putRoomJSON;
     private static final String testStatus = "Start";
-    private static final String postPutPlayerPath = JSON_REQUESTS_PATH + "/postPutPlayer.json";
     private static String putDrawCardJSON;
     private static String invalidPutDrawJSON;
     private static final int startingHandCardSize = 7;
@@ -54,19 +54,11 @@ public class startGameTest {
                 .when().delete(BASE_URL + "/rooms/{uid}");
     }
 
-    // Create player - returns player response
-    public static Response createPlayer(String playerName) throws FileNotFoundException {
-        String request = jsonUtil.createPostPutPlayerJson(playerName, postPutPlayerPath);
-        return given().contentType(ContentType.JSON).pathParam("uid", roomId)
-                .when().body(request).post(BASE_URL + "/rooms/{uid}/players")
-                .then().extract().response();
-    }
-
     // PUT request to Start game
     @Test
     public void putValidStartGame200() throws FileNotFoundException {
-        createPlayer("player_1");
-        createPlayer("player_2");
+        createPlayer("player_1", roomId);
+        createPlayer("player_2", roomId);
         Response response = given().pathParam("uid", roomId)
                 .when().body(putRoomJSON).put(BASE_URL + "/rooms/{uid}")
                 .then().extract().response();
@@ -101,8 +93,8 @@ public class startGameTest {
     // PUT draw card
     @Test
     public void putPlayerDrawCards200() throws FileNotFoundException {
-        Response player1 = createPlayer("player_1");
-        createPlayer("player_2");
+        Response player1 = createPlayer("player_1", roomId);
+        createPlayer("player_2", roomId);
 
         // Change room status to Start
         given().pathParam("uid", roomId)
@@ -125,8 +117,8 @@ public class startGameTest {
     // PUT invalid draw card - via non-numeric number
     @Test
     public void putInvalidDrawCards400() throws FileNotFoundException {
-        Response player1 = createPlayer("player_1");
-        createPlayer("player_2");
+        Response player1 = createPlayer("player_1", roomId);
+        createPlayer("player_2", roomId);
 
         // Change room status to Start
         given().pathParam("uid", roomId)
