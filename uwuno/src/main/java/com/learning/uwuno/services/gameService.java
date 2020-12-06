@@ -91,7 +91,7 @@ public class gameService {
 
             // maxScore only relevant for point mode. For normal mode, setting maxScore to a default value.
             if (gameMode.toLowerCase().equals("normal")) gameSettings.setMaxScore(normalDefaultScore);
-            if (gameMode.toLowerCase().equals("point") && maxScore >= pointMinScore) gameSettings.setMaxScore(maxScore);
+            else if (gameMode.toLowerCase().equals("point") && maxScore >= pointMinScore) gameSettings.setMaxScore(maxScore);
             else throw new badRequest("Max score must be equal to or greater than 500 for Point Mode");
         }
     }

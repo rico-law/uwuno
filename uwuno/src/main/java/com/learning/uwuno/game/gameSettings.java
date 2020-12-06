@@ -24,7 +24,7 @@ public class gameSettings {
         return maxScore;
     }
 
-    public boolean isUseBlankCards() {
+    public boolean getUseBlankCards() {
         return useBlankCards;
     }
 
