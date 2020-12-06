@@ -6,11 +6,9 @@ import com.learning.uwuno.cards.sColorCard;
 import com.learning.uwuno.cards.wildCard;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.internalServerError;
-import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.UUID;
 
 public final class serviceUtils {
@@ -98,6 +96,7 @@ public final class serviceUtils {
     static public void setUpGameState(room room, room.Status status) {
         switch (status) {
             case Lobby -> {
+                // Lobby state needed for changing game settings
                 return;
             }
             case Start -> {
@@ -106,6 +105,7 @@ public final class serviceUtils {
             }
             case Restart -> {
                 // For Point Mode: restart game for next round
+                // Should not change game settings
                 serviceUtils.setUpNextRound(room);
                 return;
             }

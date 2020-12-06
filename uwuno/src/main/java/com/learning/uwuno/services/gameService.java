@@ -78,12 +78,15 @@ public class gameService {
         }
     }
 
+    // Should only be able to modify game settings when gameState is Lobby
     public void updateGameSettings(String uid, String gameMode, int maxTurn, int maxScore, boolean useBlankCards) {
-        gameSettings gameSettings = getRoom(uid).getGameSettings();
-        gameSettings.setGameMode(gameMode);
-        gameSettings.setMaxTurn(maxTurn);
-        gameSettings.setMaxScore(maxScore);
-        gameSettings.setUseBlankCards(useBlankCards);
+        if (getRoom(uid).getRoomStatus() == room.Status.Lobby) {
+            gameSettings gameSettings = getRoom(uid).getGameSettings();
+            gameSettings.setGameMode(gameMode);
+            gameSettings.setMaxTurn(maxTurn);
+            gameSettings.setMaxScore(maxScore);
+            gameSettings.setUseBlankCards(useBlankCards);
+        }
     }
 
     public player updatePlayerName(String uid, String pid, String newName) {
