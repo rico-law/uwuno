@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class playCardTest {
+public class basicPlayCardTest {
     private static String roomId;
     private static String playerId1;
     private static String playerId2;
@@ -61,6 +61,22 @@ public class playCardTest {
         String playerId = (playerTurnId.equals(playerId1)) ? playerId2 : playerId1;
         Response response = testUtil.playerPlayCard(roomId, playerId, "", "", "",
                 "", "true");
+        assertThat(response.statusCode(), is(equalTo(400)));
+    }
+
+    // PUT invalid play card - via setWildColor field
+    @Test
+    public void putInvalidSetWild400() throws FileNotFoundException {
+        Response response = testUtil.playerPlayCard(roomId, playerTurnId, "Basic", "Yellow", "2",
+                "Yellow", "false");
+        assertThat(response.statusCode(), is(equalTo(400)));
+    }
+
+    // PUT invalid play card - via card value field
+    @Test
+    public void putInvalidCardValue400() throws FileNotFoundException {
+        Response response = testUtil.playerPlayCard(roomId, playerTurnId, "Skip", "Yellow", "2",
+                "", "false");
         assertThat(response.statusCode(), is(equalTo(400)));
     }
 }
