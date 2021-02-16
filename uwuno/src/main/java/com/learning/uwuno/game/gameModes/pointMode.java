@@ -6,6 +6,9 @@ import com.learning.uwuno.util.playerList;
 
 import java.util.*;
 
+/**
+ * Rules and special settings for Point mode.
+ */
 public class pointMode implements gameMode {
     final private int SPECIAL_CARDS_POINTS = 20;   // Reverse, Skip, +2
     final private int WILD_CARDS_POINTS = 50;      // Wild, Wild +4

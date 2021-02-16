@@ -5,6 +5,14 @@ import com.learning.uwuno.player;
 
 import java.util.*;
 
+/**
+ * gameResponse creates JSON response used in-game. The response can contain:
+ *
+ * - The current or next player's pid and their playable cards OR
+ * - A list of winners (to indicate the end of the game) OR
+ * - In the case of Point Mode, a hashmap of current scores to carry over into the next round. Indicates the end of the round.
+ *
+ */
 public class gameResponse {
     private List<card> playableCards;
     private String playerTurnPid;

@@ -5,6 +5,9 @@ import com.learning.uwuno.game.gameModes.gameMode;
 import com.learning.uwuno.game.gameModes.normalMode;
 import com.learning.uwuno.game.gameModes.pointMode;
 
+/**
+ * Game settings/options
+ */
 public class gameSettings {
     private gameMode gameMode;
     private int maxTurn;

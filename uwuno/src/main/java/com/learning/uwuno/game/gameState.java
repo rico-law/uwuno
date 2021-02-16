@@ -9,6 +9,16 @@ import com.learning.uwuno.util.playerList;
 
 import java.util.*;
 
+/**
+ * State of the game per round. Keeps track of:
+ *
+ * - The players' cumulative score at the end of each round,
+ * - Number of turns taken in the current round,
+ * - Whether the turn order is clockwise or counterclockwise and
+ * - The number of cards to draw from the +4, +2 stacking effect.
+ *
+ * After each round, all properties except ```scores``` are reset.
+ */
 public class gameState {
     private int cardsToDraw;    // Keeps track of +4, +2 stacking
     private int turnsTaken;
@@ -31,7 +41,10 @@ public class gameState {
         return scores;
     }
 
-    // To keep track of points and other current game properties
+    /**
+     * gameState constructor. To keep track of points and other current game properties.
+     * @param playerList: playerList
+     */
     public gameState(playerList playerList) {
         cardsToDraw = 0;
         turnsTaken = 0;
@@ -43,13 +56,19 @@ public class gameState {
         }
     }
 
-    // For Point Mode: resets game state fields except scores
+    /**
+     * For Point Mode: resets game state fields except scores.
+     */
     public void resetRound() {
         cardsToDraw = 0;
         turnsTaken = 0;
         turnClockwise = true;
     }
 
+    /**
+     * Apply +4, +2 or reverse card effects.
+     * @param type: CardType (i.e. Draw2, Draw4 or Reverse)
+     */
     public void applyCardEffect(card.CardType type) {
         if (type == card.CardType.Draw2) {
             cardsToDraw += 2;
@@ -60,6 +79,15 @@ public class gameState {
         }
     }
 
+    /**
+     * Update given gameResponse when player skips their turn.
+     * - Apply penalty if any (i.e. +4, +2). If the drawn cards are playable, update response with those cards.
+     * - Otherwise, draw 1 card and update response with the card if playable.
+     * - If no drawn cards are playable, end turn.
+     * @param player: player of current turn
+     * @param room: room
+     * @param response: gameResponse
+     */
     public void skipTurn(player player, room room, gameResponse response) {
         // Check if there are extra cards to draw from stacking effect
         if (cardsToDraw > 0) {
@@ -68,14 +96,16 @@ public class gameState {
             cards.addAll(player.getCardList());
             cardsToDraw = 0;
             // If the card is valid to play, return response with current pid and playable cards
+            // If there are no valid cards to play, draw 1 more card.
             for (card card : cards) {
                 if (checkPlayable(card, room.getLastPlayedCard())) {
                     playableCards.add(card);
                 }
             }
-            // Need to send response here because player has not taken their turn yet. Can still draw 1 card to skip.
-            response.setPlayerTurnResponse(player.getPid(), playableCards);
-            return;
+            if (!playableCards.isEmpty()) {
+                response.setPlayerTurnResponse(player.getPid(), playableCards);
+                return;
+            }
         }
         ArrayList<card> cards = player.drawCards(1);
         if (checkPlayable(cards.get(0), room.getLastPlayedCard()))
@@ -85,6 +115,14 @@ public class gameState {
             endTurn(player, room, response);
     }
 
+    /**
+     * Update given gameResponse when player ends their turn.
+     * - If player has no cards or max turn have been taken, update response to reset round or determine winners.
+     * - Otherwise, update response with next player's pid and playable cards.
+     * @param player: player of current turn
+     * @param room: room
+     * @param response: gameResponse
+     */
     public void endTurn(player player, room room, gameResponse response) {
         ++turnsTaken;
         gameSettings gameSettings = room.getGameSettings();
@@ -107,6 +145,13 @@ public class gameState {
         }
     }
 
+    /**
+     * Play given card toPlay and it apply its effect if applicable.
+     * @param toPlay: card
+     * @param lastPlayed: card
+     * @param player: player
+     * @return true if card is playable, else false.
+     */
     public boolean playCard(card toPlay, card lastPlayed, player player) {
         // Add the player's card to discard pile and remove it from the player's hand
         if (checkPlayable(toPlay, lastPlayed) && player.playCard(toPlay)) {
@@ -116,7 +161,11 @@ public class gameState {
         return false;
     }
 
-    // Returns list of playable cards from given player's hand based on given last played card
+    /**
+     * @param player: player
+     * @param lastPlayed: card
+     * @return ArrayList of playable cards from given player's hand based on given last played card.
+     */
     public ArrayList<card> getPlayableCards(player player, card lastPlayed) {
         ArrayList<card> playableCards = new ArrayList<>();
         for (card card : player.getCardList()) {
@@ -127,7 +176,12 @@ public class gameState {
         return playableCards;
     }
 
-    // Function to check if card is playable when compared to last played card
+    /**
+     * Check whether given toPlay card is playable when compared to given lastPlayed card.
+     * @param toPlay: card
+     * @param lastPlayed: card
+     * @return true if card is playable, else false.
+     */
     public boolean checkPlayable(card toPlay, card lastPlayed) {
         // Get colour of last played card
         card.Color lastPlayedColour = (lastPlayed instanceof wildCard) ?
