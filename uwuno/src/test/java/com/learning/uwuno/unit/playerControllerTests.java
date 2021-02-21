@@ -142,7 +142,6 @@ public class playerControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
-    // TODO: write tests for PUT. Right now, only testing that the return type is the same.
     @Test
     public void testPlayer_PUT_playCard() throws Exception {
         testPlayer.setCurDeck(new deck(false));

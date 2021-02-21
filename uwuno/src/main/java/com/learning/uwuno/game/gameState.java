@@ -23,6 +23,7 @@ public class gameState {
     private int cardsToDraw;    // Keeps track of +4, +2 stacking
     private int turnsTaken;
     private boolean turnClockwise; // true if forward, otherwise reverse direction
+    private boolean skipNextPlayer;
     private final HashMap<player, Integer> scores;
 
     public int getCardsToDraw() {
@@ -49,6 +50,7 @@ public class gameState {
         cardsToDraw = 0;
         turnsTaken = 0;
         turnClockwise = true;
+        skipNextPlayer = false;
         scores = new HashMap<>();
 
         for (player player : playerList) {
@@ -63,6 +65,7 @@ public class gameState {
         cardsToDraw = 0;
         turnsTaken = 0;
         turnClockwise = true;
+        skipNextPlayer = false;
     }
 
     /**
@@ -76,6 +79,8 @@ public class gameState {
             cardsToDraw += 4;
         } else if (type == card.CardType.Reverse) {
             turnClockwise = !turnClockwise;
+        } else if (type == card.CardType.Skip) {
+            skipNextPlayer = true;
         }
     }
 
@@ -140,7 +145,10 @@ public class gameState {
             }
         } else {
             // Otherwise, return response with next player's pid and their playable cards
+            // Check whether "Skip Turn" effect should be applied
             player nextPlayer = room.nextPlayer(turnClockwise);
+            nextPlayer = (skipNextPlayer) ? room.nextPlayer(turnClockwise) : nextPlayer;
+            skipNextPlayer = false;
             response.setPlayerTurnResponse(nextPlayer.getPid(), getPlayableCards(nextPlayer, room.getLastPlayedCard()));
         }
     }
