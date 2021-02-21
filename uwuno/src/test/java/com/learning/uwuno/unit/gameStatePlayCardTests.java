@@ -1,8 +1,9 @@
 package com.learning.uwuno.unit;
 
 import com.learning.uwuno.cards.*;
-import com.learning.uwuno.game.gameState;
+import com.learning.uwuno.game.*;
 import com.learning.uwuno.player;
+import com.learning.uwuno.room;
 import com.learning.uwuno.util.playerList;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,13 @@ import org.mockito.Mock;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 public class gameStatePlayCardTests {
@@ -98,10 +104,6 @@ public class gameStatePlayCardTests {
 
     /**
      * No error occurs when wild card is played and colour can be changed.
-     * TODO:
-     *  - Draw4 and changeColour can both be played on top of another black card and any coloured card //
-     *  - Put correct normal colour on top after change
-     *  - Put wrong normal colour on top after change
      */
     @Test
     public void testNoErrorWhenPlayWildCard() {
@@ -144,13 +146,36 @@ public class gameStatePlayCardTests {
      * Tests skip turn card effect applied.
      */
     @Test
-    public void testSkipCardEffectApplies() {
-//        card toPlay = new sColorCard(card.CardType.Skip, card.Color.Yellow);
-//        card lastPlayed = new basicCard(2, card.Color.Yellow);
-//        when(mockPlayer.playCard(toPlay)).thenReturn(true);
-//
-//        boolean result = gameState.playCard(toPlay, lastPlayed, mockPlayer);
-//        assertThat(result, is(true));
+    public void testSkipCardEffectApplies(@Mock room mockRoom, @Mock gameResponse mockResponse) {
+        card toPlay = new sColorCard(card.CardType.Skip, card.Color.Yellow);
+        card lastPlayed = new basicCard(2, card.Color.Yellow);
+
+        populatePlayerList();
+        player player = playerList.next();
+        player spyPlayer = spy(player);
+        gameSettings spySettings = spy(new gameSettings());
+//        room spyRoom = spy(new room("room", false, "111"));
+
+        doReturn(true).when(spyPlayer).playCard(toPlay);
+        doReturn(new ArrayList<>(Arrays.asList(toPlay, lastPlayed))).when(spyPlayer).getCardList();
+        doReturn(30).when(spySettings).getMaxTurn();
+        when(mockRoom.getGameSettings()).thenReturn(spySettings);
+        when(mockRoom.nextPlayer(true)).thenReturn(playerList.next());
+        //Works when called from test function
+//        mockRoom.nextPlayer(true);
+//        System.out.println(playerList.cur().getName());
+//        doReturn(spySettings).when(spyRoom).getGameSettings();
+//        doReturn(playerList.next()).when(spyRoom).nextPlayer(true);
+
+        boolean result = gameState.playCard(toPlay, lastPlayed, spyPlayer);
+//        gameState.endTurn(spyPlayer, spyRoom, mockResponse);
+        gameState.endTurn(spyPlayer, mockRoom, mockResponse);
+        assertThat(result, is(true));
+        verify(mockRoom, times(2)).nextPlayer(true);
+        assertThat(playerList.cur().getName(), is("player3"));
+
+        // Mock keeping track of playerList pointer. Figure out how to make it keep track.
+
     }
 
     /**
@@ -160,4 +185,10 @@ public class gameStatePlayCardTests {
     /**
      * Tests player draws penalty cards from draw2 and draw4 effects.
      */
+
+    private void populatePlayerList() {
+        for (int i = 1; i < 4; i++ ) {
+            playerList.add(new player("player" + i));
+        }
+    }
 }
