@@ -8,6 +8,5 @@ import java.util.*;
 public interface gameMode {
 
     String getModeName();
-    ArrayList<player> determineWinner(player playerTurn, playerList players,
-                                      HashMap<player, Integer> scores, int maxScore);
+    ArrayList<player> determineWinner(player playerTurn, HashMap<player, Integer> scores, int maxScore);
 }

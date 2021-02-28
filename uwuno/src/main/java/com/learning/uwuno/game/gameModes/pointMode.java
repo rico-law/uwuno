@@ -20,36 +20,26 @@ public class pointMode implements gameMode {
     }
 
     @Override
-    public ArrayList<player> determineWinner(player playerTurn, playerList players,
-                                             HashMap<player, Integer> scores, int maxScore) {
+    public ArrayList<player> determineWinner(player playerTurn, HashMap<player, Integer> scores, int maxScore) {
         ArrayList<player> winners = new ArrayList<>();
-        HashMap<player, Integer> pointsInHand = new HashMap<>();
-        int total = 0;
         // Calculate points
-        for (player player : players) {
-            int points = 0;
-            for (card card : player.getCardList()) {
-                if (card instanceof wildCard) {
-                    points += WILD_CARDS_POINTS;
-                    total += WILD_CARDS_POINTS;
-                } else if (card instanceof sColorCard) {
-                    points += SPECIAL_CARDS_POINTS;
-                    total += SPECIAL_CARDS_POINTS;
-                } else {
-                    points += ((basicCard) card).getValue();
-                    total += ((basicCard) card).getValue();
-                }
-            }
-            pointsInHand.put(player, points);
-        }
-        // Update current score
         for (Map.Entry<player, Integer> entry : scores.entrySet()) {
             player player = entry.getKey();
-            int score = total - pointsInHand.get(player) + entry.getValue();
-            // If reached maxScore, save in winners
-            if (score >= maxScore)
-                winners.add(player);
-            scores.put(player, score);
+            int currentPlayerScore = entry.getValue();
+            for (card card : player.getCardList()) {
+                if (card instanceof wildCard)
+                    currentPlayerScore += WILD_CARDS_POINTS;
+                else if (card instanceof sColorCard)
+                    currentPlayerScore += SPECIAL_CARDS_POINTS;
+                else
+                    currentPlayerScore += ((basicCard) card).getValue();
+            }
+            scores.put(player, currentPlayerScore);
+        }
+        // Save winners who reached maxScore, else return empty list (to indicate next round)
+        for (Map.Entry<player, Integer> entry : scores.entrySet()) {
+            if (entry.getValue() >= maxScore)
+                winners.add(entry.getKey());
         }
         return winners;
     }

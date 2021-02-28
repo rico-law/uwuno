@@ -1,9 +1,7 @@
 package com.learning.uwuno.game;
 
 import com.learning.uwuno.errors.badRequest;
-import com.learning.uwuno.game.gameModes.gameMode;
-import com.learning.uwuno.game.gameModes.normalMode;
-import com.learning.uwuno.game.gameModes.pointMode;
+import com.learning.uwuno.game.gameModes.*;
 
 /**
  * Game settings/options

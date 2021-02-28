@@ -22,7 +22,7 @@ import java.util.*;
 @ExtendWith(MockitoExtension.class)
 public class gameStatePlayCardTests {
     @Mock private player mockPlayer;
-    @Mock gameResponse mockResponse;
+    @Mock private gameResponse mockResponse;
 
     private gameState gameState;
     private final playerList playerList = new playerList("123");

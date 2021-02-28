@@ -20,8 +20,7 @@ public class normalMode implements gameMode {
     }
 
     @Override
-    public ArrayList<player> determineWinner(player playerTurn, playerList players,
-                                             HashMap<player, Integer> scores, int maxScore) {
+    public ArrayList<player> determineWinner(player playerTurn, HashMap<player, Integer> scores, int maxScore) {
         // If player has no hand cards, they win
         if (playerTurn.getCardList().isEmpty())
             return new ArrayList<>(Arrays.asList(playerTurn));
@@ -31,7 +30,8 @@ public class normalMode implements gameMode {
         ArrayList<player> nominees = new ArrayList<>();
         ArrayList<player> winners = new ArrayList<>();
         int minScore = Integer.MAX_VALUE;
-        for (player player : players) {
+        for (Map.Entry<player, Integer> entry : scores.entrySet()) {
+            player player = entry.getKey();
             int points = 0;
             for (card card : player.getCardList()) {
                 if (card instanceof wildCard) {

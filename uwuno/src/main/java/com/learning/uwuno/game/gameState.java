@@ -133,8 +133,8 @@ public class gameState {
         gameSettings gameSettings = room.getGameSettings();
         // If the given player has won, return winning response
         if (player.getCardList().isEmpty() || turnsTaken == gameSettings.getMaxTurn()) {
-            ArrayList<player> winners = gameSettings.getGameMode().determineWinner(player, room.getPlayers(),
-                    scores, gameSettings.getMaxScore());
+            ArrayList<player> winners = gameSettings.getGameMode().determineWinner(player, scores,
+                    gameSettings.getMaxScore());
             if (winners.isEmpty()) {
                 // No winners should only happen in Point Mode
                 // TODO: better way to trigger reset game state (except scores) for next round?
