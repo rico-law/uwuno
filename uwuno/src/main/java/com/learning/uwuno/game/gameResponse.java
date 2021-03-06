@@ -1,5 +1,6 @@
 package com.learning.uwuno.game;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.player;
 

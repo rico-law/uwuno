@@ -59,6 +59,10 @@ public class gameService {
         }
     }
 
+    public gameSettings getGameSettings(String uid) {
+        return getRoom(uid).getGameSettings();
+    }
+
     // PUTS
     public void updateRoomName(String uid, String newName) {
         if (newName.isBlank())
