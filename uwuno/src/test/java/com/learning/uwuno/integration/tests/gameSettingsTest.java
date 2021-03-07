@@ -26,7 +26,7 @@ public class gameSettingsTest {
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
-        roomId = testUtil.createRoom("room_1").path("uid");
+        roomId = testUtil.createRoom("room_1", normalMode, Integer.toString(maxTurn), "500").path("uid");
     }
 
     @AfterEach

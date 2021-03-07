@@ -19,7 +19,7 @@ public class skipTurnTest {
     @BeforeEach
     public void setUp() throws FileNotFoundException {
         // Start game
-        roomId = testUtil.createRoom(roomName).path("uid");
+        roomId = testUtil.createRoom(roomName, gameMode, "20", "500").path("uid");
         playerId1 = testUtil.createPlayer("player_1", roomId).path("pid");
         playerId2 = testUtil.createPlayer("player_2", roomId).path("pid");
         testUtil.putGameSettings(roomId, gameMode, "30", "0", "false");

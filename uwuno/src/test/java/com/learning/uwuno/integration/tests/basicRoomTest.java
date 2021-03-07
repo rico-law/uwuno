@@ -15,6 +15,9 @@ import static org.hamcrest.Matchers.*;
 public class basicRoomTest {
     private final static ArrayList<String> runningRoomIds = new ArrayList<>();
     private final static String inputName = "test_room_name";
+    private final static String gameMode = "NORMAL";
+    private final static String maxTurn = "20";
+    private final static String maxScore = "500";
 
     @AfterAll
     public static void cleanUp() {
@@ -26,12 +29,13 @@ public class basicRoomTest {
     //POST valid Room
     @Test
     public void createValidRoom200() throws FileNotFoundException {
-        Response response = testUtil.createRoom(inputName);
+        Response response = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore);
 
         assertThat(response.statusCode(), is(equalTo(200)));
         assertThat(response.path("uid"), is(not(emptyString())));
         assertThat(response.path("name"), is(equalTo(inputName)));
         assertThat(response.path("players"), is(empty()));
+        // TODO: add gameSettings asserts
 
         String roomId = response.path("uid");
         runningRoomIds.add(roomId);
@@ -40,7 +44,7 @@ public class basicRoomTest {
     // POST invalid Room with roomName = ""
     @Test
     public void createRoomEmptyName400() throws IOException {
-        Response response = testUtil.createRoom("");
+        Response response = testUtil.createRoom("", gameMode, maxTurn, maxScore);
         assertThat(response.statusCode(), is(equalTo(400)));
     }
 
@@ -55,7 +59,7 @@ public class basicRoomTest {
     @Test
     public void getRoom200() throws FileNotFoundException {
         // Room
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         runningRoomIds.add(roomId);
 
         // Request
@@ -74,7 +78,7 @@ public class basicRoomTest {
     @Test
     public void getPlayersInRoom200() throws FileNotFoundException {
         // Room
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         runningRoomIds.add(roomId);
 
         // Request
@@ -93,7 +97,7 @@ public class basicRoomTest {
     // DELETE valid Room
     @Test
     public void deleteRoom200() throws FileNotFoundException {
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         Response response = testUtil.deleteRoom(roomId);
         assertThat(response.statusCode(), is(equalTo(200)));
     }
@@ -109,7 +113,7 @@ public class basicRoomTest {
     @Test
     public void putValidRoom200() throws IOException {
         // Room
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         runningRoomIds.add(roomId);
 
         // Request
@@ -121,11 +125,13 @@ public class basicRoomTest {
         assertThat(response.path("name"), is(equalTo(new_name)));
     }
 
+    // TODO: add putGameSettings200 - check gameSettings can be updated
+
     // PUT invalid name
     @Test
     public void putInvalidRoomName400() throws IOException {
         // Room
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         runningRoomIds.add(roomId);
 
         // Request
@@ -137,7 +143,7 @@ public class basicRoomTest {
     @Test
     public void putInvalidRoomStatus400() throws IOException {
         // Room
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         runningRoomIds.add(roomId);
 
         // Request
@@ -149,7 +155,7 @@ public class basicRoomTest {
     @Test
     public void putInvalidRoomUid404() throws IOException {
         // Room
-        String roomId = testUtil.createRoom(inputName).path("uid");
+        String roomId = testUtil.createRoom(inputName, gameMode, maxTurn, maxScore).path("uid");
         runningRoomIds.add(roomId);
 
         // Request

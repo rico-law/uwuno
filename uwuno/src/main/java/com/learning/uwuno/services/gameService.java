@@ -30,8 +30,9 @@ public class gameService {
         if (roomName.isBlank())
             throw new badRequest("Room name cannot be blank");
         room newRoom = new room(roomName, useBlankCards, serviceUtils.createUID(roomList));
-        updateGameSettings(newRoom.getUid(), gameMode, maxTurn, maxScore, useBlankCards);
         roomList.add(newRoom);
+        // TODO: refactor so that don't need to getRoom(uid) again in updateGameSettings
+        updateGameSettings(newRoom.getUid(), gameMode, maxTurn, maxScore, useBlankCards);
         return newRoom;
     }
 

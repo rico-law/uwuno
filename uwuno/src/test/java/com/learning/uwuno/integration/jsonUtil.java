@@ -33,10 +33,10 @@ public final class jsonUtil {
     }
 
     // Create Room JSON String
-    public static String createPostRoomJson(String roomName, String useBlank, String jsonPath)
-            throws FileNotFoundException {
-        return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName)
-                .replace(BLANK_CARDS, useBlank);
+    public static String createPostRoomJson(String roomName, String useBlank, String gameMode, String maxTurn,
+                                            String maxScore, String jsonPath) throws FileNotFoundException {
+        return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(GAME_MODE, gameMode)
+                .replace(MAX_TURN, maxTurn).replace(MAX_SCORE, maxScore).replace(BLANK_CARDS, useBlank);
     }
 
     public static String createPutRoomJson(String roomName, String uid, String status, String jsonPath)

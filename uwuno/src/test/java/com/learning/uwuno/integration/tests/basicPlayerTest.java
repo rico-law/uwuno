@@ -16,7 +16,7 @@ public class basicPlayerTest {
 
     @BeforeEach
     public void setUp() throws FileNotFoundException {
-        roomId = testUtil.createRoom("room_1").path("uid");
+        roomId = testUtil.createRoom("room_1", "NORMAL", "20", "500").path("uid");
     }
 
     @AfterEach

@@ -23,8 +23,9 @@ public final class testUtil {
     }
 
     // POST - Create room - returns room response
-    public static Response createRoom(String roomName) throws FileNotFoundException {
-        String request = jsonUtil.createPostRoomJson(roomName, "false", postRoom);
+    public static Response createRoom(String roomName, String gameMode, String maxTurn, String maxScore)
+            throws FileNotFoundException {
+        String request = jsonUtil.createPostRoomJson(roomName, "false", gameMode, maxTurn, maxScore, postRoom);
         return given().contentType(ContentType.JSON)
                 .when().body(request).post(BASE_URL + "/rooms")
                 .then().extract().response();
@@ -52,7 +53,7 @@ public final class testUtil {
             throws FileNotFoundException {
         String request = jsonUtil.createPutGameSettings(roomId, gameMode, maxTurn, maxScore,useBlank, putGameSettings);
         return given().pathParam("uid", roomId)
-                .when().body(request).put(BASE_URL + "/rooms/{uid}")
+                .when().body(request).put(BASE_URL + "/rooms/{uid}/settings")
                 .then().extract().response();
     }
 

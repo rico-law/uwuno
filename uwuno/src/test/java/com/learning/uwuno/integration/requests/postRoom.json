@@ -1,4 +1,7 @@
 {
   "roomName": "$roomName",
-  "useBlankCards": "$useBlankCards"
+  "useBlankCards": "$useBlankCards",
+  "gameMode": "$gameMode",
+  "maxTurn": "$maxTurn",
+  "maxScore": "$maxScore"
 }
