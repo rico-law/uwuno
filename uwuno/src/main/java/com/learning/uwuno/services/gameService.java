@@ -26,10 +26,11 @@ public class gameService {
 
     // Class Functions
     // POSTS
-    public room addRoom(String roomName, boolean useBlankCards) {
+    public room addRoom(String roomName, boolean useBlankCards, String gameMode, int maxTurn, int maxScore) {
         if (roomName.isBlank())
             throw new badRequest("Room name cannot be blank");
         room newRoom = new room(roomName, useBlankCards, serviceUtils.createUID(roomList));
+        updateGameSettings(newRoom.getUid(), gameMode, maxTurn, maxScore, useBlankCards);
         roomList.add(newRoom);
         return newRoom;
     }

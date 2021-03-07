@@ -2,24 +2,16 @@ JSON Planning
 - spring recognizes both uid and id as the same thing by default
 - order in code POST, GET, PUT, DELETE
 
-### GAMESETTINGS ###
-PUT and POST
-http://localhost:8080/rooms/<uid>/settings
-Game settings
-{
-  uid,
-  gameMode,
-  maxTurn,
-  maxScore,     // only used in point mode (must be equal to or greater than 500)
-  useBlankCards
-}
-
 ### ROOMS ###
 POST
 http://localhost:8080/rooms
 {
     roomName,
     useBlankCards, // boolean
+    gameMode,
+    maxTurn,
+    maxScore,     // only used in point mode (must be equal to or greater than 500)
+    useBlankCards
 }
 
 GET
@@ -35,6 +27,16 @@ http://localhost:8080/rooms/<uid>
     roomName,
     roomStatus: lobby // state of the game either: Lobby, Start, Restart (for Point Mode where there are multiple rounds)
     gameMode       // normal or point
+}
+
+http://localhost:8080/rooms/<uid>/settings
+Game settings
+{
+  uid,
+  gameMode,
+  maxTurn,
+  maxScore,     // only used in point mode (must be equal to or greater than 500)
+  useBlankCards
 }
 
 DELETE

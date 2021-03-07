@@ -28,11 +28,13 @@ public class roomController {
     private gameService containerService;
 
     // POSTS
+    // TODO: refactor useBlankCards to be part of gameSettings rather than room
     @PostMapping(value = "rooms")
     public ResponseEntity<room> addRoom(@RequestBody String json) {
-            parser parser = new parser(json);
-            return ResponseEntity.ok(containerService.addRoom(parser.getValue("roomName"),
-                        Boolean.parseBoolean(parser.getValue("useBlankCards"))));
+        parser parser = new parser(json);
+        return ResponseEntity.ok(containerService.addRoom(parser.getValue("roomName"),
+                Boolean.parseBoolean(parser.getValue("useBlankCards")), parser.getValue("gameMode"),
+                Integer.parseInt(parser.getValue("maxTurn")), Integer.parseInt(parser.getValue("maxScore"))));
     }
 
     // GETS
@@ -83,23 +85,14 @@ public class roomController {
         return ResponseEntity.ok(containerService.getRoom(uid));
     }
 
-    // DELETES
-    // TODO: Figure out how to prevent ppl from deleting a room that isn't theirs (maybe make a hidden password per room?
-    @DeleteMapping(value = "rooms/{uid}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable String uid) {
-        containerService.deleteRoom(uid);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    // GameSettings PUT and POST
     /**
-     * POST and PUT requests for setting gameSettings.
+     * PUT requests for setting gameSettings.
      * @param uid: room uid
      * @param json: gameSettings jsons
      * @return ResponseEntity
      * TODO: pass through an object rather than each parsed value
      */
-    @RequestMapping(value = "rooms/{uid}/settings", method = {RequestMethod.POST, RequestMethod.PUT})
+    @PutMapping(value = "rooms/{uid}/settings")
     public ResponseEntity<room> setGameSettings(@PathVariable String uid, @RequestBody String json) {
         parser parser = new parser(json);
         if (parser.exists("gameMode") && parser.exists("maxTurn")
@@ -111,6 +104,14 @@ public class roomController {
             throw new badRequest("Unknown Game Settings Modification");
         }
         return ResponseEntity.ok(containerService.getRoom(uid));
+    }
+
+    // DELETES
+    // TODO: Figure out how to prevent ppl from deleting a room that isn't theirs (maybe make a hidden password per room?
+    @DeleteMapping(value = "rooms/{uid}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable String uid) {
+        containerService.deleteRoom(uid);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
 
