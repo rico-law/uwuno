@@ -150,7 +150,8 @@ public class determineWinnerTests {
     }
 
     /**
-     * Test when no player has reached maxScore, no players are determined winners.
+     * Test when no player has reached maxScore, no players are determined winners in point mode.
+     * (In this case, the score is kept and gameState resets for next round until a player reaches maxScore, cumulatively.)
      * Pre-condition: when a player has no hand card or maxTurn has been reached.
      */
     @Test
