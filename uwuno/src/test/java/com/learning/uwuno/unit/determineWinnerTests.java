@@ -26,7 +26,7 @@ public class determineWinnerTests {
     private playerList playerList;
     private HashMap<player, Integer> playerScores;
     private ArrayList<player> winners;
-    private ArrayList<ArrayList<card>> playerHandCards;
+    private ArrayList<ArrayList<card>> playersHandCards;
     private final gameMode normalMode = new normalMode();
     private final gameMode pointMode = new pointMode();
 
@@ -35,7 +35,7 @@ public class determineWinnerTests {
         playerList = new playerList("123");
         playerScores = new HashMap<>();
         winners = new ArrayList<>();
-        playerHandCards = new ArrayList<>();
+        playersHandCards = new ArrayList<>();
     }
 
     /**
@@ -59,7 +59,7 @@ public class determineWinnerTests {
     @Test
     public void testNormalModeWinnerByLeastPoints() {
         populatePlayersAndScores(new ArrayList<>(Collections.nCopies(NUM_PLAYERS, 0)));
-        playerHandCards.addAll(new ArrayList<>(
+        playersHandCards.addAll(new ArrayList<>(
                 Arrays.asList(
                         new ArrayList<>(Arrays.asList(new wildCard(card.CardType.Draw4))),
                         new ArrayList<>(Arrays.asList(new sColorCard(card.CardType.Reverse, card.Color.Yellow))),
@@ -81,7 +81,7 @@ public class determineWinnerTests {
     @Test
     public void testNormalModeWinnerByLeastCards() {
         populatePlayersAndScores(new ArrayList<>(Collections.nCopies(NUM_PLAYERS, 0)));
-        playerHandCards.addAll(new ArrayList<>(
+        playersHandCards.addAll(new ArrayList<>(
                 Arrays.asList(
                         new ArrayList<>(Arrays.asList(new wildCard(card.CardType.Draw4))),
                         new ArrayList<>(Arrays.asList(new sColorCard(card.CardType.Reverse, card.Color.Yellow),
@@ -104,7 +104,7 @@ public class determineWinnerTests {
     @Test
     public void testNormalModeMoreThanOneWinner() {
         populatePlayersAndScores(new ArrayList<>(Collections.nCopies(NUM_PLAYERS, 0)));
-        playerHandCards.addAll(new ArrayList<>(
+        playersHandCards.addAll(new ArrayList<>(
                 Arrays.asList(
                         new ArrayList<>(Arrays.asList(new wildCard(card.CardType.Draw4))),
                         new ArrayList<>(Arrays.asList(new wildCard(card.CardType.ChangeColor))),
@@ -129,7 +129,7 @@ public class determineWinnerTests {
     @Test
     public void testPointModeWinnerByReachingMaxScore() {
         populatePlayersAndScores(new ArrayList<>(Collections.nCopies(NUM_PLAYERS, 499)));
-        playerHandCards.addAll(new ArrayList<>(
+        playersHandCards.addAll(new ArrayList<>(
                 Arrays.asList(
                         new ArrayList<>(Arrays.asList(new wildCard(card.CardType.Draw4))),
                         new ArrayList<>(Arrays.asList(new sColorCard(card.CardType.Reverse, card.Color.Yellow))),
@@ -157,7 +157,7 @@ public class determineWinnerTests {
     @Test
     public void testPointModeNoWinner() {
         populatePlayersAndScores(new ArrayList<>(Collections.nCopies(NUM_PLAYERS, 200)));
-        playerHandCards.addAll(new ArrayList<>(
+        playersHandCards.addAll(new ArrayList<>(
                 Arrays.asList(
                         new ArrayList<>(Arrays.asList(new wildCard(card.CardType.Draw4))),
                         new ArrayList<>(Arrays.asList(new sColorCard(card.CardType.Reverse, card.Color.Yellow))),
@@ -184,7 +184,7 @@ public class determineWinnerTests {
 
     private void populateHandCards() {
         for (int i = 0; i < NUM_PLAYERS; i++) {
-            doReturn(playerHandCards.get(i)).when(playerList.get(i)).getCardList();
+            doReturn(playersHandCards.get(i)).when(playerList.get(i)).getCardList();
         }
     }
 }

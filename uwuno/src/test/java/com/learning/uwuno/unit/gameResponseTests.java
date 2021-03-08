@@ -22,6 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
+/**
+ * Verify gameResponse starting from gameService.takeTurn().
+ */
 @ExtendWith(MockitoExtension.class)
 public class gameResponseTests {
     private final int NUM_PLAYERS = 3;
@@ -29,19 +32,109 @@ public class gameResponseTests {
     private playerList playerList;
     private HashMap<player, Integer> playerScores;
     private ArrayList<player> winners;
-    private ArrayList<ArrayList<card>> playerHandCards;
-    private final gameMode normalMode = new normalMode();
-    private final gameMode pointMode = new pointMode();
+    private ArrayList<ArrayList<card>> playersHandCards;
 
     @BeforeEach
     public void setUp() {
         playerList = new playerList("123");
         playerScores = new HashMap<>();
         winners = new ArrayList<>();
-        playerHandCards = new ArrayList<>();
+        playersHandCards = new ArrayList<>();
     }
 
-    // Checks
+    // takeTurn
+    // 1) playCard => endTurn proper next player & playable cards
+    // 2) if invalid played card => throw error
+
+    /**
+     * Throw bad request when invalid card is played.
+     */
+    @Test
+    public void error400WhenPlayInvalidCard() {
+//        playersHandCards.addAll(new ArrayList<>(
+//                Arrays.asList(
+//                        new ArrayList<>(Arrays.asList(new wildCard(card.CardType.Draw4))),
+//                        new ArrayList<>(Arrays.asList(new sColorCard(card.CardType.Reverse, card.Color.Yellow))),
+//                        new ArrayList<>(Arrays.asList(new sColorCard(card.CardType.Skip, card.Color.Green),
+//                                new basicCard(10, card.Color.Red)))
+//                ))
+//        );
+//        populateHandCards();
+//
+//        assertThat(winners.size(), is(1));
+//        assertThat(winners.get(0).getName(), is("player2"));
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void playCard() {
+
+    }
+
+    /**
+     * Verify gameResponse when player skips turn with no +4, +2 penalty and draws 1 playable card.
+     */
+    @Test
+    public void skipTurnWithNoPenaltyAndDrawOnePlayableCard() {
+
+    }
+
+    /**
+     * Verify gameResponse when player skips turn with no +4, +2 penalty and draws 1 non-playable card.
+     */
+    @Test
+    public void skipTurnWithNoPenaltyAndDrawNoPlayableCard() {
+
+    }
+
+    /**
+     * Verify gameResponse when player skips turn with playable +4, +2 penalty cards drawn.
+     */
+    @Test
+    public void skipTurnWithPlayablePenaltyCards() {
+
+    }
+
+    /**
+     * Verify gameResponse when player skips turn with no playable +4, +2 penalty cards drawn.
+     */
+    @Test
+    public void skipTurnWithNoPlayablePenaltyCard() {
+
+    }
+
+    // Checks proper gameResponse value for skipTurn
+    // 1) skipTurn => no penalty => draw 1 with playable cards
+    // 2) skipTurn => no penalty => draw 1 with no playable cards => endTurn see below
+    // 3) skipTurn => penalty => draws playable cards
+    // 4) skipTurn => penalty => no playable cards drawn => draw 1 => same as 1, 2
+
+    // Checks proper gameResponse value for endTurn
+    // 1) endTurn => if there's a winner => winResponse
+    // 2) endTurn => if there's no winner => nextRoundResponse
+    // 3) endTurn => if there's skip Turn => proper next player
+    // 4) endTurn => if no skip turn => proper next player
+    // 5) endTurn => if reverse => proper next player
+
+
+
+    @Test
+    public void endTurnWhenReverseCardPlayed() {
+
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void endTurnWhenSkipCardPlayed() {
+
+    }
+
+
+
 
     private void populatePlayersAndScores(ArrayList<Integer> scores) {
         for (int i = 1; i < NUM_PLAYERS + 1; i++ ) {
@@ -53,7 +146,7 @@ public class gameResponseTests {
 
     private void populateHandCards() {
         for (int i = 0; i < NUM_PLAYERS; i++) {
-            doReturn(playerHandCards.get(i)).when(playerList.get(i)).getCardList();
+            doReturn(playersHandCards.get(i)).when(playerList.get(i)).getCardList();
         }
     }
 }

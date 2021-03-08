@@ -154,11 +154,14 @@ public class gameService {
                 // Or declare the winner
                 gameState.endTurn(player, room, response);
             else {
+                // If invalid card played, throw error
+                throw new badRequest("Invalid card played");
                 // TODO: somehow return gameResponse without modifying it (since no card has been played,
                 //  the properties should be the same as before)
+                // Not sure why we didn't want to throw an error before.
                 // If played an invalid card, return response with same pid and their playable cards
-                response.setPlayerTurnResponse(player.getPid(),
-                        gameState.getPlayableCards(player, room.getLastPlayedCard()));
+//                response.setPlayerTurnResponse(player.getPid(),
+//                        gameState.getPlayableCards(player, room.getLastPlayedCard()));
             }
         }
         return response;
