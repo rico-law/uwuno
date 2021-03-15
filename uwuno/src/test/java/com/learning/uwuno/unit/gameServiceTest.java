@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,12 +23,6 @@ import java.util.ArrayList;
 
 @ExtendWith(MockitoExtension.class)
 public class gameServiceTest {
-    @Mock
-    player player;
-
-    @Mock
-    room room;
-
     @InjectMocks
     private gameService gameService;
 
