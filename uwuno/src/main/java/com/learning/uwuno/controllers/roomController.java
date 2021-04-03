@@ -1,6 +1,8 @@
 package com.learning.uwuno.controllers;
 
 import com.learning.uwuno.*;
+import com.learning.uwuno.errors.badRequest;
+import com.learning.uwuno.game.gameSettings;
 import com.learning.uwuno.services.gameService;
 import com.learning.uwuno.util.parser;
 
@@ -26,12 +28,14 @@ public class roomController {
     private gameService containerService;
 
     // POSTS
+    // TODO: refactor useBlankCards to be part of gameSettings rather than room
     @PostMapping(value = "rooms")
     public ResponseEntity<room> addRoom(@RequestBody String json) {
-            parser parser = new parser(json);
-            return ResponseEntity.ok(containerService.addRoom(parser.getValue("roomName"),
-                        Boolean.parseBoolean(parser.getValue("useBlankCards"))));
-}
+        parser parser = new parser(json);
+        return ResponseEntity.ok(containerService.addRoom(parser.getValue("roomName"),
+                Boolean.parseBoolean(parser.getValue("useBlankCards")), parser.getValue("gameMode"),
+                Integer.parseInt(parser.getValue("maxTurn")), Integer.parseInt(parser.getValue("maxScore"))));
+    }
 
     // GETS
     // Returns .json formatted vector of rooms, private variables are shown (room name)
@@ -52,13 +56,54 @@ public class roomController {
         return ResponseEntity.ok(containerService.getRoom(uid).getPlayers());
     }
 
+    /**
+     * Return gameSettings for given room uid.
+     * @param uid: room uid
+     * @return ResponseEntity
+     */
+    @GetMapping(value = "rooms/{uid}/settings")
+    public ResponseEntity<gameSettings> getGameSettings(@PathVariable String uid) {
+        return ResponseEntity.ok(containerService.getGameSettings(uid));
+    }
+
     // PUTS
+    /**
+     * PUT requests for setting roomName, roomStatus.
+     * @param uid: room uid
+     * @param json: gameSettings jsons
+     * @return ResponseEntity
+     */
     @PutMapping(value = "rooms/{uid}")
     public ResponseEntity<room> updateRoom(@PathVariable String uid, @RequestBody String json) {
-            parser parser = new parser(json);
+        parser parser = new parser(json);
+        if (parser.exists("roomName") && parser.exists("roomStatus")) {
             containerService.updateRoomName(uid, parser.getValue("roomName"));
             containerService.updateRoomStatus(uid, parser.getValue("roomStatus"));
-            return ResponseEntity.ok(containerService.getRoom(uid));
+        } else {
+            throw new badRequest("Unknown Room Modification");
+        }
+        return ResponseEntity.ok(containerService.getRoom(uid));
+    }
+
+    /**
+     * PUT requests for setting gameSettings.
+     * @param uid: room uid
+     * @param json: gameSettings jsons
+     * @return ResponseEntity
+     * TODO: pass through an object rather than each parsed value
+     */
+    @PutMapping(value = "rooms/{uid}/settings")
+    public ResponseEntity<room> setGameSettings(@PathVariable String uid, @RequestBody String json) {
+        parser parser = new parser(json);
+        if (parser.exists("gameMode") && parser.exists("maxTurn")
+                && parser.exists("maxScore") && parser.exists("useBlankCards")) {
+            containerService.updateGameSettings(uid, parser.getValue("gameMode"),
+                    Integer.parseInt(parser.getValue("maxTurn")), Integer.parseInt(parser.getValue("maxScore")),
+                    Boolean.parseBoolean(parser.getValue("useBlankCards")));
+        } else {
+            throw new badRequest("Unknown Game Settings Modification");
+        }
+        return ResponseEntity.ok(containerService.getRoom(uid));
     }
 
     // DELETES

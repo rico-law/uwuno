@@ -22,6 +22,16 @@ public class wildCard extends card {
         return this.cardType == toTest.getType() && this.color == toTest.getColor();
     }
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        if (cardType != null)
+            result = 31 * result + cardType.hashCode();
+        if (color != null)
+            result = 31 * result + color.hashCode();
+        return result;
+    }
+
     // Class Functions
     public wildCard(card.CardType cardType) {
         this.cardType = cardType;
@@ -34,6 +44,11 @@ public class wildCard extends card {
             lastChosenColor = color;
         else
             throw new badRequest("Cannot set new color of Wild Card to black");
+    }
+
+    // Reset tempColour after sending to discardPile
+    public void resetColor() {
+        lastChosenColor = Color.Black;
     }
 
     // If this returns black, means first use of this card,

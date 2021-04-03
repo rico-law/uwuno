@@ -36,11 +36,16 @@ public class playerController {
 
     // PUTS
     // Possible calls for player PUT, for differing json inputs check JSON Documentation.txt
-    // 1) Update player name
-    // 2) Draw Card
+    // 1) Update player name - Returns player
+    // 2) Draw Card - Returns player
     // 3) Play Card
+    //      - Returns gameResponse:
+    //          - Of current or next player's pid and their playable card options OR
+    //          - Of the winning player OR
+    //          - Of the current scores carrying over for next round (in the case of Point Mode)
+    // TODO: Convert RequestBody to Object
     @PutMapping(value = "rooms/{uid}/players/{pid}")
-    public ResponseEntity<player> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
+    public ResponseEntity<Object> handlePlayerPuts(@RequestBody String json, @PathVariable String uid, @PathVariable String pid) {
         parser parser = new parser(json);
 
         // TODO: Change this to return a JSON Object, returning a POJO screws with JSON return
@@ -64,18 +69,21 @@ public class playerController {
         else if (parser.exists("cardType") &&
                 parser.exists("cardColor") &&
                 parser.exists("cardValue") &&
-                parser.exists("setWildColor")) {
-            return ResponseEntity.ok(containerService.playCard(uid, pid,
+                parser.exists("setWildColor") &&
+                parser.exists("skip")) {
+            return ResponseEntity.ok(containerService.takeTurn(uid, pid,
                                         parser.getValue("cardType"),
                                         parser.getValue("cardColor"),
                                         parser.getValue("cardValue"),
-                                        parser.getValue("setWildColor")));
+                                        parser.getValue("setWildColor"),
+                                        parser.getValue("skip")));
         }
         // Handle missing card information for playing
         else if (parser.exists("cardType") ||
                 parser.exists("cardColor") ||
                 parser.exists("cardValue") ||
-                parser.exists("setWildColor")) {
+                parser.exists("setWildColor") ||
+                parser.exists("skip")) {
             throw new badRequest("Missing Key for playing card");
         }
         else {

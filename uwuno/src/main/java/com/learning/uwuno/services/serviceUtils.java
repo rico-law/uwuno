@@ -6,11 +6,9 @@ import com.learning.uwuno.cards.sColorCard;
 import com.learning.uwuno.cards.wildCard;
 import com.learning.uwuno.errors.badRequest;
 import com.learning.uwuno.errors.internalServerError;
-import com.learning.uwuno.player;
 import com.learning.uwuno.room;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.UUID;
 
 public final class serviceUtils {
@@ -41,7 +39,8 @@ public final class serviceUtils {
 
     // Function to create the proper card interface given cardType, cardColor, cardValue as strings
     // This function is case sensitive, for exact qualifiers look in card.java
-    static public card inputToCard(String cardType, String cardColor, String cardValue) {
+    // Only use this function for player PUT request for turn taking.
+    static public card generateCard(String cardType, String cardColor, String cardValue, String setWildCard) {
         card.CardType type;
         card.Color color;
         try {
@@ -51,7 +50,8 @@ public final class serviceUtils {
         catch (IllegalArgumentException e) {
             throw new badRequest("Error with creating card from JSON");
         }
-        if (!cardValue.isBlank() && cardType.equals("Basic") && !cardColor.equals("Black")) {
+        // Basic card
+        if (!cardValue.isBlank() && cardType.equals("Basic") && !cardColor.equals("Black") && setWildCard.isBlank()) {
             try {
                 int value = Integer.parseInt(cardValue);
                 if (value < 0 || value > 9)
@@ -62,41 +62,24 @@ public final class serviceUtils {
                 throw new badRequest("Error with creating card from JSON");
             }
         }
+        // Special Card or Wild Card (sets wild card temp colour)
         else if (cardValue.isBlank() && !cardType.equals("Basic")) {
             switch (type) {
                 case Skip, Reverse, Draw2 -> {
-                    if (color != card.Color.Black)
+                    if (color != card.Color.Black && setWildCard.isBlank())
                         return new sColorCard(type, color);
                 }
                 case Draw4, ChangeColor, Blank -> {
-                    if (color == card.Color.Black)
-                        return new wildCard(type);
+                    if (color == card.Color.Black && !setWildCard.isBlank()) {
+                        wildCard wildCard = new wildCard(type);
+                        card.Color setColor = card.Color.valueOf(setWildCard);
+                        wildCard.setTempColor(setColor);
+                        return wildCard;
+                    }
                 }
             }
         }
         throw new badRequest("Error with creating card from JSON");
-    }
-
-    // Function to check if card is playable when compared to last played card
-    static public boolean checkPlayable(card toPlay, card lastPlayed) {
-        // If current card is a black card, can always be played
-        if (toPlay instanceof wildCard) {
-            return true;
-        }
-        // Check if current and previous card has the same value
-        else if (toPlay instanceof basicCard && lastPlayed instanceof basicCard &&
-                ((basicCard) toPlay).getValue() == ((basicCard) lastPlayed).getValue()) {
-            return true;
-        }
-        // If last played card is a wild card need to check the temp color
-        else if (lastPlayed instanceof wildCard) {
-            return ((wildCard) lastPlayed).getTempColor() == toPlay.getColor();
-        }
-        // Check if same color or same type, if same type the type must not be a basic numeric card
-        else {
-            return toPlay.getColor() == lastPlayed.getColor() ||
-                    (toPlay.getType() == lastPlayed.getType() && lastPlayed.getType() != card.CardType.Basic);
-        }
     }
 
     // Returns room state from string
@@ -109,19 +92,21 @@ public final class serviceUtils {
         }
     }
 
-    //
     // TODO: Only Start state. May need to add other states as necessary.
     static public void setUpGameState(room room, room.Status status) {
         switch (status) {
             case Lobby -> {
-                // Restart game
+                // Lobby state needed for changing game settings
                 return;
             }
             case Start -> {
                 serviceUtils.setUpStartGame(room);
                 return;
             }
-            case End -> {
+            case Restart -> {
+                // For Point Mode: restart game for next round
+                // Should not change game settings
+                serviceUtils.setUpNextRound(room);
                 return;
             }
         }
@@ -132,11 +117,14 @@ public final class serviceUtils {
     static public void setUpStartGame(room room) {
         room.shufflePlayers();
         room.setupDeck();
-        LinkedList<player> playerList = room.getPlayers();
-        for (player player:playerList) {
-            player.drawCards(room.getMaxHandSize());
-        }
-        room.flipTopCard();
+        room.reshuffleDeck();
+    }
+
+    // Is helper for setUpGameState. Should use through there.
+    // Resets game for next round except the scores.
+    static public void setUpNextRound(room room) {
+        room.resetRoundGameState();
+        room.reshuffleDeck();
     }
 
     // TODO: Only has Lobby -> Start check. May need to add other states as necessary.
@@ -149,7 +137,8 @@ public final class serviceUtils {
                 return room.getPlayers().size() >= room.getMinPlayers() &&
                         room.getPlayers().size() <= room.getMaxPlayers();
             }
-            case End -> {
+            case Restart -> {
+                // TODO: see if there is anything to validate. Otherwise don't need this case.
                 return false;
             }
         }

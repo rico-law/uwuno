@@ -1,0 +1,29 @@
+Rules:
+    - Match by number, colour or symbol/action. Or can play wildcard.
+    - Player can choose not to play their card OR if they can't play a card => will need to draw 1 from deck
+    - After drawing, if card can be played, they can play that card
+    - First card, reshuffle if not number cards
+    - Stacking: Can mix +2 and +4
+
+Game modes:
+    - Normal game mode:
+        - First to get rid of all your cards win
+        - If reached maxTurn before finishing the game, each player get points equal to the cards they have left
+        - Player with the least points wins
+        - If tie, player with less cards wins
+    - Point mode (multiple rounds):
+        - When you get rid of all your cards, you get points equal to the cards left in other players' hands
+        - First to reach the set number of pts wins (e.g. 500 pts)
+        - If reached maxTurn before finishing the game, calculate pts equal to the cards in other players' hands
+
+Scoring:
+    - All number cards (0-9) ... Face value
+    - Draw 2 ... 20 pts
+    - Reverse ... 20 pts
+    - Skip ... 20 pts
+    - Wild ... 50 pts
+    - Wild Draw 4 ... 50 pts
+
+Misc:
+    - maxTurn must be >= 15
+    - maxScore only relevant to point mode and must be >= 500

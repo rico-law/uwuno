@@ -19,7 +19,7 @@ public class playerList extends LinkedList<player> {
     // Class functions
     public playerList(String uid) {
         parentUID = uid;
-        playerNames = new HashSet<String>();
+        playerNames = new HashSet<>();
     }
 
     // Only Call this function from within this.add(), all the checking code is there

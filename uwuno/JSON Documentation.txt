@@ -7,18 +7,36 @@ POST
 http://localhost:8080/rooms
 {
     roomName,
-    useBlankCards // boolean
+    useBlankCards, // boolean
+    gameMode,
+    maxTurn,
+    maxScore,     // only used in point mode (must be equal to or greater than 500)
+    useBlankCards
 }
 
 GET
 http://localhost:8080/rooms
+http://localhost:8080/rooms/<uid>
+http://localhost:8080/rooms/<uid>/players
+http://localhost:8080/rooms/<uid>/settings
 
 PUT
 http://localhost:8080/rooms/<uid>
 {
     uid,
     roomName,
-    roomStatus: lobby // state of the game either: Lobby, Start, End
+    roomStatus: lobby // state of the game either: Lobby, Start, Restart (for Point Mode where there are multiple rounds)
+    gameMode       // normal or point
+}
+
+http://localhost:8080/rooms/<uid>/settings
+Game settings
+{
+  uid,
+  gameMode,
+  maxTurn,
+  maxScore,     // only used in point mode (must be equal to or greater than 500)
+  useBlankCards
 }
 
 DELETE
@@ -53,5 +71,21 @@ Play a card
     cardType,
     cardColor,
     cardValue, // empty if non-basic card
-    setWildColor // empty if not a wild card
+    setWildColor, // set to the colour of the player's choosing. empty if not a wild card
+    skip // true if ends turn without playing a card, otherwise false
 }
+
+
+### gameResponse ###
+{
+    playerTurnPid,
+    playableCards,  // Option of playable cards for playerTurnPid
+    winners,    // List of winners (indicates the end of game if non-empty)
+    scores,     // Map of player-to-score
+}
+
+Game is ready for next round in POINT mode, if response received contains:
+    - empty playerTurnPid (i.e. "")
+    - empty list of playableCards
+    - empty list of winners
+    - non-empty map of scores

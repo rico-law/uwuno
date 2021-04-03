@@ -1,17 +1,13 @@
 package com.learning.uwuno.integration;
 
 import io.micrometer.core.instrument.util.IOUtils;
-import org.junit.jupiter.api.DisplayNameGenerator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
-public class jsonUtil {
+public final class jsonUtil {
     private static final String ROOM_NAME = "$roomName";
     private static final String ROOM_UID = "$roomUid";
     private static final String ROOM_STATUS = "$roomStatus";
@@ -22,6 +18,10 @@ public class jsonUtil {
     private static final String CARD_COLOR = "$cardColor";
     private static final String CARD_VALUE = "$cardValue";
     private static final String SET_WILD_COLOR = "$setWildCard";
+    private static final String SKIP = "$skip";
+    private static final String GAME_MODE = "$gameMode";
+    private static final String MAX_TURN = "$maxTurn";
+    private static final String MAX_SCORE = "$maxScore";
 
     private jsonUtil() {
         // Should not run
@@ -33,15 +33,23 @@ public class jsonUtil {
     }
 
     // Create Room JSON String
-    public static String createPostRoomJson(String roomName, String useBlank,String jsonPath)
-            throws FileNotFoundException {
-        return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(BLANK_CARDS, useBlank);
+    public static String createPostRoomJson(String roomName, String useBlank, String gameMode, String maxTurn,
+                                            String maxScore, String jsonPath) throws FileNotFoundException {
+        return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(GAME_MODE, gameMode)
+                .replace(MAX_TURN, maxTurn).replace(MAX_SCORE, maxScore).replace(BLANK_CARDS, useBlank);
     }
 
     public static String createPutRoomJson(String roomName, String uid, String status, String jsonPath)
             throws FileNotFoundException {
         return jsonFileToString(jsonPath).replace(ROOM_NAME, roomName).replace(ROOM_UID, uid)
                 .replace(ROOM_STATUS, status);
+    }
+
+    public static String createPutGameSettings(String uid, String gameMode, String maxTurn,
+                                               String maxScore, String useBlank, String jsonPath)
+            throws  FileNotFoundException {
+        return jsonFileToString(jsonPath).replace(ROOM_UID, uid).replace(GAME_MODE, gameMode).replace(MAX_TURN, maxTurn)
+                .replace(MAX_SCORE, maxScore).replace(BLANK_CARDS, useBlank);
     }
 
     // Create Player JSON String
@@ -54,9 +62,9 @@ public class jsonUtil {
     }
 
     public static String createPutPlayerPlayCardJson(String cardType, String cardColor, String cardValue,
-                                                     String setWildColor, String jsonPath)
+                                                     String setWildColor,String skip, String jsonPath)
             throws FileNotFoundException {
         return jsonFileToString(jsonPath).replace(CARD_TYPE, cardType).replace(CARD_COLOR, cardColor)
-                .replace(CARD_VALUE, cardValue).replace(SET_WILD_COLOR, setWildColor);
+                .replace(CARD_VALUE, cardValue).replace(SET_WILD_COLOR, setWildColor).replace(SKIP, skip);
     }
 }

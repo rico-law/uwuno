@@ -7,8 +7,8 @@ import java.util.*;
 public class deck {
     // Class variables
     // Assume the top of the list is the next card to be drawn
-    private LinkedList<card> activeDeck;
-    private ArrayList<card> discardPile;
+    private final LinkedList<card> activeDeck;
+    private final ArrayList<card> discardPile;
     final private boolean useBlankCards;
     private card lastCardPlayed;
 
@@ -37,7 +37,7 @@ public class deck {
 
     // Creates cards, fills active deck and shuffles it
     public LinkedList<card> createDeck() {
-        LinkedList<card> deck = new LinkedList<card>();
+        LinkedList<card> deck = new LinkedList<>();
         for (card.Color color : card.Color.values()) {
             if (color != card.Color.Black) {
                 // Handle basic numeric cards
@@ -66,10 +66,10 @@ public class deck {
     }
 
     // Add discard pile to active deck and shuffle it
-    public void reshuffle() {
+    public synchronized void reshuffle() {
         if (!discardPile.isEmpty()) {
             activeDeck.addAll(discardPile);
-            Collections.shuffle(discardPile);
+            Collections.shuffle(activeDeck);
             discardPile.clear(); // Faster than removeAll
         }
     }
@@ -81,7 +81,7 @@ public class deck {
         if (activeDeck.isEmpty() || activeDeck.size() < numCards)
             reshuffle();
         try {
-            ArrayList<card> ret = new ArrayList<card>();
+            ArrayList<card> ret = new ArrayList<>();
             for (int i = 0; i < numCards; i++) {
                 ret.add(activeDeck.pop());
             }
@@ -97,14 +97,15 @@ public class deck {
     public card drawStart() {
         card start =  activeDeck.pop();
         lastCardPlayed = start;
-        discardPile.add(start);
         return start;
     }
 
     // Place given card into the discard pile at the end of the list, does not perform
-    // any checks whether the card is actually owned by the deck, should not handle game logic
+    // any checks whether the card is actually owned by the deck, should not handle game logic.
     public void addToDiscard(card card) {
+        if (lastCardPlayed instanceof wildCard)
+            ((wildCard) lastCardPlayed).resetColor();
+        discardPile.add(lastCardPlayed);
         lastCardPlayed = card;
-        discardPile.add(card);
     }
 }

@@ -1,7 +1,9 @@
 package com.learning.uwuno;
 
+import com.learning.uwuno.cards.basicCard;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
+import com.learning.uwuno.game.*;
 import com.learning.uwuno.util.playerList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,7 +18,7 @@ public class room {
     public enum Status {
         Lobby,
         Start,
-        End
+        Restart
     }
 
     // Class Variables
@@ -26,14 +28,19 @@ public class room {
     private deck deck;
     private Status roomStatus;
     private player playerTurn;
+    private gameSettings gameSettings;
+    private gameState gameState;
 
     // Class functions
+    // TODO: remove useBlankCards from param (useBlankCards moved to gameSettings)
     public room(String roomName, boolean useBlankCards, String uid) {
         this.uid = uid;
         this.playerList = new playerList(this.uid);
         this.roomName = roomName;
         this.roomStatus = Status.Lobby;
         this.deck = new deck(useBlankCards);
+        this.gameSettings = new gameSettings();
+        this.gameState = new gameState(playerList);
     }
 
     // Room Functions
@@ -57,6 +64,14 @@ public class room {
         return uid;
     }
 
+    public gameSettings getGameSettings() {
+        return gameSettings;
+    }
+
+    public gameState getGameState() {
+        return gameState;
+    }
+
     // Ignores the cardList field in the response JSON. We only need player id and name.
     @JsonIgnoreProperties("cardList")
     public player getPlayerTurn() {
@@ -75,8 +90,13 @@ public class room {
         return MIN_PLAYERS;
     }
 
+    // TODO: refactor room (e.g. too many reference to deck properties)
+    public int getActiveDeckSize() {
+        return deck.getActiveDeck().size();
+    }
+
     // Player Functions
-    public LinkedList<player> getPlayers() {
+    public playerList getPlayers() {
         return playerList;
     }
 
@@ -105,6 +125,12 @@ public class room {
         this.playerTurn = playerList.getFirst();
     }
 
+    // Sets next player and returns it
+    public player nextPlayer(boolean turnClockwise) {
+        playerTurn = (turnClockwise) ? playerList.next() : playerList.prev();
+        return playerTurn;
+    }
+
     // Only use this to create new deck as this will ensure each player gets the same reference deck
     public void setupDeck() {
         for (player curPlayer : playerList) {
@@ -112,11 +138,52 @@ public class room {
         }
     }
 
-    public void flipTopCard() {
-        this.deck.drawStart();
+    public card flipTopCard() {
+        return this.deck.drawStart();
     }
 
-    public card lastPlayedCard() {
+    public card getLastPlayedCard() {
         return deck.getLastPlayedCard();
+    }
+
+    public ArrayList<card> getDiscardPile() {
+        return deck.getDiscardPile();
+    }
+
+    // Restarts game after cards have been dealt/played. Does not include final step of flipping top card.
+    public void reshuffleDeck() {
+        // Place last played card back in deck
+        if (getLastPlayedCard() != null)
+            getDiscardPile().add(getLastPlayedCard());
+
+        // Place hand cards back in deck
+        for (player player : getPlayers()) {
+            player.removeHandCards();
+        }
+
+        // Deal hand cards
+        deck.reshuffle();
+        for (player player : getPlayers()) {
+            player.drawCards(getMaxHandSize());
+        }
+
+        setValidFirstCard();
+    }
+
+    public void setValidFirstCard() {
+        card card = flipTopCard();
+
+        // Reshuffle if flipped card is not a Basic card
+        if (!(card instanceof basicCard))
+            reshuffleDeck();
+    }
+
+    public void resetGameState() {
+        this.gameState = new gameState(playerList);
+    }
+
+    // For Point Mode: resets game state fields except scores
+    public void resetRoundGameState() {
+        gameState.resetRound();
     }
 }

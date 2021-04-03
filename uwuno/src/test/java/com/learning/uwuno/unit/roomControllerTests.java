@@ -22,9 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @WebMvcTest(roomController.class)
 @AutoConfigureMockMvc
@@ -97,11 +95,11 @@ public class roomControllerTests {
 
     @Test
     public void POST_add_room() throws Exception {
-        when(service.addRoom(anyString(), anyBoolean())).thenReturn(room);
+        when(service.addRoom(anyString(), anyBoolean(), anyString(), anyInt(), anyInt())).thenReturn(room);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("roomName", "useBlankCards")),
-                new ArrayList<>(Arrays.asList(room.getName(), "false")));
+                new ArrayList<>(List.of("roomName", "useBlankCards", "gameMode", "maxTurn", "maxScore")),
+                new ArrayList<>(Arrays.asList(room.getName(), "false", "NORMAL", "20", "500")));
 
         mock.perform(post("/rooms")
                 .contentType(MediaType.APPLICATION_JSON)

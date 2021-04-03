@@ -3,6 +3,7 @@ package com.learning.uwuno.unit;
 import com.learning.uwuno.cards.card;
 import com.learning.uwuno.cards.deck;
 import com.learning.uwuno.controllers.playerController;
+import com.learning.uwuno.game.gameResponse;
 import com.learning.uwuno.player;
 import com.learning.uwuno.services.gameService;
 
@@ -24,9 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @WebMvcTest(playerController.class)
 @AutoConfigureMockMvc
@@ -41,6 +40,7 @@ public class playerControllerTests {
     private gameService gameService;
 
     player testPlayer = new player("testPlayer");
+    gameResponse gameResponse = new gameResponse();
 
     @Test
     public void testPlayer_POST() throws Exception {
@@ -147,20 +147,19 @@ public class playerControllerTests {
         testPlayer.setCurDeck(new deck(false));
         testPlayer.drawCards(1);
         testPlayer.playCard(testPlayer.getCardList().get(0));
-        when(gameService.playCard(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(testPlayer);
+        when(gameService.takeTurn(anyString(), anyString(), anyString(), anyString(),
+                anyString(), anyString(), anyString())).thenReturn(gameResponse);
 
         String content = testUtils.createJSON(
-                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor")),
-                new ArrayList<>(Arrays.asList("Basic", "Green", "6", "")));
+                new ArrayList<>(List.of("cardType", "cardColor", "cardValue", "setWildColor", "skip")),
+                new ArrayList<>(Arrays.asList("Basic", "Green", "6", "", "false")));
 
         mvc.perform(put("/rooms/123/players/123")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.cardList").isArray())
-                .andExpect(jsonPath("$.cardList", hasSize(0)));
+                .andExpect(status().isOk());
     }
 
     @Test
